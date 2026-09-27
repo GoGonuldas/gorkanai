@@ -3,7 +3,7 @@
 
 # Eğitilmiş modeller (~420 MB'lık dosyalar; GitHub 100 MB üstünü kabul etmez).
 # Her biri kendi adımındaki train.py ile yeniden üretilir.
-step*/model/
+step*/model*/
 
 # Gerçek veri havuzu (41 MB) — data/prepare_real_dataset.py ile yeniden üretilir
 data/real/train_pool.csv

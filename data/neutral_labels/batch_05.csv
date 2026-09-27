@@ -1,0 +1,151 @@
+id,text,label,source
+1000,demlenen çayın rengi bulanık oluyor.,negatif,val_negatif
+1001,ürün hiç bir şekilde beklentimi karşılamadı.,negatif,val_negatif
+1002,alacak olan arkadaşlara tavsıyem kalem pıl ıle çalışıyor bılgınız olsun,nötr,val_negatif
+1003,fene değil,pozitif,val_negatif
+1004,ben vestel kullanıyorum yeğnim kullanıyor yeni aldı memnun,pozitif,val_negatif
+1005,kilit yuva delikleri açılmamış,negatif,val_negatif
+1006,resimdeki kadar güzel durmuyor. umduğum gibi çıkmadı..,negatif,val_negatif
+1007,montaj yaparken bi̇rleşti̇rme noktasindan koptu. geldi̇ği̇ gün çöpe gi̇tti̇,negatif,val_negatif
+1008,kedim beğenmedi ama kötüde değildi yani,nötr,val_negatif
+1009,köpük 30 saniye sonra kayboluyor ama...,negatif,val_negatif
+1010,görselde göründügü kadar iyi olmasada gecerli,nötr,val_negatif
+1011,hediye olarak geldi sadece temizleyicisini kullanılır. diğerleri işe yaramaz,negatif,val_negatif
+1012,kokusu kalıcı değil asla tavsiye etmem.,negatif,val_negatif
+1013,kesinlike cok iyi karar vererk almanizi tavsiye ederim,pozitif,val_negatif
+1014,sürekli sıkıntı çıkarıyor tavsiye etmiyorm,negatif,val_negatif
+1015,"hiç kullanışlı değil, malzemesi çok kötü",negatif,val_negatif
+1016,satıcısı sadece hepsiburada olan ürünler dısında hiçbirşey almam.,nötr,val_negatif
+1017,kamera cikintili olmus.bu nedenle cizilme riski yuksek.haricen iyi.alinabilir.,pozitif,val_negatif
+1018,çift camlarda iş yapmıyor düşüyor. tek camlarda sıkıntı yok.,nötr,val_negatif
+1019,3.i̇şlemcisi hızlı birden fazla programda bile kasmıyor.,pozitif,val_negatif
+1020,aldığım ürün bir sorna açılmadı ve kulalklığı çok kısa,negatif,val_negatif
+1021,çırpma teli cok zayıf ürünün marka değerine yakışmayan kalitede,negatif,val_negatif
+1022,henüz kullanmadım ama fiyatı normal,nötr,val_negatif
+1023,kalıcılık konusu daha önemli diyorsanız bence tercih etmeyin.,negatif,val_negatif
+1024,cihazı gri olarak  sipariş verdim kırmızı renk geldi ne iş,negatif,val_negatif
+1025,bu parfumu ilk defa kulladımbence hiçkalıcıgı  yok tavsiye etmem,negatif,val_negatif
+1026,ürün termostatlı değil ve koku yapıyor.,negatif,val_negatif
+1027,makine1/2 çalıştırılacağında jel mantıklı geliyor ama hiç temizlemiyor,negatif,val_negatif
+1028,urunun guvenligi yok cok dik dusme riski cok fazla.,negatif,val_negatif
+1029,sadece iğneleri işe yaradı.hava komprosörü ile şişrdim...,negatif,val_negatif
+1030,idare eder..1 mt kablo uzunluğu pek yeterli olmuyor.,negatif,val_negatif
+1031,accest point olarak iyi .ama bridge olarak hiç verimli çalışmıyor.,nötr,val_negatif
+1032,+kapatma tuşunun olması,pozitif,val_negatif
+1033,hepsiburadaya iademi kabul ettigi için tesekkürlerimi sunarım...,nötr,val_negatif
+1034,ses sevi̇yesi̇ düşük yükselmi̇yor,negatif,val_negatif
+1035,klasik yaylı yataklar gibi yıllarca kullanılmış deforme olmuş gibi duruyor.,negatif,val_negatif
+1036,fiyat daha iyi olabilir.,negatif,val_negatif
+1037,benden söylemesi...,nötr,val_negatif
+1038,sağlam değil ve çok küçük fiyatına göre uygun,nötr,val_negatif
+1039,hızlı şarj etmiyor 2 doldurmada hemen bitiyor. sıkıntı ..,negatif,val_negatif
+1040,"resimlerde göründüğü gibi canlı renk değil, başka ürün alınabilir.",negatif,val_negatif
+1041,"kömürün üzerine döktüm. yakmadı, ateşi söndürdü!",negatif,val_negatif
+1042,+ malzeme kalitesi beklediğimin üzerinde,pozitif,val_negatif
+1043,hiç anlatildigi gibi bir urun degil.,negatif,val_negatif
+1044,kokusu çok kötü. aldığıma çok pişmanım.,negatif,val_negatif
+1045,ürün çabuk bitiyor. 15 dakika yanan mumu bir daha yakamıyorsunuz.,negatif,val_negatif
+1046,herkese keyifli alışverişler dilerim.,nötr,val_negatif
+1047,valla hiç beğenmedim sildiğim yerlerde iplik bırakıyor.sökülüyor gibi anlamadım.,negatif,val_negatif
+1048,ben beğenmedim ne uzatıyor ne kalınlaştırıyor,negatif,val_negatif
+1049,beğenmedim,negatif,val_negatif
+1050,işık var ama kendine bile yetmiyor.,negatif,val_negatif
+1051,ben ettim siz etmeyin derim!,negatif,val_negatif
+1052,kirli sakal icin aldım.çok kötü. keske bt 5090 alsaydim dedim.,negatif,val_negatif
+1053,bende orjinali var ama kokusu kalıcı değil kokusu güzel ama,nötr,val_negatif
+1054,fakat şahsen üzerine basıldığı kadar kuvvetli değil,negatif,val_negatif
+1055,hb tsk...,nötr,val_negatif
+1056,hicbir işe yaramıyo hiç bir şey farktemedi boşu boşuna aldık,negatif,val_negatif
+1057,ütü masamıza biraz büyük geldi.,negatif,val_negatif
+1058,telefon cok ısınıyo,negatif,val_negatif
+1059,2017 şubat itibariyle whatsapp desteğini çekiyor.,nötr,val_negatif
+1060,kalitesiz bir ürün,negatif,val_negatif
+1061,telefonda ki müzikleri çok güzel aktarıyor,pozitif,val_negatif
+1062,dişlileri saçı tam olarak kavramıyor,negatif,val_negatif
+1063,benim tecrübem bu...,nötr,val_negatif
+1064,teslimat süresi çok uzun 3 günde geldi.hb beklemezdim,negatif,val_negatif
+1065,samsung galaxy c7 alın arkadaşlar paranız cebinizde kalsın...,negatif,val_negatif
+1066,20 gün oldu hala daha gelecek diye bekliyorum arkadaşlar.,negatif,val_negatif
+1067,i̇dare eder bu paraya değmez ama,negatif,val_negatif
+1068,sonuç: (fiyat/performans) 7/10,nötr,val_negatif
+1069,üzerinde ufak tefek delikler vardı. ürünü beğenmedim.,negatif,val_negatif
+1070,ürün hızlı geldi ama toz içinde geldi.,negatif,val_negatif
+1071,çok kalın bir bez hem de çok sert memnun kalmadım,negatif,val_negatif
+1072,ben pek memnun kalmadım açıkçası.,negatif,val_negatif
+1073,okuma hızı 38.7 mb,nötr,val_negatif
+1074,şyerinde kullandık bu üründen içi pas tutuyor zamanla.,negatif,val_negatif
+1075,fiyatı iyi fakat çekim gücü çok az.,negatif,val_negatif
+1076,her şişeye girecek gibi bir tıpası olabilir,nötr,val_negatif
+1077,çok kaba görüntüsü çok eski model,negatif,val_negatif
+1078,üründen beklentim fazla değildi ve buna rağmen bununda altında kaldı.,negatif,val_negatif
+1079,sipariş verdik elime ulaştığında olumlu veya olumsuz değerlendirmelerim olacaktır...,nötr,val_negatif
+1080,gillette ürünleri arasında orta segment bir ürün,nötr,val_negatif
+1081,yoga eğitmeniyim. ürün çok vasat.,negatif,val_negatif
+1082,farklı çeşit meyve sebze de olabilir,nötr,val_negatif
+1083,çok kullanmamamıza rağmen hemen kırıldı tavaiye etmem.,negatif,val_negatif
+1084,çekim gücü beklediğimden kötü,negatif,val_negatif
+1085,"kalite düşük , ip ince ,",negatif,val_negatif
+1086,elimizdeki bezleri de pişik ilerlememesi için kullanmaktan vazgeçtik.,negatif,val_negatif
+1087,"gereksiz bir ürün,",negatif,val_negatif
+1088,normal bi̇ ci̇haz  bu fi̇yata alinirmi dersen alinir,nötr,val_negatif
+1089,1- bu fiyata alınabilecek yegane özellikli telefon.,pozitif,val_negatif
+1090,hiçbir şekilde tavsiye etmem. hiç kullanışlı değil. hemen geri gönderdim.,negatif,val_negatif
+1091,çok berbat hiç güzel değil tablet alacaklara tab 4 t530,negatif,val_negatif
+1092,galaxy s7ye uygun değil,negatif,val_negatif
+1093,anlatımı çok basit ve sıkıcı bir kitap olmuş.,negatif,val_negatif
+1094,ayak plastiklerini beğenmedik maalesef umduğumuz gibi değil,negatif,val_negatif
+1095,kokmuyor ki kalıcı olsun.saçma bir koku..,negatif,val_negatif
+1096,boyle dusunerek aliyorsaniz paranizi cope atmis olursunuz.,negatif,val_negatif
+1097,"4= bişey açtığınızda ekrana çift tıklandığında ekran yaklaşıyor ve donuyor,",negatif,val_negatif
+1098,hiç güzel değilmiş verilen paraya yazık çok hantal görünüyor,negatif,val_negatif
+1099,küçük lastikler ekranda göründüğü gibi değil büyük lastik değiller,negatif,val_negatif
+1100,çöpe atacak paranız varsa alın. hiç bir işe yaramıyor.,negatif,val_negatif
+1101,bezler değişmiş incelmis sizdiriyo iade ettim.,negatif,val_negatif
+1102,kestirince montaj tamamlandı,nötr,val_negatif
+1103,"ürün işini yapıyor tırnaklarınızı kısaltıyor ama kesmiyor, ezerek koparıyor.",negatif,val_negatif
+1104,yorumlara bakarak aldım. pişmanım.,negatif,val_negatif
+1105,ses kalitesi oldukça düşük ve boğuk,negatif,val_negatif
+1106,hepsi̇ buradanin ürün gönderi̇mi̇ çok i̇yi̇,pozitif,val_negatif
+1107,"kesinlikle ayar yapmaya kalkmayınız, çünkü cam silikonla tutturulmuş, canınız sıkılabilir...",nötr,val_negatif
+1108,beğenmedim. i̇şe yaramaz kötü bir şey,negatif,val_negatif
+1109,7=telefon rehberimin yarısını bile kaydetmedi yer yok diyor,negatif,val_negatif
+1110,çalışırken 30-40 tane çektikten sonra tuttuğunuz yer acıyor,negatif,val_negatif
+1111,elimden düştü ve patladı dayanıklı değil,negatif,val_negatif
+1112,ucretın karsılıgı degıl almayın,negatif,val_negatif
+1113,tekerlekleri̇ çok kali̇tesi̇z çikti...hemen kirildi...,negatif,val_negatif
+1114,"bizimkiler sevmedi,kusura bakma hepsiburada,yazmazsam suçluluk duyacağım",negatif,val_negatif
+1115,çok zayıf ışık veriyor,negatif,val_negatif
+1116,beklediğim performansı maalesef alamadım.,negatif,val_negatif
+1117,çok ucuz bir haftalık harçlığımla aldım,nötr,val_negatif
+1118,ürünü boşa almayın tam tersine boyaya zarar veriyor.,negatif,val_negatif
+1119,bu fiyata çok kalite beklenilmez sessiz hesaplı tasarruflu tavsiye ederim.,pozitif,val_negatif
+1120,yere tam yapışmadı yani yarısı yapıştı yarısı yapışmadı anlamadım valla,negatif,val_negatif
+1121,[eksileri]:,nötr,val_negatif
+1122,"çok kaliteli bir şemsiye beklemeyin, eşim pek beğenmedi.",negatif,val_negatif
+1123,icindeki agirlik yapan madde kenarlardan ekyerlerinden dokuluyor,negatif,val_negatif
+1124,eli terletiyo ve çok ağır bir mause ama padi güzel,negatif,val_negatif
+1125,kılıf çok kötü zaten fiyatındanda belli sakın paranızı boşa harcamayın..,negatif,val_negatif
+1126,çok kötü bir ürün philips kalitesine yakışmayan bir ürün,negatif,val_negatif
+1127,krom kaplaması on ayda cıktı paslandı,negatif,val_negatif
+1128,i̇çinden bazıları yamuk döküm hatası görerek almak lazım,negatif,val_negatif
+1129,sebebini bilemiyorum belki merceklerinde sıkıntı olabilir vs,nötr,val_negatif
+1130,cidden hayal kırıklığı yaşamak istiyosanız hemen alın:),negatif,val_negatif
+1131,"çantaların boyu sığmıyor, bosuna almis olursunuz, gozuktugu gibi degil",negatif,val_negatif
+1132,yani çok beklentiniz olmasın...,negatif,val_negatif
+1133,alalı 4-5 ay oldu,nötr,val_negatif
+1134,teslimat süper ürün fena değil,pozitif,val_negatif
+1135,muhteşem hızlı gönderi için teşekkürler hepsiburada.com,pozitif,val_negatif
+1136,lazım olmaz demeyin.,pozitif,val_negatif
+1137,beğendim ürün kaliteli tavsiye ederim,pozitif,val_negatif
+1138,"müzik de dinleyemedim , telefon görüşmeside yapamadım.",negatif,val_negatif
+1139,biraz kalitesi düşük gibi ama iş görür,nötr,val_negatif
+1140,ürün resimde göründüğü kadar büyük değil ve tek tarafı kullanılabilir.,negatif,val_negatif
+1141,alet her tarafından toz boşaltıyor. kablosu kısa,negatif,val_negatif
+1142,sünger olanlar daha iyi en azından rahatsız etmiyor,negatif,val_negatif
+1143,"okuma-yazma hızı 10 mb/s civarı, bana göre çok yavaş...",negatif,val_negatif
+1144,fana degil iş görür,pozitif,val_negatif
+1145,ebatlara dikkat edin.çünkü kapıya göre ayarlamalı fonksiyonu yok.,nötr,val_negatif
+1146,"normal ürüne geçene kadar ürün almıycam, alana da tavsiye etmiyorum....",negatif,val_negatif
+1147,başarılar. ...,nötr,val_negatif
+1148,sanirim i̇hti̇yaci olan eski arabalar,nötr,val_negatif
+1149,genel anlamda i̇stedi̇gi̇m özelli̇kleri̇n hepsi̇ne sahi̇p memnunum,pozitif,val_negatif

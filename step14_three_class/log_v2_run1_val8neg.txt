@@ -1,0 +1,106 @@
+Cihaz: mps
+Val: {'pozitif': 128, 'nötr': 64, 'negatif': 8} | elle-eğitim: {'pozitif': 514, 'nötr': 255, 'negatif': 31}
+=== V2a (kısa etiketsizler yok): 13964 satır | {'pozitif': 6378, 'negatif': 5546, 'nötr': 2040}
+    etiketsiz kısa yorum: 0 (neg 0, poz 0)
+    epoch 1 | loss 0.3000
+    epoch 2 | loss 0.1078
+    süre: 7.8 dk
+    VAL macro-F1: bias=0 -> 0.661 | en iyi bias=+2.75 -> 0.768
+    (şimdiye kadarki en iyi val -> /Users/gorkangonuldas/workspace/gorkanai/step14_three_class/model_v2 kaydedildi)
+=== V2b (sadece net kısa): 16955 satır | {'pozitif': 7914, 'negatif': 7001, 'nötr': 2040}
+    etiketsiz kısa yorum: 2991 (neg 1455, poz 1536)
+    epoch 1 | loss 0.2552
+    epoch 2 | loss 0.0913
+    süre: 10.2 dk
+    VAL macro-F1: bias=0 -> 0.648 | en iyi bias=+0.50 -> 0.664
+Val'e göre seçilen: V2a (kısa etiketsizler yok) (bias +2.75)
+=== KISA TEMİZ TEST (97 poz / 35 nötr / 68 neg) — ilk kez bakılıyor ===
+                                            doğr.    mF1 |   nötr P/R |    neg P/R |    poz P/R
+Kıyas: C + %95 eşik                         0.800  0.766 |  0.46/0.69 |  0.92/0.88 |  0.92/0.78
+Deney 2 (v1), bias 0                        0.830  0.735 |  0.73/0.31 |  0.78/0.96 |  0.88/0.93
+V2a (kısa etiketsizler yok), bias 0         0.745  0.695 |  0.40/0.60 |  0.98/0.60 |  0.82/0.90
+V2a (kısa etiketsizler yok), val-bias +2.75  0.725  0.678 |  0.39/0.83 |  0.97/0.44 |  0.91/0.89
+V2b (sadece net kısa), bias 0               0.860  0.807 |  0.72/0.51 |  0.93/0.94 |  0.85/0.93
+V2b (sadece net kısa), val-bias +0.50       0.860  0.811 |  0.70/0.54 |  0.93/0.94 |  0.86/0.92
+Seçilen model (V2a (kısa etiketsizler yok)) karışıklık matrisi:
+tahmin   negatif  nötr  pozitif
+doğrusu                        
+negatif       30    34        4
+nötr           1    29        5
+pozitif        0    11       86
+Gerçek test (2 sınıf, gürültülü): nötr deme %8.0 | cevap verilenlerde doğruluk 0.893
+=== Kısayol testi (V2a (kısa etiketsizler yok), bias +2.75) ===
+  pozitif  (nötr olasılığı %  0) | çok sağlam
+  pozitif  (nötr olasılığı %  0) | harika
+  nötr     (nötr olasılığı % 60) | berbat
+  pozitif  (nötr olasılığı %  2) | bayıldım
+  nötr     (nötr olasılığı % 98) | iade ettim
+  negatif  (nötr olasılığı %  3) | tavsiye etmem
+  pozitif  (nötr olasılığı %  0) | süper ürün
+  nötr     (nötr olasılığı % 15) | çok kötü
+  pozitif  (nötr olasılığı %  0) | fena değil
+  nötr     (nötr olasılığı % 84) | idare eder
+  nötr     (nötr olasılığı % 66) | kargo 2 günde geldi.
+  nötr     (nötr olasılığı % 99) | saygılarımla.
+  nötr     (nötr olasılığı % 90) | bunda da aynı bedeni alın.
+  nötr     (nötr olasılığı % 98) | ürün dün elime ulaştı.
+  nötr     (nötr olasılığı % 99) | telefonun rengi siyah.
+  nötr     (nötr olasılığı % 98) | Ürün 2019 yılında piyasaya sürülmüştür.
+  pozitif  (nötr olasılığı %  0) | Cihaz yüksek performansı ile kullanıcılar tarafından beğenilmiştir.
+  negatif  (nötr olasılığı %  0) | ürünü aldıktan bir hafta sonra bozuldu, müşteri hizmetleri de hiç yardımcı olmadı.
+--- Seçilen modelin test hataları ---
+  doğrusu=pozitif  tahmin=nötr     | motorola efsanesi̇
+  doğrusu=negatif  tahmin=nötr     | eşi̇m çok pahali buldu
+  doğrusu=negatif  tahmin=nötr     | ouncak bile değil
+  doğrusu=pozitif  tahmin=nötr     | idarenin biraz üstü
+  doğrusu=negatif  tahmin=nötr     | kupaların bir kısmı cekmiyor
+  doğrusu=negatif  tahmin=nötr     | görüntüye aldanmayin. basi̇t küçük.
+  doğrusu=nötr     tahmin=pozitif  | yağlı his bırakıyor ama temizliyor
+  doğrusu=negatif  tahmin=nötr     | kargo sirketi çok yavaş.
+  doğrusu=negatif  tahmin=nötr     | -elektrik kesintilerinde saat ayarı gidiyor.
+  doğrusu=negatif  tahmin=nötr     | umduğum gibi değil
+  doğrusu=pozitif  tahmin=nötr     | sessiz
+  doğrusu=negatif  tahmin=nötr     | paranız cebınızde kalsın daha iyi
+  doğrusu=nötr     tahmin=pozitif  | poşet daha kalın ve saydam.
+  doğrusu=negatif  tahmin=nötr     | fiyat iyi ama sağlam değil
+  doğrusu=negatif  tahmin=nötr     | çok kucuk
+  doğrusu=negatif  tahmin=nötr     | ben beğenemedim.
+  doğrusu=nötr     tahmin=pozitif  | ben de almayı düşünüyorum.
+  doğrusu=negatif  tahmin=nötr     | göründüğü gibi değil çok küçük
+  doğrusu=negatif  tahmin=nötr     | kar yürüyüşünde içeri su geçirdi
+  doğrusu=negatif  tahmin=nötr     | kullanışsız
+  doğrusu=nötr     tahmin=pozitif  | canları sağ olsun.
+  doğrusu=negatif  tahmin=nötr     | gereksiz bir ürün tavsiye etmiyorum.
+  doğrusu=nötr     tahmin=pozitif  | bu fiyata bu
+  doğrusu=pozitif  tahmin=nötr     | urun resimde gorulenin aynisi,
+  doğrusu=negatif  tahmin=nötr     | beklediyimden daha küçük geldi
+  doğrusu=negatif  tahmin=nötr     | hiç bi ise yaramaza
+  doğrusu=negatif  tahmin=pozitif  | duvara yapışmıyor ve paslanmaya meyilli
+  doğrusu=negatif  tahmin=nötr     | tek kelimeyle gereksiz ve kullanışsız.
+  doğrusu=negatif  tahmin=nötr     | kutulusuna bosuna fazla para vermeyin
+  doğrusu=negatif  tahmin=nötr     | asıl koruması gereken köşelere ulaşamıyor..
+  doğrusu=pozitif  tahmin=nötr     | hemen teslim olayında son nokta...
+  doğrusu=nötr     tahmin=negatif  | 4- yüksek buhar elinizi yakabilir.
+  doğrusu=negatif  tahmin=nötr     | üst kapak cam görünümlü kırılır
+  doğrusu=negatif  tahmin=nötr     | kablosu kısa
+  doğrusu=pozitif  tahmin=nötr     | marifet büyüklüğünde değil işlevinde
+  doğrusu=negatif  tahmin=nötr     | win 7 denedim olmadı
+  doğrusu=negatif  tahmin=nötr     | peugeout 207 ile uyumlu degil
+  doğrusu=negatif  tahmin=nötr     | elektri̇k çarpiyor
+  doğrusu=negatif  tahmin=nötr     | bluetooth klavye/mouse takılamıyor.
+  doğrusu=negatif  tahmin=nötr     | hepsi burada böyle ürünleri satmamalı!!!
+  doğrusu=negatif  tahmin=nötr     | kargom 1 haftada ancak geldi.
+  doğrusu=negatif  tahmin=pozitif  | tek artısı hızlı ısınıyor.
+  doğrusu=negatif  tahmin=nötr     | beklentimin altında...
+  doğrusu=negatif  tahmin=pozitif  | -yorganınız kaliteliyse aşırı terletiyor
+  doğrusu=pozitif  tahmin=nötr     | 5 yıldız
+  doğrusu=pozitif  tahmin=nötr     | 1. aracın amortisörleri değişmiş gibi
+  doğrusu=negatif  tahmin=nötr     | çöp
+  doğrusu=pozitif  tahmin=nötr     | bildiğimiz oral be kalitesi
+  doğrusu=pozitif  tahmin=nötr     | fiatı hesaplı
+  doğrusu=negatif  tahmin=nötr     | i̇lk haftadan koptu.
+  doğrusu=negatif  tahmin=pozitif  | bu ne küçücük dedi̇  :-)))
+  doğrusu=negatif  tahmin=nötr     | özelliklerine göre çok pahalı
+  doğrusu=negatif  tahmin=nötr     | iade etmeyi düsüyorum.
+  doğrusu=pozitif  tahmin=nötr     | i̇ş görür gi̇bi̇
+  doğrusu=negatif  tahmin=nötr     | polar çorap gibi hiç beğenmedim

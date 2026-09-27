@@ -1,0 +1,80 @@
+Cihaz: mps
+Val: {'pozitif': 145, 'negatif': 109, 'nötr': 96} | elle-eğitim: {'pozitif': 514, 'nötr': 255, 'negatif': 31}
+=== V2a (kısa etiketsizler yok): 13964 satır | {'pozitif': 6378, 'negatif': 5546, 'nötr': 2040}
+    etiketsiz kısa yorum: 0 (neg 0, poz 0)
+    epoch 1 | loss 0.2979
+    epoch 2 | loss 0.1080
+    süre: 7.8 dk
+    VAL macro-F1: bias=0 -> 0.718 | en iyi bias=+0.25 -> 0.721
+    kaydedildi: /Users/gorkangonuldas/workspace/gorkanai/step14_three_class/model_v2a
+=== V2b (sadece net kısa): 16955 satır | {'pozitif': 7914, 'negatif': 7001, 'nötr': 2040}
+    etiketsiz kısa yorum: 2991 (neg 1455, poz 1536)
+    epoch 1 | loss 0.2548
+    epoch 2 | loss 0.0905
+    süre: 9.5 dk
+    VAL macro-F1: bias=0 -> 0.765 | en iyi bias=+3.00 -> 0.778
+    kaydedildi: /Users/gorkangonuldas/workspace/gorkanai/step14_three_class/model_v2b
+Val'e göre seçilen: V2b (sadece net kısa) (bias +3.00)
+=== KISA TEMİZ TEST (97 poz / 35 nötr / 68 neg) — DİKKAT: ilk çalıştırmada görüldü, sayılar iyimser ===
+                                            doğr.    mF1 |   nötr P/R |    neg P/R |    poz P/R
+Kıyas: C + %95 eşik                         0.800  0.766 |  0.46/0.69 |  0.92/0.88 |  0.92/0.78
+Deney 2 (v1), bias 0                        0.830  0.735 |  0.73/0.31 |  0.78/0.96 |  0.88/0.93
+V2a (kısa etiketsizler yok), bias 0         0.730  0.666 |  0.43/0.51 |  0.97/0.53 |  0.76/0.95
+V2a (kısa etiketsizler yok), val-bias +0.25  0.725  0.659 |  0.41/0.51 |  0.97/0.51 |  0.77/0.95
+V2b (sadece net kısa), bias 0               0.835  0.774 |  0.63/0.49 |  0.91/0.87 |  0.84/0.94
+V2b (sadece net kısa), val-bias +3.00       0.860  0.825 |  0.67/0.69 |  0.92/0.87 |  0.89/0.92
+Seçilen model (V2b (sadece net kısa)) karışıklık matrisi:
+tahmin   negatif  nötr  pozitif
+doğrusu                        
+negatif       59     6        3
+nötr           3    24        8
+pozitif        2     6       89
+Gerçek test (2 sınıf, gürültülü): nötr deme %5.4 | cevap verilenlerde doğruluk 0.903
+=== Kısayol testi (V2b (sadece net kısa), bias +3.00) ===
+  pozitif  (nötr olasılığı %  0) | çok sağlam
+  pozitif  (nötr olasılığı %  0) | harika
+  negatif  (nötr olasılığı %  0) | berbat
+  pozitif  (nötr olasılığı %  0) | bayıldım
+  negatif  (nötr olasılığı %  0) | iade ettim
+  negatif  (nötr olasılığı %  0) | tavsiye etmem
+  pozitif  (nötr olasılığı %  0) | süper ürün
+  negatif  (nötr olasılığı %  0) | çok kötü
+  pozitif  (nötr olasılığı %  0) | fena değil
+  nötr     (nötr olasılığı % 98) | idare eder
+  nötr     (nötr olasılığı % 99) | kargo 2 günde geldi.
+  nötr     (nötr olasılığı %100) | saygılarımla.
+  nötr     (nötr olasılığı % 96) | bunda da aynı bedeni alın.
+  nötr     (nötr olasılığı %100) | ürün dün elime ulaştı.
+  nötr     (nötr olasılığı %100) | telefonun rengi siyah.
+  nötr     (nötr olasılığı % 96) | Ürün 2019 yılında piyasaya sürülmüştür.
+  pozitif  (nötr olasılığı %  0) | Cihaz yüksek performansı ile kullanıcılar tarafından beğenilmiştir.
+  negatif  (nötr olasılığı %  0) | ürünü aldıktan bir hafta sonra bozuldu, müşteri hizmetleri de hiç yardımcı olmadı.
+--- Seçilen modelin test hataları ---
+  doğrusu=nötr     tahmin=pozitif  | kullanılabilirlik - 10
+  doğrusu=negatif  tahmin=pozitif  | eşi̇m çok pahali buldu
+  doğrusu=pozitif  tahmin=nötr     | idarenin biraz üstü
+  doğrusu=nötr     tahmin=negatif  | yağlı his bırakıyor ama temizliyor
+  doğrusu=negatif  tahmin=pozitif  | -elektrik kesintilerinde saat ayarı gidiyor.
+  doğrusu=negatif  tahmin=nötr     | paranız cebınızde kalsın daha iyi
+  doğrusu=nötr     tahmin=negatif  | poşet daha kalın ve saydam.
+  doğrusu=nötr     tahmin=pozitif  | -daha iyi kamera
+  doğrusu=pozitif  tahmin=nötr     | + quad hd ekran
+  doğrusu=nötr     tahmin=pozitif  | prima yurtdışındaki adıyla pampersin kalitesi,
+  doğrusu=negatif  tahmin=nötr     | kar yürüyüşünde içeri su geçirdi
+  doğrusu=nötr     tahmin=pozitif  | canları sağ olsun.
+  doğrusu=nötr     tahmin=pozitif  | ilginç...
+  doğrusu=nötr     tahmin=pozitif  | bu fiyata bu
+  doğrusu=pozitif  tahmin=negatif  | çok küçük tanklar için ideal
+  doğrusu=nötr     tahmin=pozitif  | işe yaramasi önemli olan,
+  doğrusu=nötr     tahmin=pozitif  | tamamen gerçek.
+  doğrusu=pozitif  tahmin=nötr     | hemen teslim olayında son nokta...
+  doğrusu=nötr     tahmin=negatif  | 4- yüksek buhar elinizi yakabilir.
+  doğrusu=negatif  tahmin=nötr     | üst kapak cam görünümlü kırılır
+  doğrusu=pozitif  tahmin=negatif  | marifet büyüklüğünde değil işlevinde
+  doğrusu=negatif  tahmin=nötr     | kargom 1 haftada ancak geldi.
+  doğrusu=pozitif  tahmin=nötr     | 5 yıldız
+  doğrusu=pozitif  tahmin=nötr     | 1. aracın amortisörleri değişmiş gibi
+  doğrusu=negatif  tahmin=nötr     | çöp
+  doğrusu=pozitif  tahmin=nötr     | fiatı hesaplı
+  doğrusu=negatif  tahmin=pozitif  | bu ne küçücük dedi̇  :-)))
+  doğrusu=negatif  tahmin=nötr     | iade etmeyi düsüyorum.

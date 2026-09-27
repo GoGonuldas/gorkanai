@@ -5,9 +5,9 @@ başlayıp adım adım daha gelişmiş yöntemlere geçerek "kendi AI'ını" in�
 Alan: Türkçe duygu analizi (sentiment analysis). Odak: öğrenmek — her adımda
 gerçek bir sınırla karşılaşıp sebebini anlamak, sonra bir sonraki yöntemle çözmek.
 
-**Son durum (2026-09-26):** Planlanan 7 adımın **7'si de tamamlandı**. Proje
-şu an duraklatıldı, ileride devam edilecek (daha büyük veri, gerçek uygulama,
-veya farklı bir NLP görevi — henüz kararlaştırılmadı, aşağıda seçenekler var).
+**Son durum (2026-09-27):** Adım 1-14 yapıldı. Uygulama (`step9_app`) Adım 12 modelini (%95 "emin değilim"
+eşiğiyle) kullanıyor. Adım 14'te 3 sınıflı (pozitif/nötr/negatif) model V2b hazır ama henüz uygulamaya alınmadı.
+Proje duraklatıldı — kaldığımız yer ve sıradaki işler aşağıda **"Yapılacaklar"** bölümünde.
 
 ## Ortam kurulumu
 - Python **3.12** (Homebrew ile kuruldu — sistem Python'ı 3.14 idi, scikit-learn
@@ -185,7 +185,7 @@ T sadece GÖSTERİLEN sayıları değiştirir. (3) "Saygılarımla" sorunu kalib
 örn. HF `winvoker/turkish-sentiment-analysis-dataset` Notr sınıfı içeriyor — incelenmedi).
 Karar: app T=1, eşik %95 ile kalıyor (C modeli).
 
-## Adım 14: 3 sınıflı model (nötr) — DEVAM EDİYOR (2026-09-27)
+## Adım 14: 3 sınıflı model (nötr) — MODEL HAZIR, app'e alınmadı (2026-09-27)
 Aday veri: HF `winvoker/turkish-sentiment-analysis-dataset` (489k). SORUN: nötrlerin %99.7'si **Vikipedi** cümlesi
 (%99'u " ." ile bitiyor, %100 büyük harfle başlıyor); pozitif/negatifler yorum/tweet. Ayrıca `urun_yorumlari`
 kaynağı bizim ürün yorumu veri setimizle aynı görünüyor → kullanırsak test sızıntısı riski.
@@ -209,12 +209,55 @@ nötr x8 oversample, 2 epoch. Kıyas: C + %95 eşik ("emin değilim" = nötr). K
 "saygılarımla." → %99 nötr), "kısa = nötr" kısayolu da yok ("harika", "berbat" doğru).
 Olası sebep: poz/neg eğitim verisinde hâlâ nötr parçalar var (kısa "negatif" etiketlilerin ~%15'i nötr) → model
 "nötr parça → negatif" öğreniyor, 319 temiz nötrle çelişiyor. App DEĞİŞTİRİLMEDİ (kıyas nötrde daha iyi).
+**Deney 3** (`train_v2.py`, log: `log_v2.txt`): elle etiketlerin %20'si val (128p/64x/**8n**). Önceden sabit iki varyant:
+V2a = etiketsiz kısa (<=10 kelime) poz/neg'lerin hepsi çıkarıldı; V2b = sadece Adım 12 K-fold tahmininin ≥%90
+katıldığı kısalar tutuldu (2991). Val'de macro-F1 ile seçim + nötr logit'ine bias.
+| Kısa temiz test | doğr. | macro-F1 | nötr P/R | neg P/R | poz P/R |
+|---|---|---|---|---|---|
+| Kıyas C+%95 | 0.800 | 0.766 | 0.46/0.69 | 0.92/0.88 | 0.92/0.78 |
+| Deney 2 (v1) | 0.830 | 0.735 | 0.73/0.31 | 0.78/0.96 | 0.88/0.93 |
+| V2a + val-bias +2.75 (**val'in seçtiği**) | 0.725 | 0.678 | 0.39/0.83 | 0.97/**0.44** | 0.91/0.89 |
+| V2b + val-bias +0.50 | **0.860** | **0.811** | 0.70/0.54 | 0.93/0.94 | 0.86/0.92 |
+Val seçimi YANLIŞ varyantı seçti: V2a "kısa negatif → nötr" kısayolunu öğrendi ("berbat", "çöp", "iade ettim" → nötr),
+ama val'de sadece 8 negatif olduğu için görünmedi. Ders: **val seti, önemsediğin her hatayı temsil etmeli** —
+kalibrasyonu olmayan sınıf için ayar yapılamaz. V2b testte en iyi AMA bunu testten öğrendik → V2b'nin test sayıları
+artık biraz iyimser. (İlk çalıştırmanın logu: `log_v2_run1_val8neg.txt`.)
+**Deney 3b** (aynı `train_v2.py`, log: `log_v2.txt`): val'e hiçbir eğitimde olmayan 150 kısa "negatif" etiketli yorum
+eklendi (`prepare_val_negatives.py` → `data/neutral_labels/batch_05.csv`, SADECE val): 101 neg / 32 nötr / 17 poz
+(yine: kısa "negatif"lerin %21'i nötr, %11'i pozitif). Val artık 145p / 96x / 109n. Eğitim aynı; sızıntı assert'i eklendi.
+Val macro-F1: V2a 0.721, **V2b 0.778** (bias +3.00 — grid'in üst sınırı; test görüldüğü için grid genişletilmedi).
+→ Val bu kez **V2b**'yi seçti. Kısa temiz test (görülmüş → iyimser):
+| | doğr. | macro-F1 | nötr P/R | neg P/R | poz P/R |
+|---|---|---|---|---|---|
+| Kıyas C+%95 (app) | 0.800 | 0.766 | 0.46/0.69 | 0.92/0.88 | 0.92/0.78 |
+| **V2b + bias +3.00** | **0.860** | **0.825** | **0.67/0.69** | 0.92/0.87 | 0.89/0.92 |
+Kısayol testi 18/18 doğru ("berbat"/"çöp" negatif, "kargo 2 günde geldi." nötr, üslup kısayolu yok).
+Gerçek test: %5.4 nötr, cevap verilenlerde 0.903. Model: `step14_three_class/model_v2b/` (bias +3.00 ile kullanılmalı).
+`model_v2a/` kullanılmamalı. App henüz DEĞİŞTİRİLMEDİ. Eksik: görülmemiş yeni bir test seti.
 
-## Devam etmek için seçenekler (henüz kararlaştırılmadı)
-Konuşmanın sonunda üç yön önerildi:
-- **(a)** Projeyi gerçek bir uygulamaya dönüştür (basit web arayüzü/API — örn. FastAPI + Adım 7'deki fine-tuned model)
-- **(b)** Daha büyük/gerçek bir veri setiyle tekrar dene (örn. gerçek Türkçe ürün/film yorumları — sentetik şablon verisinin sınırlarını aşmak için)
-- **(c)** Farklı bir NLP görevine geç (özetleme, soru-cevap, vb.) — muhtemelen doğrudan Adım 6-7 seviyesinden (embeddings/transformer/fine-tuning) başlanır, 1-3 tekrar edilmez
+## Yapılacaklar (2026-09-27'de bırakıldı — bu sırayla önerildi)
+
+1. **Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.**
+   - Neden: `data/short_clean_test.csv` Adım 14'te görüldü (val'i genişletme kararı test sonucuna bakılarak verildi)
+     → V2b'nin 0.825 macro-F1'i iyimser.
+   - Nasıl: `prepare_val_negatives.py` / `prepare_candidates.py` mantığıyla, HİÇBİR eğitim/val/test setinde olmayan
+     kısa yorumlar seç (hem "pozitif" hem "negatif" etiketlilerden, ~%20 nötr beklenir). `save_labels.py` ile
+     kaydet (yeni bir batch numarası; eğitime/val'e SOKMA). V2b'yi `model_v2b/` + bias +3.00 ile ölç, kıyas C+%95 ile.
+   - Aynı sette nötr bias'ını (+3.00 grid'in üst sınırıydı) yeniden seçmek YOK — bias val'de seçilir; istenirse
+     grid'i genişletip val'de yeniden seç, sonra yeni testte bir kez ölç.
+2. **Uygulamaya 3 sınıf ekle** (`step9_app/app.py`, `index.html`).
+   - `MODEL_DIR` → `step14_three_class/model_v2b`, nötr logit'ine +3.00 ekle (softmax'tan önce), etiketler
+     `config.id2label`'dan (negatif/nötr/pozitif).
+   - Karar verilecek: "emin değilim" eşiği kalsın mı? Nötr sınıfı işinin bir kısmını üstleniyor. Kalacaksa eşik
+     3 sınıflı model için val'de yeniden seçilmeli (Adım 11 kuralı).
+   - Arayüzde nötr için ayrı renk/mesaj.
+3. ~~Git commit + push~~ — **yapıldı** (2026-09-27, "Adım 14: 3 sınıflı model..." GitHub'a gönderildi).
+   Sonraki commit'lerde de önce `git status` ile büyük dosya (model, .venv) girmediğini kontrol et.
+4. (İsteğe bağlı) Yerel `.git` 1.5 GB — geri alınan eski commit'in (01cd6b70, .venv + modeller içeriyordu) nesneleri.
+   Artık gerek yoksa: `git reflog expire --expire=now --all && git gc --prune=now`.
+
+Daha sonrası için fikirler: modeli Hugging Face Hub'a yükleyip uygulamayı yayınlamak; yeni bir NLP görevi
+(yorum özetleme, "hangi özellikten şikâyet ediliyor?" gibi konu/aspect analizi).
 
 ## Devam ederken hatırlanacaklar
 - `data/hard_test.csv`'yi asla eğitim/tuning'e karıştırma — o gerçek genelleme ölçütümüz, "sızdırırsak" tüm karşılaştırmalar anlamsızlaşır.
