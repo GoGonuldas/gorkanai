@@ -1,0 +1,15 @@
+# Sanal ortam — her bilgisayarda yeniden kurulur (bkz. README)
+.venv/
+
+# Eğitilmiş modeller (~420 MB'lık dosyalar; GitHub 100 MB üstünü kabul etmez).
+# Her biri kendi adımındaki train.py ile yeniden üretilir.
+step*/model/
+
+# Gerçek veri havuzu (41 MB) — data/prepare_real_dataset.py ile yeniden üretilir
+data/real/train_pool.csv
+
+# Python / çalışma çıktıları
+__pycache__/
+*.pyc
+server_log.txt
+.DS_Store

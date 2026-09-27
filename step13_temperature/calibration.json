@@ -1,0 +1,6 @@
+{
+  "model_dir": "step12_confident_learning/model",
+  "temperature": 2.4733,
+  "threshold": 0.76,
+  "target_acc": 0.93
+}

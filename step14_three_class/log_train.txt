@@ -1,0 +1,85 @@
+Cihaz: mps
+Eğitim seti: 18896 satır | {'pozitif': 8747, 'negatif': 7597, 'nötr': 2552}
+  (nötr: 319 benzersiz yorum x 8)
+epoch 1 | loss 0.3496
+epoch 2 | loss 0.1378
+süre: 9.9 dk
+Model kaydedildi: /Users/gorkangonuldas/workspace/gorkanai/step14_three_class/model
+=== 1) KISA TEMİZ TEST (elle etiketli, 3 sınıf: 97 poz / 35 nötr / 68 neg) ===
+Kıyas: C + %95 eşik: doğruluk 0.800 | macro-F1 0.766
+  negatif  kesinlik 0.92 | yakalama 0.88
+  nötr     kesinlik 0.46 | yakalama 0.69
+  pozitif  kesinlik 0.92 | yakalama 0.78
+tahmin   negatif  nötr  pozitif
+doğrusu                        
+negatif       60     8        0
+nötr           4    24        7
+pozitif        1    20       76
+3 sınıflı model: doğruluk 0.830 | macro-F1 0.735
+  negatif  kesinlik 0.78 | yakalama 0.96
+  nötr     kesinlik 0.73 | yakalama 0.31
+  pozitif  kesinlik 0.88 | yakalama 0.93
+tahmin   negatif  nötr  pozitif
+doğrusu                        
+negatif       65     1        2
+nötr          14    11       10
+pozitif        4     3       90
+=== 2) Diğer testler (2 sınıflı etiketler) ===
+  gerçek test (gürültülü)  [kıyas  ] nötr/emin değil: %17.6 | cevap verilenlerde doğruluk 0.944
+  gerçek test (gürültülü)  [3 sınıf] nötr/emin değil: % 2.3 | cevap verilenlerde doğruluk 0.899
+  negasyon: elle           [kıyas  ] nötr/emin değil: % 0.0 | cevap verilenlerde doğruluk 1.000
+  negasyon: elle           [3 sınıf] nötr/emin değil: % 0.0 | cevap verilenlerde doğruluk 1.000
+  sentetik zor             [kıyas  ] nötr/emin değil: % 6.2 | cevap verilenlerde doğruluk 1.000
+  sentetik zor             [3 sınıf] nötr/emin değil: % 0.0 | cevap verilenlerde doğruluk 1.000
+=== 3) Kısayol testi: kısa ama duygulu cümleler nötr olmamalı ===
+  3 sınıf: pozitif  % 68 | kıyas: pozitif  | çok sağlam
+  3 sınıf: pozitif  % 97 | kıyas: pozitif  | harika
+  3 sınıf: negatif  %100 | kıyas: negatif  | berbat
+  3 sınıf: pozitif  % 98 | kıyas: pozitif  | bayıldım
+  3 sınıf: negatif  %100 | kıyas: negatif  | iade ettim
+  3 sınıf: negatif  %100 | kıyas: negatif  | tavsiye etmem
+  3 sınıf: pozitif  %100 | kıyas: pozitif  | süper ürün
+  3 sınıf: pozitif  % 89 | kıyas: pozitif  | fena değil
+  3 sınıf: negatif  % 84 | kıyas: negatif  | idare eder
+  3 sınıf: negatif  % 55 | kıyas: pozitif  | kargo 2 günde geldi.
+  3 sınıf: nötr     % 99 | kıyas: pozitif  | saygılarımla.
+  3 sınıf: negatif  % 80 | kıyas: nötr     | bunda da aynı bedeni alın.
+  3 sınıf: nötr     % 55 | kıyas: nötr     | ürün dün elime ulaştı.
+  3 sınıf: negatif  % 50 | kıyas: nötr     | telefonun rengi siyah.
+  3 sınıf: nötr     % 99 | kıyas: nötr     | Ürün 2019 yılında piyasaya sürülmüştür.
+  3 sınıf: pozitif  % 99 | kıyas: pozitif  | Cihaz yüksek performansı ile kullanıcılar tarafından beğenilmiştir.
+--- 3 sınıflı modelin kısa temiz testteki hataları ---
+  doğrusu=nötr     tahmin=pozitif  | kullanılabilirlik - 10
+  doğrusu=pozitif  tahmin=negatif  | idarenin biraz üstü
+  doğrusu=nötr     tahmin=pozitif  | yağlı his bırakıyor ama temizliyor
+  doğrusu=nötr     tahmin=negatif  | bu ürünü başka biryerden aldım.
+  doğrusu=nötr     tahmin=negatif  | bunda da aynı bedeni alın.
+  doğrusu=negatif  tahmin=pozitif  | -elektrik kesintilerinde saat ayarı gidiyor.
+  doğrusu=nötr     tahmin=pozitif  | parkdale ile test ettim
+  doğrusu=nötr     tahmin=negatif  | poşet daha kalın ve saydam.
+  doğrusu=nötr     tahmin=pozitif  | fiyat olarak hakkı bu.
+  doğrusu=nötr     tahmin=negatif  | ses 71dbdir.
+  doğrusu=nötr     tahmin=negatif  | -daha iyi kamera
+  doğrusu=nötr     tahmin=pozitif  | prima yurtdışındaki adıyla pampersin kalitesi,
+  doğrusu=pozitif  tahmin=nötr     | güçlü,isik renki guzel,biraz uzun
+  doğrusu=nötr     tahmin=pozitif  | ben de almayı düşünüyorum.
+  doğrusu=nötr     tahmin=negatif  | alacaklar bu kriteri dikkate alsınlar
+  doğrusu=nötr     tahmin=pozitif  | canları sağ olsun.
+  doğrusu=nötr     tahmin=pozitif  | ilginç...
+  doğrusu=nötr     tahmin=pozitif  | bu fiyata bu
+  doğrusu=nötr     tahmin=negatif  | ahhhh.... azra köhen  ahhh...
+  doğrusu=pozitif  tahmin=negatif  | çok küçük tanklar için ideal
+  doğrusu=negatif  tahmin=nötr     | kutulusuna bosuna fazla para vermeyin
+  doğrusu=nötr     tahmin=pozitif  | tamamen gerçek.
+  doğrusu=pozitif  tahmin=nötr     | hemen teslim olayında son nokta...
+  doğrusu=nötr     tahmin=negatif  | 4- yüksek buhar elinizi yakabilir.
+  doğrusu=pozitif  tahmin=negatif  | marifet büyüklüğünde değil işlevinde
+  doğrusu=nötr     tahmin=negatif  | parayı iade etiler.
+  doğrusu=nötr     tahmin=negatif  | ehh
+  doğrusu=nötr     tahmin=negatif  | telefonun eksileri:
+  doğrusu=pozitif  tahmin=negatif  | cekim gucu bana gore iyi.
+  doğrusu=nötr     tahmin=negatif  | kesip uydurduk.
+  doğrusu=negatif  tahmin=pozitif  | bu ne küçücük dedi̇  :-)))
+  doğrusu=nötr     tahmin=negatif  | ama en azından niyet iyi.
+  doğrusu=nötr     tahmin=negatif  | kargo 2 günde geldi.
+  doğrusu=pozitif  tahmin=nötr     | bence gonul rahatligi ile alinabilir

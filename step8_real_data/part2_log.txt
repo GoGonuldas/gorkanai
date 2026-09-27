@@ -1,0 +1,42 @@
+Cihaz: mps
+Havuzda kullanılabilir negatif yorum: 13761 (en fazla 27522 dengeli örnek)
+classifier.weight                          | MISSING    | 
+classifier.bias                            | MISSING    | 
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+=== 1000 gerçek yorumla fine-tuning (2 epoch) ===
+epoch 1 | ortalama loss: 0.6820 | val doğruluk: 0.67
+epoch 2 | ortalama loss: 0.4290 | val doğruluk: 0.88
+GERÇEK test: 0.879 (negatif 0.88 / pozitif 0.87) | sentetik zor test: 0.81 | süre: 0.9 dk
+classifier.weight                          | MISSING    | 
+classifier.bias                            | MISSING    | 
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+=== 4000 gerçek yorumla fine-tuning (2 epoch) ===
+epoch 1 | ortalama loss: 0.4230 | val doğruluk: 0.88
+epoch 2 | ortalama loss: 0.2144 | val doğruluk: 0.88
+GERÇEK test: 0.889 (negatif 0.91 / pozitif 0.87) | sentetik zor test: 0.81 | süre: 3.0 dk
+classifier.weight                          | MISSING    | 
+classifier.bias                            | MISSING    | 
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+=== 16000 gerçek yorumla fine-tuning (2 epoch) ===
+epoch 1 | ortalama loss: 0.3241 | val doğruluk: 0.89
+epoch 2 | ortalama loss: 0.2059 | val doğruluk: 0.89
+GERÇEK test: 0.895 (negatif 0.87 / pozitif 0.92) | sentetik zor test: 0.81 | süre: 20.9 dk
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  3.47it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  3.41it/s]
+Model kaydedildi: /Users/gorkangonuldas/workspace/gorkanai/step8_real_data/model
+X  gerçek=negatif  | ama genel olarak bu fiyatlara daha iyisini bulmak zor,samsung da olsa alınabilir bir telefon olduğunu belir...
+X  gerçek=negatif  | ürünü kullanmaya bilirseniz çok güzel.boyaya başlamadan önce kapı pencere pervazları çıkıyorsa çıkartın çık...
+X  gerçek=negatif  | diğer markalar nasıldır bilmiyorum ama bu ilk tecrübem çok olumsuz tavsiye etmem
+X  gerçek=pozitif  | havasını çekerken kıyafetlerinizin hava deliğini içeriden tıkamamasına özen gösterin.
+X  gerçek=negatif  | urun kuvetlenmek için iyi çalısma hayatınızda çalısrsanız ağrımaz eller uzun sure calsımalarda 3 tel ile ca...
+X  gerçek=negatif  | ama bosaltması biraz tozutuyor ortalıgı.torbayı alıp cope atmaya alısan bırı icin ilk basta zor gelebilir h...
+X  gerçek=negatif  | fiyatıyla doğru orantılı bir ürün. benim beklentilerimi karşıladı.
+X  gerçek=negatif  | oysa spigen ne de kaliteli bir markadır
+X  gerçek=negatif  | bunun dışımda söylenecek fazla birşey yok. fiyatı uygun kapınıza kadar geiriyorlar.garanti sürecini başlatm...
+X  gerçek=pozitif  | yorumlarda 15 dakikada kurdum gibi seyler soylenilmis ancak benim en az 1 saatimi aldı, sanırım vida pozisy...
+X  gerçek=pozitif  | aldıgımda cok umutlu degıldım hıc acmadan gerı gondermeyı bıle dusundum actım bıraz surunce ıse yaramıyo hı...
+X  gerçek=negatif  | ürün fiyatından da tahmin edileceği gibi çok kaliteli değil. geldiğinde yan demirlerden biri çıkmış ve bir ...
+=== ÖZET ===
+Kısım 1 (330 sentetik cümle) -> gerçek test: 0.58 | sentetik zor test: 0.88
+  1000 gerçek yorum -> gerçek test: 0.879 (neg 0.88 / poz 0.87) | sentetik zor test: 0.81
+  4000 gerçek yorum -> gerçek test: 0.889 (neg 0.91 / poz 0.87) | sentetik zor test: 0.81
+ 16000 gerçek yorum -> gerçek test: 0.895 (neg 0.87 / poz 0.92) | sentetik zor test: 0.81

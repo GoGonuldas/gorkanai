@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gorkanai — Duygu Analizi</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; color: #222; background: #fafafa; }
+  h1 { font-size: 1.5rem; margin-bottom: 4px; }
+  p.sub { color: #666; margin-top: 0; }
+  textarea { width: 100%; box-sizing: border-box; min-height: 110px; padding: 10px; font: inherit; border: 1px solid #ccc; border-radius: 8px; }
+  button { margin-top: 10px; padding: 10px 20px; font: inherit; border: 0; border-radius: 8px; background: #333; color: #fff; cursor: pointer; }
+  button:disabled { opacity: .5; }
+  #result { margin-top: 24px; padding: 16px; border-radius: 8px; background: #fff; border: 1px solid #ddd; }
+  .label { font-size: 1.3rem; font-weight: 600; }
+  .pozitif { color: #1a7f37; }
+  .negatif { color: #c62828; }
+  .belirsiz { color: #8a6d00; }
+  .note { color: #666; font-size: .9rem; margin-top: 4px; }
+  .bar { height: 10px; border-radius: 5px; background: #eee; margin-top: 8px; overflow: hidden; }
+  .bar div { height: 100%; }
+  .examples button { background: #e8e8e8; color: #333; padding: 6px 10px; font-size: .85rem; margin: 4px 4px 0 0; }
+</style>
+</head>
+<body>
+<h1>gorkanai</h1>
+<p class="sub">Türkçe ürün yorumu duygu analizi — BERT, ~15.700 gerçek yorumla eğitildi (hatalı etiketler temizlendi)</p>
+
+<textarea id="text" placeholder="Bir yorum yaz..."></textarea>
+<div class="examples">
+  <button type="button">Kargo çok hızlıydı, ürün harika!</button>
+  <button type="button">İade etmek zorunda kaldım, hiç memnun değilim.</button>
+  <button type="button">Fiyatına göre idare eder.</button>
+</div>
+<button id="go">Analiz et</button>
+
+<div id="result" hidden></div>
+
+<script>
+  const textEl = document.getElementById("text");
+  const goEl = document.getElementById("go");
+  const resultEl = document.getElementById("result");
+
+  document.querySelectorAll(".examples button").forEach(b =>
+    b.addEventListener("click", () => { textEl.value = b.textContent; analyze(); }));
+  goEl.addEventListener("click", analyze);
+
+  async function analyze() {
+    const text = textEl.value.trim();
+    if (!text) return;
+    goEl.disabled = true;
+    try {
+      const res = await fetch("/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      const data = await res.json();
+      const pos = data.probabilities.pozitif;
+      const heading = data.confident ? data.label.toUpperCase() : "EMİN DEĞİLİM";
+      const note = data.confident ? "" :
+        `<div class="note">Hafifçe <b>${data.leaning}</b> tarafına yakın, ama bu güven seviyesinde model sık yanılıyor (~%64 doğru).</div>`;
+      resultEl.innerHTML = `
+        <div class="label ${data.label}">${heading}</div>
+        <div>Güven: %${(data.confidence * 100).toFixed(1)}</div>${note}
+        <div class="bar"><div style="width:${pos * 100}%; background:${pos >= 0.5 ? "#1a7f37" : "#c62828"}"></div></div>
+        <small>pozitif olasılığı: %${(pos * 100).toFixed(1)}</small>`;
+      resultEl.hidden = false;
+    } catch (e) {
+      resultEl.textContent = "Hata: sunucuya ulaşılamadı.";
+      resultEl.hidden = false;
+    } finally {
+      goEl.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>

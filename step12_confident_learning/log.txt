@@ -1,0 +1,52 @@
+Cihaz: mps
+B eğitim seti: 16454 örnek
+K-fold tahminleri diskten yüklendi: /Users/gorkangonuldas/workspace/gorkanai/step12_confident_learning/oof_probs.npy
+=== 2) Sınıf eşikleri: negatif 0.850 | pozitif 0.854 ===
+Şüpheli etiket: 744 / 16454 (%4.5)
+  'negatif' etiketlilerin %5.3'i şüpheli
+  'pozitif' etiketlilerin %3.8'i şüpheli
+  kısa (<=5 kelime): %7.0 | uzun: %4.3
+En şüpheli 25 örnek (modelin DİĞER sınıfa verdiği olasılıkla):
+  etiket=pozitif  diğer sınıf=%100 | kötü bır urun degıl hızlı şarj edıyor kalıtelı de bundan daha kötü daha pahalı urunlerı satanlar ...
+  etiket=pozitif  diğer sınıf=%100 | gerçekten de 1 ay içinde plak ve tartarı büyük oranda temizliyor ama beyazlatma modunun bir fayda...
+  etiket=pozitif  diğer sınıf=%100 | çok övüldüğü icin denedim. parfüm orjinal ama beklediğim kadar kalıcı ve farkedilir değil. 2 saat...
+  etiket=pozitif  diğer sınıf=%100 | açıklama kısmında i̇mzalı yazıyor ancak bana gelen kitapta herhangi bir imza yoktu.. gerçi şart t...
+  etiket=pozitif  diğer sınıf=%100 | görüntü kalitesi ekran çözünürlüğü kötü vasat.  zil sesi saglam kulaklarim olmasına ragmen ancak ...
+  etiket=pozitif  diğer sınıf=%100 | ürün açıklaması oldukça yetersiz,
+  etiket=pozitif  diğer sınıf=%100 | ürünü hepsiburada üzerinden yorumları ve araştırmalarıma göre aldım fotoğraf çekimi özelliklerine...
+  etiket=pozitif  diğer sınıf=%100 | 13 mp lik kamera gerçekten vasat. 5 mp lik ön kamera daha başarılı. bataryası dahili ve bir günü ...
+  etiket=pozitif  diğer sınıf=%100 | bu ürünü daha önce kullanmıştım şimdi yeni aldıgım araç için tekrardan aldım önce depoyu fullemed...
+  etiket=pozitif  diğer sınıf=%100 | (-) kutusundan çıkan kulaklığı lenovo ya yakışmamış. kulaklığın ses kalitesi iyi değil.  13 mp ka...
+  etiket=pozitif  diğer sınıf=%100 | urun beklentimi karsiladi fakat mukemmel degil.tek problemi yatma modu.cocuk yaterken kafasi one ...
+  etiket=pozitif  diğer sınıf=%100 | kumaşı fermuarı çok kalitesiz yapmışlar
+  etiket=pozitif  diğer sınıf=%100 | sapları ısıyı iletmiyor.
+  etiket=pozitif  diğer sınıf=%100 | ürün resimle aynı geldi daha kullanamadım
+  etiket=pozitif  diğer sınıf=%100 | ama mühendislikte okuyan arkadaşlara tavsiye etmem.
+  etiket=pozitif  diğer sınıf=%100 | aldigim zaman 2 ay icerisinde solntiki bozuldu ve kullanilmaz hale geldi (yorumum uste ciksin diy...
+  etiket=pozitif  diğer sınıf=%100 | uçlar tamamen işe yaramaz.
+  etiket=pozitif  diğer sınıf=%100 | çok kaliteli ürünlerden hiç bir farkı yok.
+  etiket=pozitif  diğer sınıf=%100 | komşu dükkana gelen fare bize uğramaz oldu...
+  etiket=pozitif  diğer sınıf=%100 | ayrıca ürün özelliklerinde belirtilmemiş, tornavida kısmı cırcırlı.
+  etiket=pozitif  diğer sınıf=%100 | söylenecek çok  şey var ama yetersiz kalır.
+  etiket=pozitif  diğer sınıf=%100 | ben 2 ay önce aldım hiç bişey olmadı
+  etiket=pozitif  diğer sınıf=% 99 | bardak tutucu olan haznesi kullanışlı olabilir ama uzun ömürlü olacağını sanmıyorum. çünkü filesi...
+  etiket=pozitif  diğer sınıf=% 99 | yorumlara bakarak ürünü almaya karar verdim ve sipariş ettim. sonuçta casıo ne kadar kötüolabilir...
+  etiket=pozitif  diğer sınıf=% 99 | ürünün üzerindeki tarif bence doğru bir tarif değil. orada sürüp beklememiz sonra parlatmamız içi...
+=== 3) Model C: 15710 örnek (744 çıkarıldı) ===
+label
+pozitif    8131
+negatif    7579
+  [C] epoch 1 | loss 0.2325
+  [C] epoch 2 | loss 0.1061
+  [C] süre: 34.4 dk
+Model kaydedildi: /Users/gorkangonuldas/workspace/gorkanai/step12_confident_learning/model
+=== 4) Karşılaştırma ===
+                              B (Adım 10)  C (temiz)    fark
+gerçek test (gürültülü)             0.890      0.891  +0.001
+gerçek: kapsam@%80                  0.838      0.922  +0.084
+KISA TEMİZ (elle)                   0.927      0.964  +0.036
+kısa temiz: kapsam@%80              0.842      0.927  +0.085
+kısa temiz: doğruluk@%80            0.978      0.967  -0.011
+negasyon holdout                    0.820      0.815  -0.005
+elle negasyon                       1.000      1.000  +0.000
+sentetik zor                        1.000      1.000  +0.000

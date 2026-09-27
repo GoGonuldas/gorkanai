@@ -1,0 +1,50 @@
+Eğitim: {'pozitif': 3000, 'negatif': 3000, 'nötr': 3000}
+epoch 1 | loss 0.3221
+epoch 2 | loss 0.1634
+=== Sonuçlar ===
+  Vikipedi nötr (görülmemiş, 500)            doğruluk 0.986 | tahmin dağılımı {'negatif': 5, 'nötr': 493, 'pozitif': 2}
+  GERÇEK nötr yorumlar (elle, 35)            doğruluk 0.114 | tahmin dağılımı {'negatif': 18, 'nötr': 4, 'pozitif': 13}
+  gerçek pozitif/negatif kısa yorumlar (elle, 165) doğruluk 0.909 | tahmin dağılımı {'negatif': 82, 'nötr': 1, 'pozitif': 82}
+--- Gerçek nötr yorumlarda tahminler ---
+  X  pozitif  % 54 | kullanılabilirlik - 10
+  X  negatif  % 75 | yağlı his bırakıyor ama temizliyor
+  X  negatif  % 88 | bu ürünü başka biryerden aldım.
+  OK nötr     % 98 | bunda da aynı bedeni alın.
+  X  pozitif  % 62 | parkdale ile test ettim
+  X  negatif  % 77 | camera orta
+  X  negatif  % 61 | poşet daha kalın ve saydam.
+  X  pozitif  % 56 | hugo boss 7 puan
+  X  pozitif  % 56 | fiyat olarak hakkı bu.
+  X  pozitif  % 54 | iyi çalışmalar,
+  OK nötr     % 99 | ses 71dbdir.
+  X  negatif  % 65 | -daha iyi kamera
+  X  pozitif  % 80 | prima yurtdışındaki adıyla pampersin kalitesi,
+  X  negatif  % 65 | artıları +++
+  X  pozitif  % 66 | ben de almayı düşünüyorum.
+  X  negatif  % 86 | sadece siyah rengimi var telefonun
+  X  negatif  % 87 | alacaklar bu kriteri dikkate alsınlar
+  OK nötr     % 96 | canları sağ olsun.
+  X  pozitif  % 54 | ilginç...
+  X  negatif  % 63 | bileginize göre ayarlamalısınız
+  X  negatif  % 52 | bu fiyata bu
+  X  negatif  % 77 | ahhhh.... azra köhen  ahhh...
+  X  negatif  % 63 | işe yaramasi önemli olan,
+  X  negatif  % 60 | önceden 20 watt'lık ampul vardı.
+  X  pozitif  % 69 | samsung orjinal 32gb 48mb sn
+  OK nötr     % 85 | tamamen gerçek.
+  X  pozitif  % 85 | tşklr
+  X  pozitif  % 82 | sağlıcakla kalın .
+  X  negatif  % 72 | 4- yüksek buhar elinizi yakabilir.
+  X  negatif  % 89 | parayı iade etiler.
+  X  negatif  % 51 | ehh
+  X  pozitif  % 64 | telefonun eksileri:
+  X  negatif  % 81 | kesip uydurduk.
+  X  negatif  % 52 | ama en azından niyet iyi.
+  X  pozitif  % 83 | kargo 2 günde geldi.
+--- Kısayol testi: aynı anlam, farklı üslup ---
+  nötr     %100 | Ürün 2019 yılında piyasaya sürülmüştür.
+  pozitif  % 81 | ürün dün elime ulaştı.
+  nötr     % 99 | Cihaz yüksek performansı ile kullanıcılar tarafından beğenilmiştir.
+  pozitif  % 97 | cihaz çok hızlı, bayıldım.
+  negatif  % 78 | Saygılarımla.
+  pozitif  % 83 | kargo 2 günde geldi.

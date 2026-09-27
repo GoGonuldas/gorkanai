@@ -1,0 +1,26 @@
+text,label,type
+"kulaklığın ses kalitesi hiç fena değil, bu fiyata çok iyi.",pozitif,cift_olumsuz
+"kumaşı kötü değil, yıkamadan sonra da bozulmadı.",pozitif,cift_olumsuz
+"bataryası fena sayılmaz, bir gün rahat gidiyor.",pozitif,cift_olumsuz
+"montajı zor değildi, yarım saatte kurdum.",pozitif,cift_olumsuz
+"ürün hiç de kalitesiz değil, gayet sağlam.",pozitif,cift_olumsuz
+"kargo yavaş değildi, ertesi gün geldi.",pozitif,cift_olumsuz
+"fiyatı pahalı değil, kesinlikle alınır.",pozitif,cift_olumsuz
+"kokusu rahatsız edici değil, hafif ve hoş.",pozitif,cift_olumsuz
+"sesi yüksek değil, gece rahatça çalıştırıyorum.",pozitif,cift_olumsuz
+"kullanması karmaşık değil, çocuğum bile kullanıyor.",pozitif,cift_olumsuz
+"hiçbir sorun yaşamadım, gönül rahatlığıyla alabilirsiniz.",pozitif,cift_olumsuz
+"aldığıma hiç pişman değilim.",pozitif,cift_olumsuz
+"beklediğimden kötü çıkmadı, aksine çok memnunum.",pozitif,cift_olumsuz
+"telefonun kamerası berbat değil, gün ışığında gayet net.",pozitif,cift_olumsuz
+"ağır değil, çantada rahat taşınıyor.",pozitif,cift_olumsuz
+"ürün hiç kaliteli değil, iki günde koptu.",negatif,basit_olumsuz
+"kulaklığın sesi net değil, sürekli cızırdıyor.",negatif,basit_olumsuz
+"anlatıldığı gibi değil, iade ettim.",negatif,basit_olumsuz
+"hiç memnun değilim, paranıza yazık.",negatif,basit_olumsuz
+"şarj aleti orijinal değil, telefonu ısıtıyor.",negatif,basit_olumsuz
+"kargo hızlı değildi, iki hafta bekledim.",negatif,basit_olumsuz
+"rahat değil, ayağımı vurdu.",negatif,basit_olumsuz
+"tavsiye etmiyorum, param boşa gitti.",negatif,basit_olumsuz
+"kumaşı yumuşak değil, tenimi tahriş etti.",negatif,basit_olumsuz
+"beklentimi karşılamadı, tam bir hayal kırıklığı.",negatif,basit_olumsuz

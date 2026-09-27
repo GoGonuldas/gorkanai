@@ -1,0 +1,44 @@
+Cihaz: mps | eğitim boyutu: 4000
+  pool["has_pattern"] = pool["text"].str.contains(NEG_PATTERN)
+Kalıp içeren yorum: 1422 | havuzdaki pozitif oranı: %73
+A: 4000 örnek | 50 kalıplı yorum, pozitif %14
+B: 4108 örnek (+108 gerçek pozitif) | 158 kalıplı yorum, pozitif %73
+=== Model A (eski örnekleme): 4000 örnek, 2 epoch ===
+epoch 1 | ortalama loss: 0.4398 | val doğruluk: 0.86
+epoch 2 | ortalama loss: 0.2453 | val doğruluk: 0.89
+süre: 2.4 dk
+=== Model B (oran düzeltilmiş): 4108 örnek, 2 epoch ===
+epoch 1 | ortalama loss: 0.4715 | val doğruluk: 0.86
+epoch 2 | ortalama loss: 0.2739 | val doğruluk: 0.87
+süre: 2.4 dk
+=== ÖZET ===
+               model  gerçek test  negasyon holdout  elle: çift olumsuz  elle: basit olumsuz  sentetik zor
+  A (eski örnekleme)        0.893             0.665               0.800                1.000         0.875
+B (oran düzeltilmiş)        0.884             0.795               0.800                1.000         1.000
+(Negasyon holdout'ta %100 beklenmez: 'fena değil' gerçekten iki anlamlı, ~%29'u negatif etiketli)
+--- Elle yazılmış negasyon testi: A -> B ---
+A:OK B:OK gerçek=pozitif  | kulaklığın ses kalitesi hiç fena değil, bu fiyata çok iyi.
+A:X  B:X  gerçek=pozitif  | kumaşı kötü değil, yıkamadan sonra da bozulmadı.
+A:X  B:OK gerçek=pozitif  | bataryası fena sayılmaz, bir gün rahat gidiyor.
+A:OK B:OK gerçek=pozitif  | montajı zor değildi, yarım saatte kurdum.
+A:OK B:X  gerçek=pozitif  | ürün hiç de kalitesiz değil, gayet sağlam.
+A:OK B:OK gerçek=pozitif  | kargo yavaş değildi, ertesi gün geldi.
+A:OK B:OK gerçek=pozitif  | fiyatı pahalı değil, kesinlikle alınır.
+A:OK B:OK gerçek=pozitif  | kokusu rahatsız edici değil, hafif ve hoş.
+A:X  B:X  gerçek=pozitif  | sesi yüksek değil, gece rahatça çalıştırıyorum.
+A:OK B:OK gerçek=pozitif  | kullanması karmaşık değil, çocuğum bile kullanıyor.
+A:OK B:OK gerçek=pozitif  | hiçbir sorun yaşamadım, gönül rahatlığıyla alabilirsiniz.
+A:OK B:OK gerçek=pozitif  | aldığıma hiç pişman değilim.
+A:OK B:OK gerçek=pozitif  | beklediğimden kötü çıkmadı, aksine çok memnunum.
+A:OK B:OK gerçek=pozitif  | telefonun kamerası berbat değil, gün ışığında gayet net.
+A:OK B:OK gerçek=pozitif  | ağır değil, çantada rahat taşınıyor.
+A:OK B:OK gerçek=negatif  | ürün hiç kaliteli değil, iki günde koptu.
+A:OK B:OK gerçek=negatif  | kulaklığın sesi net değil, sürekli cızırdıyor.
+A:OK B:OK gerçek=negatif  | anlatıldığı gibi değil, iade ettim.
+A:OK B:OK gerçek=negatif  | hiç memnun değilim, paranıza yazık.
+A:OK B:OK gerçek=negatif  | şarj aleti orijinal değil, telefonu ısıtıyor.
+A:OK B:OK gerçek=negatif  | kargo hızlı değildi, iki hafta bekledim.
+A:OK B:OK gerçek=negatif  | rahat değil, ayağımı vurdu.
+A:OK B:OK gerçek=negatif  | tavsiye etmiyorum, param boşa gitti.
+A:OK B:OK gerçek=negatif  | kumaşı yumuşak değil, tenimi tahriş etti.
+A:OK B:OK gerçek=negatif  | beklentimi karşılamadı, tam bir hayal kırıklığı.
