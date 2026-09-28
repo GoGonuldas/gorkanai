@@ -235,16 +235,39 @@ Kısayol testi 18/18 doğru ("berbat"/"çöp" negatif, "kargo 2 günde geldi." n
 Gerçek test: %5.4 nötr, cevap verilenlerde 0.903. Model: `step14_three_class/model_v2b/` (bias +3.00 ile kullanılmalı).
 `model_v2a/` kullanılmamalı. App henüz DEĞİŞTİRİLMEDİ. Eksik: görülmemiş yeni bir test seti.
 
-## Yapılacaklar (2026-09-27'de bırakıldı — bu sırayla önerildi)
+## Adım 14 devamı: Görülmemiş test seti üzerinde V2b doğrulaması — TAMAMLANDI (2026-09-28)
+Bu makinede proje sıfırdan kuruldu (`.venv`, `data/real/train_pool.csv`, tüm `step*/model*/` gitignore'da
+olduğu için hiç yoktu) — Homebrew Python 3.12 + venv + paketler yeniden kuruldu, `train_pool.csv`
+`prepare_real_dataset.py` ile yeniden üretildi (deterministik: `test.csv` git'teki ile birebir aynı çıktı).
 
-1. **Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.**
-   - Neden: `data/short_clean_test.csv` Adım 14'te görüldü (val'i genişletme kararı test sonucuna bakılarak verildi)
-     → V2b'nin 0.825 macro-F1'i iyimser.
-   - Nasıl: `prepare_val_negatives.py` / `prepare_candidates.py` mantığıyla, HİÇBİR eğitim/val/test setinde olmayan
-     kısa yorumlar seç (hem "pozitif" hem "negatif" etiketlilerden, ~%20 nötr beklenir). `save_labels.py` ile
-     kaydet (yeni bir batch numarası; eğitime/val'e SOKMA). V2b'yi `model_v2b/` + bias +3.00 ile ölç, kıyas C+%95 ile.
-   - Aynı sette nötr bias'ını (+3.00 grid'in üst sınırıydı) yeniden seçmek YOK — bias val'de seçilir; istenirse
-     grid'i genişletip val'de yeniden seç, sonra yeni testte bir kez ölç.
+**Yeni test seti** (`step14_three_class/prepare_new_test.py` → `candidates/batch_06.csv`, id 2000-2199):
+havuzun ilk 9000'lik dilimi (val+eğitim+pattern-extra payı) tamamen atlanıp ondan SONRAKİ kısımdan,
+hem "pozitif" hem "negatif" etiketli havuz yorumlarından 100'er tane seçildi — hiçbir eğitim/val/test/
+candidate setinde yok (assert ile doğrulandı). Claude sohbette etiketledi (200/200) → `data/neutral_labels/batch_06.csv`
+(`save_labels.py 6 ...`): **104 pozitif / 74 negatif / 22 nötr** (%11 nötr — "rastgele" örneklemde beklenen
+%11-16 aralığıyla tutarlı, active-learning örneklemindeki %48-52'den düşük, beklendiği gibi).
+
+**Modeller yeniden eğitildi** (gitignore'da oldukları için): `step12_confident_learning/train.py` (oof_probs.npy
+diskte olduğu için K-fold atlandı, sadece model C ~15 dk) ve `step14_three_class/train_v2.py` (V2a ~13 dk,
+V2b ~16 dk). Her iki script de sonunda eksik kıyas modelleri yüzünden (`step10_negation/model`,
+`step14_three_class/model` — ikisi de bu makinede yok ve gerekmiyor) hata verip durdu, ama asıl modeller
+(C, V2a, V2b) hatadan ÖNCE kaydedildiği için sorun olmadı. İlginç not: bu çalıştırmada val macro-F1 V2a'yı
+seçti (0.769 vs V2b 0.767 — çok yakın), önceki çalıştırmada V2b seçilmişti (0.778 vs 0.721); muhtemelen
+MPS backend'in tam deterministik olmaması. Görev zaten V2b'yi sabit ölçtüğü için etkisi yok.
+
+**Ölçüm** (`step14_three_class/eval_new_test.py`, bias YENİDEN seçilmedi — val'de önceden sabitlenen +3.00 kullanıldı):
+| Yeni test (104 poz / 22 nötr / 74 neg, hiç görülmemiş) | doğr. | macro-F1 | nötr P/R | neg P/R | poz P/R |
+|---|---|---|---|---|---|
+| Kıyas: C + %95 eşik (mevcut app) | 0.825 | 0.746 | 0.38/0.64 | 0.87/0.84 | 0.97/0.86 |
+| **V2b + bias +3.00** | **0.870** | **0.808** | **0.58/0.68** | 0.87/0.88 | 0.95/0.90 |
+**Sonuç: V2b, önceki "görülmüş" kısa temiz testteki sonucuna (0.860/0.825) çok yakın bir skorla, hiç
+görülmemiş veride de kıyas modelini üç sınıfta da (özellikle nötr kesinlikte %38→%58) geçti.** Önceki
+şüphe ("V2b'nin sayıları iyimser olabilir, çünkü val'i genişletme kararı bu teste bakılarak verildi")
+doğrulanmadı — gerçek kazanç, ölçüm artefaktı değil. V2b'yi uygulamaya almak için elde yeterli kanıt var.
+
+## Yapılacaklar (2026-09-28'de güncellendi)
+
+1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. **Uygulamaya 3 sınıf ekle** (`step9_app/app.py`, `index.html`).
    - `MODEL_DIR` → `step14_three_class/model_v2b`, nötr logit'ine +3.00 ekle (softmax'tan önce), etiketler
      `config.id2label`'dan (negatif/nötr/pozitif).
