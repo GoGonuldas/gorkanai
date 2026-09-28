@@ -5,9 +5,11 @@ başlayıp adım adım daha gelişmiş yöntemlere geçerek "kendi AI'ını" in�
 Alan: Türkçe duygu analizi (sentiment analysis). Odak: öğrenmek — her adımda
 gerçek bir sınırla karşılaşıp sebebini anlamak, sonra bir sonraki yöntemle çözmek.
 
-**Son durum (2026-09-27):** Adım 1-14 yapıldı. Uygulama (`step9_app`) Adım 12 modelini (%95 "emin değilim"
-eşiğiyle) kullanıyor. Adım 14'te 3 sınıflı (pozitif/nötr/negatif) model V2b hazır ama henüz uygulamaya alınmadı.
-Proje duraklatıldı — kaldığımız yer ve sıradaki işler aşağıda **"Yapılacaklar"** bölümünde.
+**Son durum (2026-09-28):** Adım 1-14 tamamlandı, uygulama 3 sınıflı model V2b'yi kullanıyor, V2b hiç
+görülmemiş veride doğrulandı, model Hugging Face Hub'da herkese açık
+([Urartu65/gorkanai-tr-sentiment](https://huggingface.co/Urartu65/gorkanai-tr-sentiment)). Uygulamanın
+internete açılması PRO abonelik gerektiği için ERTELENDİ (aşağıda). Proje duraklatıldı — sıradaki işler
+**"Yapılacaklar"** bölümünde.
 
 ## Ortam kurulumu
 - Python **3.12** (Homebrew ile kuruldu — sistem Python'ı 3.14 idi, scikit-learn
@@ -277,13 +279,28 @@ Tarayıcıda test edildi (uvicorn + Chrome): "Kargo çok hızlıydı, ürün har
 "Saygılarımla." → NÖTR %99.99 (2 sınıflı eski modelde bu %97 YANLIŞ pozitif çıkıyordu — Adım 13'te tespit
 edilen üslup/kısayol sorunu artık çözülmüş görünüyor).
 
+## Modeli Hugging Face Hub'a yükle + uygulamayı yayınla — KISMEN TAMAMLANDI (2026-09-28)
+`hf auth login` ile giriş yapıldı (kullanıcı: Urartu65). `step14_three_class/model_v2b` bir model kartıyla
+(README.md — kullanım örneği, eğitim verisi, hiç görülmemiş test sonuçları) birlikte
+[Urartu65/gorkanai-tr-sentiment](https://huggingface.co/Urartu65/gorkanai-tr-sentiment)'e yüklendi (ilk
+denemede Xet depolama sunucusunda geçici bir ağ hatası oldu, tekrar denemede tamamlandı).
+
+`step9_app/app.py`: `MODEL_DIR` artık `MODEL_DIR` ortam değişkeninden okunuyor (yoksa yerel `model_v2b`
+klasörüne düşüyor) — Hub'dan yükleyip doğrulandı (`Saygılarımla.` → nötr %99.99, yerel modelle birebir aynı
+sonuç). `step9_app/Dockerfile`, `requirements.txt`, `README.md` (Spaces YAML front-matter'lı) hazırlandı
+ama **kullanılmadı**: `hf repo create --type space --sdk docker` **402 Payment Required** verdi — HF artık
+ücretsiz cpu-basic'te bile Docker/Gradio Space'leri için PRO abonelik istiyor (sadece static Space'ler
+ücretsiz). Kullanıcıyla konuşuldu, karar: **şimdilik uygulamayı yayınlamayı ertele**, model Hub'da herkese
+açık olması yeterli. Dockerfile/requirements.txt hazır — PRO'ya geçilirse veya başka bir Docker destekli
+ücretsiz servise (Render/Fly.io) taşınırsa doğrudan kullanılabilir.
+
 ## Yapılacaklar (2026-09-28'de güncellendi)
 
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
-3. ~~Git commit + push~~ — **yapıldı** (2026-09-27, "Adım 14: 3 sınıflı model..." GitHub'a gönderildi).
-   Sonraki commit'lerde de önce `git status` ile büyük dosya (model, .venv) girmediğini kontrol et.
-4. (İsteğe bağlı) Yerel `.git` 1.5 GB — geri alınan eski commit'in (01cd6b70, .venv + modeller içeriyordu) nesneleri.
+3. ~~Modeli Hugging Face Hub'a yükle.~~ — **yapıldı** (yukarıda). Uygulamayı internete açmak ERTELENDİ (PRO gerekiyor).
+4. ~~Git commit + push~~ — düzenli olarak yapılıyor. Önce `git status` ile büyük dosya (model, .venv) girmediğini kontrol et.
+5. (İsteğe bağlı) Yerel `.git` 1.5 GB — geri alınan eski commit'in (01cd6b70, .venv + modeller içeriyordu) nesneleri.
    Artık gerek yoksa: `git reflog expire --expire=now --all && git gc --prune=now`.
 
 Daha sonrası için fikirler: modeli Hugging Face Hub'a yükleyip uygulamayı yayınlamak; yeni bir NLP görevi

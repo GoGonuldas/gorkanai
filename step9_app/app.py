@@ -35,7 +35,8 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 HERE = os.path.dirname(os.path.abspath(__file__))
 # Adım 14 Deney 3b: nötr sınıfını da öğrenen, val'de seçilen model
 # (öncekiler: step12_confident_learning/model, step10_negation/model, step8_real_data/model)
-MODEL_DIR = os.path.join(HERE, "..", "step14_three_class", "model_v2b")
+# Yerelde bu klasörden, HF Spaces'te MODEL_DIR ortam değişkeniyle Hub'daki repodan (Urartu65/gorkanai-tr-sentiment) yüklenir.
+MODEL_DIR = os.environ.get("MODEL_DIR", os.path.join(HERE, "..", "step14_three_class", "model_v2b"))
 
 # Val'de macro-F1 ile seçilen sabit: nötr kararı ancak bu kadar logit avantajıyla veriliyor
 # (Adım 14 Deney 3b, train_v2.py). Test setine bakılarak yeniden seçilmedi.
