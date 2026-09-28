@@ -15,22 +15,26 @@
   .label { font-size: 1.3rem; font-weight: 600; }
   .pozitif { color: #1a7f37; }
   .negatif { color: #c62828; }
-  .belirsiz { color: #8a6d00; }
-  .note { color: #666; font-size: .9rem; margin-top: 4px; }
-  .bar { height: 10px; border-radius: 5px; background: #eee; margin-top: 8px; overflow: hidden; }
+  .nötr { color: #8a6d00; }
+  .bars { margin-top: 12px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: .85rem; }
+  .bar-row .name { width: 60px; color: #666; }
+  .bar-row .pct { width: 42px; text-align: right; color: #666; }
+  .bar { flex: 1; height: 10px; border-radius: 5px; background: #eee; overflow: hidden; }
   .bar div { height: 100%; }
   .examples button { background: #e8e8e8; color: #333; padding: 6px 10px; font-size: .85rem; margin: 4px 4px 0 0; }
 </style>
 </head>
 <body>
 <h1>gorkanai</h1>
-<p class="sub">Türkçe ürün yorumu duygu analizi — BERT, ~15.700 gerçek yorumla eğitildi (hatalı etiketler temizlendi)</p>
+<p class="sub">Türkçe ürün yorumu duygu analizi — BERT, ~17.000 gerçek + elle etiketli yorumla eğitildi (3 sınıf: pozitif/nötr/negatif)</p>
 
 <textarea id="text" placeholder="Bir yorum yaz..."></textarea>
 <div class="examples">
   <button type="button">Kargo çok hızlıydı, ürün harika!</button>
   <button type="button">İade etmek zorunda kaldım, hiç memnun değilim.</button>
   <button type="button">Fiyatına göre idare eder.</button>
+  <button type="button">Ürün bugün elime ulaştı.</button>
 </div>
 <button id="go">Analiz et</button>
 
@@ -56,15 +60,20 @@
         body: JSON.stringify({ text }),
       });
       const data = await res.json();
-      const pos = data.probabilities.pozitif;
-      const heading = data.confident ? data.label.toUpperCase() : "EMİN DEĞİLİM";
-      const note = data.confident ? "" :
-        `<div class="note">Hafifçe <b>${data.leaning}</b> tarafına yakın, ama bu güven seviyesinde model sık yanılıyor (~%64 doğru).</div>`;
+      const colors = { pozitif: "#1a7f37", nötr: "#8a6d00", negatif: "#c62828" };
+      const order = ["pozitif", "nötr", "negatif"];
+      const bars = order.map(name => {
+        const p = data.probabilities[name];
+        return `<div class="bar-row">
+          <span class="name">${name}</span>
+          <div class="bar"><div style="width:${p * 100}%; background:${colors[name]}"></div></div>
+          <span class="pct">%${(p * 100).toFixed(1)}</span>
+        </div>`;
+      }).join("");
       resultEl.innerHTML = `
-        <div class="label ${data.label}">${heading}</div>
-        <div>Güven: %${(data.confidence * 100).toFixed(1)}</div>${note}
-        <div class="bar"><div style="width:${pos * 100}%; background:${pos >= 0.5 ? "#1a7f37" : "#c62828"}"></div></div>
-        <small>pozitif olasılığı: %${(pos * 100).toFixed(1)}</small>`;
+        <div class="label ${data.label}">${data.label.toUpperCase()}</div>
+        <div>Güven: %${(data.confidence * 100).toFixed(1)}</div>
+        <div class="bars">${bars}</div>`;
       resultEl.hidden = false;
     } catch (e) {
       resultEl.textContent = "Hata: sunucuya ulaşılamadı.";

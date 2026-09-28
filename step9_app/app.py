@@ -1,10 +1,10 @@
 """
 ADIM 9: Modeli bir uygulamaya dönüştürmek (FastAPI).
+ADIM 14 devamı (2026-09-28): 3 sınıflı modele (V2b) geçiş.
 
-Gerçek yorumlarla eğittiğimiz BERT modelini (Adım 12: step12_confident_learning/model/)
-bir web servisine koyuyoruz. Artık model bir script'in içinde değil —
-herhangi bir program (web sayfası, mobil uygulama, başka bir servis) ona
-HTTP isteği atıp cevap alabilir.
+Gerçek yorumlarla eğittiğimiz BERT modelini bir web servisine koyuyoruz.
+Artık model bir script'in içinde değil — herhangi bir program (web sayfası,
+mobil uygulama, başka bir servis) ona HTTP isteği atıp cevap alabilir.
 
 Çalıştırmak için:
     cd step9_app && source ../.venv/bin/activate
@@ -17,6 +17,11 @@ Model hep KÜÇÜK HARFLİ yorumlarla eğitildi. Kullanıcı "Bu Ürün Harika"
 yazarsa model alışık olmadığı bir girdi görür. Bu yüzden her metni önce
 eğitim verisine benzetiyoruz (turkish_lower). Sentetik zor testte bu tek
 satır doğruluğu 0.81 -> 0.875 çıkardı.
+
+Adım 11-13'teki "emin değilim" eşiği (2 sınıflı model, güven < eşikse belirsiz)
+KALDIRILDI: nötr sınıfı artık o işlevi doğrudan üstleniyor (hiç görülmemiş
+testte nötr kesinliği %38 -> %58). Eşiği 3 sınıf için yeniden seçmek ayrı bir
+val ölçümü gerektirirdi; basitlik için modele doğrudan güveniyoruz.
 """
 
 import os
@@ -28,20 +33,20 @@ from pydantic import BaseModel, Field
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-# Adım 12: confident learning ile temizlenmiş veride eğitilen model
-# (öncekiler: step10_negation/model, step8_real_data/model)
-MODEL_DIR = os.path.join(HERE, "..", "step12_confident_learning", "model")
-LABELS = ["negatif", "pozitif"]
+# Adım 14 Deney 3b: nötr sınıfını da öğrenen, val'de seçilen model
+# (öncekiler: step12_confident_learning/model, step10_negation/model, step8_real_data/model)
+MODEL_DIR = os.path.join(HERE, "..", "step14_three_class", "model_v2b")
 
-# Adım 11: güven bu eşiğin altındaysa "belirsiz" diyoruz. Eşik VAL setinde seçildi
-# (step11_confidence/choose_threshold.py). Model değişince eşik de YENİDEN seçilmeli:
-# Adım 12 modeli daha "emin" konuştuğu için aynı doğruluk hedefi (>=0.93) %95 eşik gerektirdi.
-# Gerçek testte: cevap verilen %82 yorumda doğruluk 0.944, "belirsiz" denenlerde 0.642.
-CONFIDENCE_THRESHOLD = 0.95
+# Val'de macro-F1 ile seçilen sabit: nötr kararı ancak bu kadar logit avantajıyla veriliyor
+# (Adım 14 Deney 3b, train_v2.py). Test setine bakılarak yeniden seçilmedi.
+NEUTRAL_BIAS = 3.00
 
 # Model uygulama açılırken BİR KEZ yüklenir, her istekte değil (yükleme birkaç saniye sürer)
 tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
 model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR).eval()
+id2label = model.config.id2label
+LABELS = [id2label[i] for i in range(len(id2label))]
+NEUTRAL_IDX = LABELS.index("nötr")
 
 
 def turkish_lower(text: str) -> str:
@@ -53,13 +58,12 @@ def turkish_lower(text: str) -> str:
 @torch.no_grad()
 def predict(text: str) -> dict:
     encoded = tokenizer(turkish_lower(text), truncation=True, max_length=128, return_tensors="pt")
-    probs = torch.softmax(model(**encoded).logits, dim=1)[0].tolist()
+    logits = model(**encoded).logits[0].clone()
+    logits[NEUTRAL_IDX] += NEUTRAL_BIAS
+    probs = torch.softmax(logits, dim=0).tolist()
     best = max(range(len(LABELS)), key=lambda i: probs[i])
-    confident = probs[best] >= CONFIDENCE_THRESHOLD
     return {
-        "label": LABELS[best] if confident else "belirsiz",
-        "leaning": LABELS[best],              # emin olmasa da hangi tarafa yakın
-        "confident": confident,
+        "label": LABELS[best],
         "confidence": round(probs[best], 4),
         "probabilities": {name: round(p, 4) for name, p in zip(LABELS, probs)},
     }

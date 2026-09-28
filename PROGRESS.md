@@ -265,15 +265,22 @@ görülmemiş veride de kıyas modelini üç sınıfta da (özellikle nötr kesi
 şüphe ("V2b'nin sayıları iyimser olabilir, çünkü val'i genişletme kararı bu teste bakılarak verildi")
 doğrulanmadı — gerçek kazanç, ölçüm artefaktı değil. V2b'yi uygulamaya almak için elde yeterli kanıt var.
 
+## Uygulamaya 3 sınıf eklendi — TAMAMLANDI (2026-09-28)
+`step9_app/app.py`: `MODEL_DIR` → `step14_three_class/model_v2b`, `LABELS` artık modelin `config.id2label`'ından
+okunuyor (negatif/nötr/pozitif), tahminden önce nötr logit'ine sabit **+3.00** ekleniyor (val'de seçilen bias,
+Adım 14 Deney 3b). Adım 11-13'teki "emin değilim" güven eşiği **kaldırıldı** — nötr sınıfı o işlevi zaten
+üstleniyor (karar: kullanıcıyla konuşuldu, basitlik tercih edildi; eşiği tutmak 3 sınıf için ayrı bir
+val-tabanlı yeniden seçim gerektirirdi). `index.html`: tek bar yerine üç renkli olasılık çubuğu (yeşil/sarı/kırmızı).
+
+Tarayıcıda test edildi (uvicorn + Chrome): "Kargo çok hızlıydı, ürün harika!" → POZİTİF %99.7,
+"İade etmek zorunda kaldım, hiç memnun değilim." → NEGATİF %99.7, "Ürün bugün elime ulaştı." → NÖTR %100.0,
+"Saygılarımla." → NÖTR %99.99 (2 sınıflı eski modelde bu %97 YANLIŞ pozitif çıkıyordu — Adım 13'te tespit
+edilen üslup/kısayol sorunu artık çözülmüş görünüyor).
+
 ## Yapılacaklar (2026-09-28'de güncellendi)
 
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
-2. **Uygulamaya 3 sınıf ekle** (`step9_app/app.py`, `index.html`).
-   - `MODEL_DIR` → `step14_three_class/model_v2b`, nötr logit'ine +3.00 ekle (softmax'tan önce), etiketler
-     `config.id2label`'dan (negatif/nötr/pozitif).
-   - Karar verilecek: "emin değilim" eşiği kalsın mı? Nötr sınıfı işinin bir kısmını üstleniyor. Kalacaksa eşik
-     3 sınıflı model için val'de yeniden seçilmeli (Adım 11 kuralı).
-   - Arayüzde nötr için ayrı renk/mesaj.
+2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
 3. ~~Git commit + push~~ — **yapıldı** (2026-09-27, "Adım 14: 3 sınıflı model..." GitHub'a gönderildi).
    Sonraki commit'lerde de önce `git status` ile büyük dosya (model, .venv) girmediğini kontrol et.
 4. (İsteğe bağlı) Yerel `.git` 1.5 GB — geri alınan eski commit'in (01cd6b70, .venv + modeller içeriyordu) nesneleri.
