@@ -13,3 +13,7 @@ __pycache__/
 *.pyc
 server_log.txt
 .DS_Store
+
+# Adım 15: V2b cümlecik logit cache'i (baseline.py yeniden üretir) ve çalışma çıktıları
+step15_aspect/clause_logits.npz
+step15_aspect/run_*.out
