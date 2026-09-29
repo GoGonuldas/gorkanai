@@ -13,12 +13,20 @@ Bir yorumun etiketi: virgülle ayrılmış (konu, duygu) çiftleri, konu yoksa "
 Etiketleme notları (kararlar):
   - Konudan duygusuz bahsediliyorsa nötr ("10 günde geldi", "indirimdeyken aldım").
   - "fiyatına göre iyi" -> F pozitif; "bu fiyata değmez" -> F negatif. Hediye/kampanya -> F.
-  - Kargo ücreti -> K. Ürünün sağlam/hasarsız gelmesi -> K.
-  - Kırılma, aşınma, işçilik, yapı kusuru -> Q; ürünün asıl işini (iyi) yapıp yapmaması, kullanım/kurulum
-    kolaylığı, koku/tat/kalıcılık, pil/şarj -> P.
+  - Kargo ücreti, paketleme -> K. Paketin/ürünün sağlam-hasarsız ya da hasarlı gelmesi -> K.
+  - Q/P SINIRI (2026-09-29, Görkan kararı — kör etiketleme uyumsuzluğundan sonra):
+      Q = ürünün GENEL iyi/kötü olması ("süper ürün", "ürün iyi değil", "memnun kaldım", "pişman oldum",
+          "beğendim") ve GENEL olarak işe yarayıp yaramaması ("işe yaramıyor", "etkisi yok", "bozuldu",
+          "şarj etmiyor", "pil ömrü kısa", "köpeğim bayılıyor", "sızdırıyor") + malzeme, işçilik, kırılma.
+      P = ADI KONAN belirli bir özellik/teknik ölçü: çekim/emiş gücü, ses, kamera/ekran, hız, uyumluluk,
+          kurulum/kullanım kolaylığı, ergonomi, koku/kalıcılık, tat, ayar/fonksiyon eksikliği.
+    Kalıp tavsiye cümleleri ("alın", "tavsiye ederim/etmiyorum") tek başına Q DEĞİL.
   - Ekran/görüntü KALİTESİ (TV, kamera, monitör) -> P. G sadece dış görünüm, renk, "resimdeki gibi".
-  - Eksik parça, iade, müşteri hizmetleri, servis, garanti, satıcının müdahalesi -> S.
-  - İçeriksiz genel övgü/yergi ve "teşekkürler hepsiburada" -> konu yok.
+  - B = boyut + MİKTAR ("yağ çok az", "3gr yerine 1.5gr", "10 tane az") + AĞIRLIK ("hafif", "çok ağır").
+  - Eksik/eksiksiz parça veya içerik (kutudan ne çıktığı), yanlış ürün gönderilmesi, iade, müşteri hizmetleri,
+    servis, garanti, satıcının müdahalesi -> S. (Sınır: kutunun İÇERİĞİ -> S, kutunun DURUMU -> K.)
+  - Sadece "teşekkürler hepsiburada", soru, kullanım ipucu -> konu yok. (Eski "içeriksiz genel övgü -> konu
+    yok" kuralı 2026-09-29'da KALDIRILDI: genel övgü/yergi artık Q.)
 
 Çıktı: data/aspect_labels/batch_N.csv ve hepsinin birleşimi data/aspect_labels/aspect_labels.csv
 (her konu için bir sütun: pozitif/negatif/nötr/boş, `karisik` 0/1, `karisik_konular`).

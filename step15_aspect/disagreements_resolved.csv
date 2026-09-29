@@ -1,0 +1,12 @@
+no,id,karar,gerekce
+7,4192,Görkan hatası,"fiyat geçmiyor; kamera övülüyor, 'tek sorun bu' -> P pozitif baskın"
+8,4221,Görkan hatası,kullanım kolaylığı -> P
+10,4129,Görkan hatası,kargo ücreti -> K
+11,4047,Görkan hatası,iade -> S
+13,4125,Görkan hatası,yeni kurala göre 'işe yarıyor' -> Q (etiket kural öncesi)
+14,4282,kural belirsiz,kalıp tavsiye ('alın') Q mu? Karar: HAYIR; 'ucuz' -> F
+15,4297,Claude hatası,genel yargı -> Q eksikti
+16,4279,Görkan hatası,'...duruyor' -> G
+17,4141,Claude + Görkan hatası,"Claude P'yi, Görkan G ve F'yi kaçırdı"
+18,4005,Görkan hatası,beden -> B
+19,4062,Görkan hatası,fiyat eksik; kesim = aletin asıl işi -> Q

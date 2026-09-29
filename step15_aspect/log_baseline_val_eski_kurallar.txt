@@ -1,0 +1,12 @@
+VAL (100 yorum) — 3 bölme x 2 nötr seçeneği. Konu tespiti bölmeden bağımsız:
+  kargo P0.91/R0.91 (n=22) | fiyat P0.93/R0.96 (n=27) | kalite P0.91/R0.88 (n=24) | performans P0.83/R0.57 (n=61) | boyut P0.70/R0.58 (n=12) | gorunum P0.55/R0.86 (n=7) | satici P0.60/R0.50 (n=6)
+bölme nötr                     duygu_micro duygu_macro  duygu_k0 uç_F1_micro uç_F1_macro tah.nötr
+A     a (bias 0, 3 sınıf)            0.847       0.839     0.858       0.667       0.634        5
+A     b (sadece poz/neg argmax)       0.856       0.846     0.867       0.673       0.640        0
+B     a (bias 0, 3 sınıf)            0.847       0.839     0.858       0.667       0.634        4
+B     b (sadece poz/neg argmax)       0.856       0.846     0.867       0.673       0.640        0
+yok   a (bias 0, 3 sınıf)            0.814       0.785     0.805       0.640       0.591        1
+yok   b (sadece poz/neg argmax)       0.814       0.785     0.805       0.640       0.591        0
+(altın nötr çift sayısı val'de: 4)
+SEÇİLEN (val duygu doğruluğu micro, eşitlikte macro, sonra basit olan): bölme=A, nötr=b (sadece poz/neg argmax) — val'de eşit: [('A', 'b'), ('B', 'b')]
+A ile B'nin val'de farklı tahmin verdiği yorum sayısı: 1
