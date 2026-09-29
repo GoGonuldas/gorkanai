@@ -1,0 +1,73 @@
+DONDURULAN: config={'split': 'A', 'mode': 'b', 'keywords': 'V2'} | KEYWORDS(V2) sha256[:16]=a7f039e0719a8dca
+Test BİR KEZ ölçüldü; aşağıdaki her şey bu dondurulmuş ayarla.
+
+1) ANA TABLO — konu tespiti (test | val)
+konu         n_test      P      R     F1    duygu   | n_val      P      R  not
+kargo            34   0.81   0.74   0.77   21/25   |    22   0.91   0.91  
+fiyat            48   0.90   0.96   0.93   41/46   |    27   0.93   0.96  
+kalite          130   0.84   0.68   0.75   80/89   |    60   0.83   0.82  
+performans       87   0.82   0.72   0.77   50/63   |    42   0.77   0.57  
+boyut            25   0.67   0.80   0.73   14/20   |    12   0.70   0.58  gürültülü (n<30)
+gorunum          17   0.64   0.82   0.72   14/14   |     7   0.50   0.86  gürültülü (n<30)
+satici           18   0.46   0.33   0.39    5/6    |     7   0.50   0.43  gürültülü (n<30)
+
+                              test       val
+konu P micro                 0.797     0.804
+konu R micro                 0.733     0.763
+konu F1 micro                0.763     0.783
+konu F1 macro                0.722     0.724
+duygu micro                  0.856     0.889
+duygu macro                  0.851     0.856
+duygu karisik=0              0.858     0.893
+uçtan uca F1 micro           0.653     0.696
+uçtan uca F1 macro           0.616     0.625
+altın nötr çift                 11         4   (nötr kapalı -> hepsi kaçar)
+
+2) KARŞILAŞTIRMA (test, yeni altın etiketler)
+kurulum                        duygu mic/mac     k0   uç F1 mic/mac konu F1 mic
+V2 + A/b (ANA)                  0.856/0.851  0.858    0.653/0.616       0.763
+(a) V2 + bölme yok/b            0.848/0.800  0.845    0.647/0.576       0.763
+(b) V1 + A/b                    0.850/0.858  0.845    0.547/0.554       0.643
+
+3) ELMAYLA ELMA — Görkan'ın kör 20'si, KARAR ÖNCESİ etiketler (n çok küçük: SADECE FİKİR VERİR)
+alt küme                     n  model-Claude  model-Görkan  Claude-Görkan
+tümü (20)                   20         0.747         0.638          0.667
+kör 18 (2,3 hariç)          18         0.765         0.645          0.633
+sadece test (10)            10         0.732         0.649          0.667
+
+4) HATA KOVALARI (test)
+Konu FP (yanlış eşleşme): 67 | konu FN: 96 | duygu hatası: 38
+
+konu         FP yanlış_eşl.  FN örtük  FN kelime_eksik  duygu bölme  duygu V2b  baskın
+kargo                     6         3                6            2          2  yanlış eşleşme
+fiyat                     5         1                1            3          2  yanlış eşleşme
+kalite                   17        21               20            5          4  örtük
+performans               14        10               14            3         10  yanlış eşleşme
+boyut                    10         1                4            2          4  yanlış eşleşme
+gorunum                   8         1                2            0          0  yanlış eşleşme
+satici                    7         7                5            0          1  yanlış eşleşme
+
+-- FP / yanlış eşleşme: 67 --
+  4006 [performans] eşleşen='fonksiyon' altın=Qp | neredeyse 15 kişiye aldırdım, süper bir cihaz, çok fonksiyonel. son derece başarılı bir çalışma, çok işime yar
+  4016 [performans] eşleşen='rahat' altın=Qp | alırken işe yarar mı diye tereddütlerim vardı ancak şimdi içim rahat ürün güzel herkese tavsiye ediyorum.
+  4017 [boyut] eşleşen='büyük' altın=Qp | bu üründen önce de kullandım ve çok memnun kalmıştım. yine sipariş verdim... ders çalışırken ve de okuduğunuz 
+
+-- FN / örtük: 44 --
+  4008 [kalite] altın=Sn,Qn tahmin=yok | 4 adet petlas lastik yanında hediye verildi lafta 2004 model aracım için 10 yaş sınırını aştığından geçersiz d
+  4008 [satici] altın=Sn,Qn tahmin=yok | 4 adet petlas lastik yanında hediye verildi lafta 2004 model aracım için 10 yaş sınırını aştığından geçersiz d
+  4011 [kalite] altın=Gp,Qn tahmin=yok | ürünü aldık ama on kapak çok iyi şık ancak arka kapak çok kötü  takiyoruz bir türlü oturmuyo çok basit alınmad
+
+-- FN / kelime eksik: 52 --
+  4005 [kalite] altın=Bx,Qp tahmin=yok | yorumları okuyup xl almam iyi oldu, aksi halde çok dar olabilirdi, ürüne gelince uzun bandajla uğraşmaktan ziy
+  4018 [kalite] altın=Pp,Qn,Bn tahmin=yok | kurulum gayet kolay. ama sallantı problemi var. üst raflar çok dar değil ama kitapta tam olarak sığmıyor.
+  4021 [performans] altın=Pn tahmin=yok | ayrıca bu özelliği iptal edememeniz de ürünün en büyük eksilerinden.
+
+-- Duygu / bölme hatası: 15 --
+  4025 [kalite] altın=Qp,Pn tahmin=negatif | cümlecik: şarj süresi iyi, ısınma problemi beklenilen seviyede | bataryayı taktık takalı telefon titreşim modunda titrememeye başl
+  4025 [performans] altın=Qp,Pn tahmin=pozitif | cümlecik: şarj süresi iyi, ısınma problemi beklenilen seviyede | o özellik iyiydi
+  4029 [kalite] altın=Fp,Qn*,Sn tahmin=pozitif | cümlecik: telefon güzel ve uygun fiyatlı | oluşan sorun nedeniyle şarjı çabuk bitiyor
+
+-- Duygu / V2b hatası: 23 --
+  4005 [boyut] altın=Bx,Qp tahmin=pozitif | cümlecik: yorumları okuyup xl almam iyi oldu, aksi halde çok dar olabilirdi, ürüne gelince uzun bandajla uğraşmaktan ziyade böyle 
+  4013 [performans] altın=Pn* tahmin=pozitif | cümlecik: ürün kullanışlı çekiş gücü çok iyi
+  4027 [kalite] altın=Qp,Kp,Fp tahmin=negatif | cümlecik: ben birgün önce aldıgım icin hediyeden faydanalanamadım

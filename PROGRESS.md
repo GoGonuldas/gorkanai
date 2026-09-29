@@ -5,7 +5,8 @@ başlayıp adım adım daha gelişmiş yöntemlere geçerek "kendi AI'ını" in�
 Alan: Türkçe duygu analizi (sentiment analysis). Odak: öğrenmek — her adımda
 gerçek bir sınırla karşılaşıp sebebini anlamak, sonra bir sonraki yöntemle çözmek.
 
-**Son durum (2026-09-29):** Adım 15 (konu bazlı duygu analizi) 15.1-15.3 tamamlandı, 15.4 (test ölçümü) onay bekliyor.
+**Son durum (2026-09-29):** Adım 15 (konu bazlı duygu analizi, anahtar kelime + cümlecik + V2b temel çizgisi) tamamlandı:
+testte uçtan uca F1 0.653 (bağımsız insana karşı 0.638, insan-insan 0.667). Sıradaki: Adım 16 (onay bekliyor).
 
 **Önceki durum (2026-09-28):** Adım 1-14 tamamlandı, uygulama 3 sınıflı model V2b'yi kullanıyor, V2b hiç
 görülmemiş veride doğrulandı, model Hugging Face Hub'da herkese açık
@@ -298,7 +299,7 @@ ama **kullanılmadı**: `hf repo create --type space --sdk docker` **402 Payment
 açık olması yeterli. Dockerfile/requirements.txt hazır — PRO'ya geçilirse veya başka bir Docker destekli
 ücretsiz servise (Render/Fly.io) taşınırsa doğrudan kullanılabilir.
 
-## Adım 15: Konu (aspect) bazlı duygu analizi — 15.1-15.3 TAMAMLANDI, 15.4 bekliyor (2026-09-29)
+## Adım 15: Konu (aspect) bazlı duygu analizi — TAMAMLANDI (2026-09-29)
 **Görev:** yorumda HANGİ konudan bahsedildiğini ve o konudaki duyguyu bulmak. Örnek: "kargo çok hızlıydı ama
 kumaşı ince" → kargo: pozitif, kalite: negatif. Klasör: `step15_aspect/`, etiketler: `data/aspect_labels/`.
 Koordinasyon: iki Claude oturumu. gorkanai-fd planladı, gorkanai-0b uyguladı; kararları Görkan onayladı.
@@ -378,7 +379,7 @@ Konu tespiti P/R (V2, val): kargo 0.91/0.91 (n=22), fiyat 0.93/0.96 (27), kalite
 performans 0.77/**0.57** (42), boyut 0.70/0.58 (12), görünüm 0.50/0.86 (7), satıcı 0.50/0.43 (7).
 **Seçilen ayar: bölme A + nötr kapalı (sadece poz/neg).** A ile B val'de birebir eşit; eşitlikte daha basit
 olan seçildi. Nötrü kapatmak en fazla ~%3 kaybettirir, (a)'nın verdiği nötrlerin hiçbiri skoru artırmadı.
-Test (15.4) henüz ÖLÇÜLMEDİ.
+Test sonuçları aşağıda (15.4).
 
 **Dersler:**
 - **Cümleciğe bölmek işe yarıyor:** bölme yok → A ile duygu doğruluğu micro +4-7 puan, macro +6-7 puan.
@@ -406,12 +407,83 @@ Test (15.4) henüz ÖLÇÜLMEDİ.
 6. **İnsan tavanı (0.667) iyimser:** kurallar aynı 20 yoruma bakılarak ve Görkan'ın kararlarıyla netleşti.
    Yeni tanım bağımsız bir kör setle doğrulanmadı; bu 20 yorumun 2'si de kör değil.
 
+### Adım 15.4: Test ölçümü — TAMAMLANDI (2026-09-29)
+`step15_aspect/evaluate.py`, log: `log_test.txt`. Ölçümden önce dondurulan: V2 anahtar kelime listesi
+(sha256[:16] `a7f039e0719a8dca`) + val'de seçilen ayar (bölme A, nötr kapalı). Test **bir kez** ölçüldü.
+Sonuçları gördükten sonra modelde hiçbir değişiklik yapılmadı; yeniden çalıştırmalar sadece elle hata
+sınıflandırmasını rapora eklemek içindi.
+
+| Konu (test) | n | P | R | F1 | duygu doğru | val P/R | not |
+|---|---|---|---|---|---|---|---|
+| kargo | 34 | 0.81 | 0.74 | 0.77 | 21/25 | 0.91/0.91 | |
+| fiyat | 48 | 0.90 | 0.96 | 0.93 | 41/46 | 0.93/0.96 | |
+| kalite | 130 | 0.84 | 0.68 | 0.75 | 80/89 | 0.83/0.82 | |
+| performans | 87 | 0.82 | 0.72 | 0.77 | 50/63 | 0.77/0.57 | |
+| boyut | 25 | 0.67 | 0.80 | 0.73 | 14/20 | 0.70/0.58 | gürültülü (n<30) |
+| görünüm | 17 | 0.64 | 0.82 | 0.72 | 14/14 | 0.50/0.86 | gürültülü (n<30) |
+| satıcı | 18 | 0.46 | 0.33 | 0.39 | 5/6 | 0.50/0.43 | gürültülü (n<30) |
+
+| Test (200) vs val (100) | konu F1 micro/macro | duygu micro/macro | duygu karisik=0 | **uçtan uca F1 micro/macro** |
+|---|---|---|---|---|
+| **Test — V2 + A/b (ANA SONUÇ)** | 0.763/0.722 | 0.856/0.851 | 0.858 | **0.653/0.616** |
+| Val — V2 + A/b | 0.783/0.724 | 0.889/0.856 | 0.893 | 0.696/0.625 |
+| Test — (a) V2 + bölme yok | 0.763 | 0.848/0.800 | 0.845 | 0.647/0.576 |
+| Test — (b) eski liste V1 + A/b | 0.643 | 0.850/0.858 | 0.845 | 0.547/0.554 |
+
+Testte 11 altın nötr çift var; nötr kapalı olduğu için hepsi kaçıyor (kabul edilen bedel).
+
+**Elmayla elma** (Görkan'ın kör 20 yorumu, karar öncesi etiketler; n çok küçük, SADECE FİKİR VERİR):
+
+| alt küme | n | model-Claude | model-Görkan | Claude-Görkan |
+|---|---|---|---|---|
+| tümü | 20 | 0.747 | **0.638** | **0.667** |
+| kör 18 (2 ve 3 hariç) | 18 | 0.765 | 0.645 | 0.633 |
+| sadece test | 10 | 0.732 | 0.649 | 0.667 |
+
+Model, Claude'a (0.747) Görkan'a (0.638) olduğundan çok daha fazla benziyor. Bağımsız bir insana karşı
+ise insan-insan uyumunun biraz altında ya da civarında. Yani val'deki "tavanı geçti" görüntüsü gerçekten bir
+ölçüm artefaktıydı.
+
+**Hata kovaları** (test): 67 konu FP, 96 konu FN, 38 duygu hatası.
+- **FP (hepsi "yanlış eşleşme"):** kelime geçiyor ama konu kastedilmiyor. En çok "büyük" (6; "en büyük eksisi"
+  gibi), "iade" (4; şikâyet değil, bilgi), "mağaza" (3), "ucuz" (3).
+- **FN, elle sınıflandırıldı** (`test_fn_manual.csv`): **örtük 44** (konu hiç adlandırılmıyor, çıkarım
+  gerekiyor: "arka kapak oturmuyor" → Q, "köpeğim tenezzül etmedi" → Q, "fritöz gönderdi" → S,
+  "eve kadar gelmesi güzel" → K) ve **kelime eksik 52**. Kelime eksik olanların alt türleri: 27'si
+  listede hiç olmayan kelime ("sallantı", "arayüz", "uyku modu", "güçlü"), 15'i yazım varyantı (ascii
+  "guzel/basarili", birleşik noktalı "i̇"), 10'u Türkçe ek/yumuşama ("özellik" → "özelliği",
+  "ulaştı" → "ulaşıyor", "tasarım" → "tasarlanmış").
+- **Duygu hatası** (otomatik sezgisel): **bölme hatası 15** (cümlecik zıt duygulu iki konuyu birlikte taşıyor:
+  "şarj süresi iyi, ısınma problemi…") ve **V2b hatası 23** (cümlecik tek görüşlü ama yanlış; "hediyeden
+  faydalanamadım" → negatif).
+- Konu bazında baskın kova: kalite → FN (örtük 21 ≈ kelime eksik 20); performans → FN 24 (kelime eksik 14,
+  örtük 10) + FP 14 + V2b hatası 10; boyut, görünüm ve satıcı → yanlış eşleşme; satıcı'da FN'lerin çoğu örtük.
+
+**Dersler (15.4):**
+- Val'deki iki ders testte de geçerli, ama biri zayıflayarak. **Liste tanımın aynası:** V1 → V2 ile konu F1
+  0.643 → 0.763, uçtan uca 0.547 → 0.653. **Bölme işe yarıyor:** duygu macro 0.800 → 0.851 ve uçtan uca
+  macro 0.576 → 0.616; ama micro kazanç testte küçük (0.848 → 0.856). Val'de +7 puandı; val 100 yorumla bu
+  farkı abartmış.
+- Val → test düşüşü küçük (uçtan uca micro 0.696 → 0.653). Beklenen yönde: anahtar kelimeler explore'dan
+  türetildi, ama bölme ve nötr kararları val'de verildi.
+- Kargo testte val'den belirgin kötü (R 0.91 → 0.74): örtük teslimat ifadeleri ("sabah yola çıktı",
+  "belirtilen zamanda aldım") ve yazım varyantları ("hizli").
+
+**Adım 16 için gerekçe:** Konu FN'lerinin %46'sı (44/96) **örtük**. Bunlar anahtar kelimeyle çözülemez,
+çünkü konu hiç adlandırılmıyor; bağlamdan çıkarım gerekiyor. "Kelime eksik"lerin yarısı (27) yeni kelime
+ister ve liste bitmez: kategoriye göre değişen özellik adları. Ucuz kısım ise 25 yazım/ek hatası; bunlar
+normalleştirme (ascii katlama, kök bulma) ile kısmen düzelir, ama bu test sonrası bir iyileştirme olur ve
+ölçülürse "iyimser" satırı olarak raporlanmalı. 67 FP de bağlam ister: aynı kelime ("büyük", "iade") bazen
+konu, bazen değil. Duygu tarafında 15 bölme hatası, sabit bağlaç kuralının sınırı. 23 V2b hatası ise
+yorum düzeyinde eğitilmiş bir modelin cümleciklerde kaymasından geliyor. → **Adım 16: BERT ile çok etiketli
+konu tespiti** (bağlamdan örtük konuları öğrenmek); ardından belki **konuya koşullu duygu**: (konu, yorum)
+çiftini birlikte okuyan bir model, bölmeye gerek bırakmaz. Eğitim verisi 300 etiketle çok az; Adım 16'nın
+ilk sorusu etiketli veriyi nasıl büyüteceğimiz olacak (Adım 14'teki active learning yöntemi).
+
 ## Yapılacaklar (2026-09-29'da güncellendi)
 
-0. **Adım 15.4:** V2 listesi + val'de seçilen ayarla (A/b) test ölçümü; konu başına n, n<30 → "gürültülü";
-   hata kovaları (konu: örtük / kelime eksik / yanlış eşleşme; duygu: bölme hatası / V2b hatası).
-   gorkanai-fd onayı bekleniyor. Adım 16 (BERT ile çok etiketli konu modeli) 15.4'ten sonra.
-
+0. **Adım 16** (onay bekliyor): BERT ile çok etiketli konu tespiti. Önce etiketli veriyi büyütme planı (active
+   learning, Adım 14 yöntemi), sonra belki konuya koşullu duygu. Gerekçe: Adım 15.4 hata kovaları.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
 3. ~~Modeli Hugging Face Hub'a yükle.~~ — **yapıldı** (yukarıda). Uygulamayı internete açmak ERTELENDİ (PRO gerekiyor).
