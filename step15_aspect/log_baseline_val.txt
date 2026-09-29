@@ -1,12 +1,45 @@
-VAL (100 yorum) — 3 bölme x 2 nötr seçeneği. Konu tespiti bölmeden bağımsız:
-  kargo P0.91/R0.91 (n=22) | fiyat P0.93/R0.96 (n=27) | kalite P0.96/R0.37 (n=60) | performans P0.55/R0.55 (n=42) | boyut P0.70/R0.58 (n=12) | gorunum P0.55/R0.86 (n=7) | satici P0.60/R0.43 (n=7)
-bölme nötr                     duygu_micro duygu_macro  duygu_k0 uç_F1_micro uç_F1_macro tah.nötr
-A     a (bias 0, 3 sınıf)            0.841       0.835     0.846       0.566       0.564        5
-A     b (sadece poz/neg argmax)       0.850       0.842     0.856       0.572       0.571        0
-B     a (bias 0, 3 sınıf)            0.841       0.835     0.846       0.566       0.564        4
-B     b (sadece poz/neg argmax)       0.850       0.842     0.856       0.572       0.571        0
-yok   a (bias 0, 3 sınıf)            0.785       0.777     0.779       0.528       0.520        1
-yok   b (sadece poz/neg argmax)       0.785       0.777     0.779       0.528       0.520        0
-(altın nötr çift sayısı val'de: 4)
-SEÇİLEN (val duygu doğruluğu micro, eşitlikte macro, sonra basit olan): bölme=A, nötr=b (sadece poz/neg argmax) — val'de eşit: [('A', 'b'), ('B', 'b')]
-A ile B'nin val'de farklı tahmin verdiği yorum sayısı: 1
+VAL (100 yorum)
+Anahtar kelime listesi farkı (V1 -> V2):
+  kargo: + ['geç teslim', 'kargola', 'tedarik']
+  fiyat: + ['fırsat', 'paraya']
+  kalite: + ['(?:güzel|iyi|kötü|harika|süper) bir (?:ürün|urun|cihaz|makine|makina|alet|telefon)', '(?:ürün|urun|cihaz|makine|makina|alet|telefon) (?:çok |gayet |gerçekten )?(?:güzel|iyi|kötü|harika|süper|mükemmel|berbat)', 'batarya', 'bayıl', 'başarılı', 'başarısız', 'berbat', 'beğen', 'etki', 'fayda', 'harika', 'hayal kırıklığı', 'iş gör', 'işe yar', 'işimi gör', 'işinizi gör', 'memnun', 'muhteşem', 'mükemmel', 'pil(?!\\w)', 'pili', 'pişman', 'rezalet', 'sarj', 'severek', 'süper', 'sıradan', 'vasat', 'çalışm[ıa]', 'çalışıyor', 'şarj']
+  performans: + ['ayar', 'emiş', 'ergonomi', 'gürültü', 'hızı', 'konfor', 'lümen', 'menü', 'rahat(?!lıkla)', 'uyum', 'ışık']  - ['batarya', 'etki', 'fayda', 'iş gör', 'işe yar', 'işimi gör', 'pil(?!\\w)', 'pili', 'sarj', 'çalış', 'şarj']
+  boyut: + ['\\d+ ?(?:ml|lt|litre)(?!\\w)', 'ağır(?!\\w|lık)', 'ağırlı', 'kapasite']
+  gorunum: + ['duruyor', 'zarif']
+  satici: + ['içinde yok', 'promosyon', 'yanında gel']
+--- eski kurallar + eski liste (V1) ---
+  konu P/R: kargo 0.91/0.91 (n=22) | fiyat 0.93/0.96 (n=27) | kalite 0.91/0.88 (n=24) | performans 0.83/0.57 (n=61) | boyut 0.70/0.58 (n=12) | gorunum 0.55/0.86 (n=7) | satici 0.60/0.50 (n=6)
+  bölme nötr                     duygu_micro duygu_macro  duygu_k0 uç_F1_micro uç_F1_macro tah.nötr
+  A     a (bias 0, 3 sınıf)            0.847       0.839     0.858       0.667       0.634        5
+  A     b (sadece poz/neg argmax)       0.856       0.846     0.867       0.673       0.640        0
+  B     a (bias 0, 3 sınıf)            0.847       0.839     0.858       0.667       0.634        4
+  B     b (sadece poz/neg argmax)       0.856       0.846     0.867       0.673       0.640        0
+  yok   a (bias 0, 3 sınıf)            0.814       0.785     0.805       0.640       0.591        1
+  yok   b (sadece poz/neg argmax)       0.814       0.785     0.805       0.640       0.591        0
+  SEÇİLEN: bölme=A, nötr=b (sadece poz/neg argmax) — val'de eşit: [('A', 'b'), ('B', 'b')]
+--- yeni kurallar + eski liste (V1) ---
+  konu P/R: kargo 0.91/0.91 (n=22) | fiyat 0.93/0.96 (n=27) | kalite 0.96/0.37 (n=60) | performans 0.55/0.55 (n=42) | boyut 0.70/0.58 (n=12) | gorunum 0.55/0.86 (n=7) | satici 0.60/0.43 (n=7)
+  bölme nötr                     duygu_micro duygu_macro  duygu_k0 uç_F1_micro uç_F1_macro tah.nötr
+  A     a (bias 0, 3 sınıf)            0.841       0.835     0.846       0.566       0.564        5
+  A     b (sadece poz/neg argmax)       0.850       0.842     0.856       0.572       0.571        0
+  B     a (bias 0, 3 sınıf)            0.841       0.835     0.846       0.566       0.564        4
+  B     b (sadece poz/neg argmax)       0.850       0.842     0.856       0.572       0.571        0
+  yok   a (bias 0, 3 sınıf)            0.785       0.777     0.779       0.528       0.520        1
+  yok   b (sadece poz/neg argmax)       0.785       0.777     0.779       0.528       0.520        0
+  SEÇİLEN: bölme=A, nötr=b (sadece poz/neg argmax) — val'de eşit: [('A', 'b'), ('B', 'b')]
+--- yeni kurallar + yeni liste (V2) ---
+  konu P/R: kargo 0.91/0.91 (n=22) | fiyat 0.93/0.96 (n=27) | kalite 0.83/0.82 (n=60) | performans 0.77/0.57 (n=42) | boyut 0.70/0.58 (n=12) | gorunum 0.50/0.86 (n=7) | satici 0.50/0.43 (n=7)
+  bölme nötr                     duygu_micro duygu_macro  duygu_k0 uç_F1_micro uç_F1_macro tah.nötr
+  A     a (bias 0, 3 sınıf)            0.881       0.849     0.885       0.690       0.618        4
+  A     b (sadece poz/neg argmax)       0.889       0.856     0.893       0.696       0.625        0
+  B     a (bias 0, 3 sınıf)            0.881       0.849     0.893       0.690       0.618        3
+  B     b (sadece poz/neg argmax)       0.889       0.856     0.901       0.696       0.625        0
+  yok   a (bias 0, 3 sınıf)            0.822       0.783     0.817       0.643       0.567        1
+  yok   b (sadece poz/neg argmax)       0.822       0.783     0.817       0.643       0.567        0
+  SEÇİLEN: bölme=A, nötr=b (sadece poz/neg argmax) — val'de eşit: [('A', 'b'), ('B', 'b')]
+
+ÖZET (her satır kendi val seçimiyle) — insan tavanı (çift F1): 0.667 (iyimser)
+kurulum                           ayar      duygu mic/mac     k0  uç F1 mic/mac  tavana oran
+eski kurallar + eski liste (V1)   A/b        0.856/0.846  0.867   0.673/0.640         1.01
+yeni kurallar + eski liste (V1)   A/b        0.850/0.842  0.856   0.572/0.571         0.86
+yeni kurallar + yeni liste (V2)   A/b        0.889/0.856  0.893   0.696/0.625         1.04

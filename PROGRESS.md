@@ -5,7 +5,9 @@ başlayıp adım adım daha gelişmiş yöntemlere geçerek "kendi AI'ını" in�
 Alan: Türkçe duygu analizi (sentiment analysis). Odak: öğrenmek — her adımda
 gerçek bir sınırla karşılaşıp sebebini anlamak, sonra bir sonraki yöntemle çözmek.
 
-**Son durum (2026-09-28):** Adım 1-14 tamamlandı, uygulama 3 sınıflı model V2b'yi kullanıyor, V2b hiç
+**Son durum (2026-09-29):** Adım 15 (konu bazlı duygu analizi) 15.1-15.3 tamamlandı, 15.4 (test ölçümü) onay bekliyor.
+
+**Önceki durum (2026-09-28):** Adım 1-14 tamamlandı, uygulama 3 sınıflı model V2b'yi kullanıyor, V2b hiç
 görülmemiş veride doğrulandı, model Hugging Face Hub'da herkese açık
 ([Urartu65/gorkanai-tr-sentiment](https://huggingface.co/Urartu65/gorkanai-tr-sentiment)). Uygulamanın
 internete açılması PRO abonelik gerektiği için ERTELENDİ (aşağıda). Proje duraklatıldı — sıradaki işler
@@ -42,6 +44,8 @@ gorkanai/
   step10_negation/, step11_confidence/, step12_confident_learning/
   step13_temperature/calibrate.py, calibration.json
   step14_three_class/experiment_wiki_neutral.py (log_wiki.txt)
+  step15_aspect/                  # konu bazlı duygu: prepare_*.py, save_aspect_labels.py, agreement.py, baseline.py
+  data/aspect_labels/             # 300 konu-duygu etiketli yorum (val 100 / test 200) + human_blind_20.csv
   data/negation_test.csv, data/short_clean_test.csv
   data/prepare_real_dataset.py    # gerçek veriyi indirip data/real/ altına böler
   data/real/test.csv              # 1000 gerçek yorum, DENGELİ (500/500), eğitimde ASLA kullanılmaz
@@ -294,7 +298,119 @@ ama **kullanılmadı**: `hf repo create --type space --sdk docker` **402 Payment
 açık olması yeterli. Dockerfile/requirements.txt hazır — PRO'ya geçilirse veya başka bir Docker destekli
 ücretsiz servise (Render/Fly.io) taşınırsa doğrudan kullanılabilir.
 
-## Yapılacaklar (2026-09-28'de güncellendi)
+## Adım 15: Konu (aspect) bazlı duygu analizi — 15.1-15.3 TAMAMLANDI, 15.4 bekliyor (2026-09-29)
+**Görev:** yorumda HANGİ konudan bahsedildiğini ve o konudaki duyguyu bulmak. Örnek: "kargo çok hızlıydı ama
+kumaşı ince" → kargo: pozitif, kalite: negatif. Klasör: `step15_aspect/`, etiketler: `data/aspect_labels/`.
+Koordinasyon: iki Claude oturumu. gorkanai-fd planladı, gorkanai-0b uyguladı; kararları Görkan onayladı.
+
+**15.1 Veri keşfi** (`prepare_explore.py` → `explore_300.csv`, id 3000-3299): 300 yorum, 8-40 kelime,
+150 "poz" + 150 "neg" havuz etiketli. Hiçbir eğitim/val/test/candidate setinde yoklar (assert).
+Havuz iki farklı permütasyonla karıştırılmıştı: Adım 8/10/11/13 holdout düşülmeden, Adım 12/14 düşülerek.
+İkisinde de pos/neg'in ilk 9000'i atlandı, negasyon kalıplı TÜM satırlar dışarıda tutuldu. Bu kısıtlarla
+8-40 kelimelik görülmemiş "neg" yorum sadece 1402 tane kaldı.
+Kelime sayımı + okuma → **7 konu**: K kargo/teslimat (paketleme dahil), F fiyat/değer, Q kalite,
+P performans/özellik, B boyut (miktar ve ağırlık dahil), G görünüm, S satıcı/hizmet.
+Ders: en sık iki konu anahtar kelimeyle en zor yakalananlar. Kargo çoğu zaman örtük ("2 günde elime
+ulaştı"), performansın kelimeleri ise ürün kategorisine göre değişiyor.
+
+**15.2 Etiketli set** (`prepare_label_set.py`, `save_aspect_labels.py` → `data/aspect_labels/aspect_labels.csv`,
+id 4000-4299): 15.1'den ayrık 300 yorum. **Val 100 / test 200 bölmesi etiketlemeden ÖNCE sabitlendi**
+(havuz etiketine göre tabakalı). Claude sohbette (konu, duygu) çiftleri olarak etiketledi. Adım 14'teki
+10'luk grup kontrolü kullanıldı. Karışık (aynı konu hem övülüp hem eleştirilmiş) için baskın duygu yazıldı
+ve ayrıca `karisik` sütunu tutuldu. Kurallar `save_aspect_labels.py` docstring'inde. Özellikle:
+ekran/görüntü KALİTESİ → P, G sadece dış görünüm; kutunun İÇERİĞİ (eksik, yanlış ürün) → S, kutunun
+DURUMU → K. Görkan 30'luk bir örneği inceledi (`review_sample.csv`), düzeltme gerekmedi.
+- **Konu içi nötr neredeyse yok:** 469 (konu, duygu) çiftinin 15'i (%3). İnsanlar bir konudan genelde fikir
+  belirtmek için bahsediyor.
+- Karışık: 300 yorumun 26'sı (%9), neredeyse hepsi performans ("kokusu güzel ama kalıcı değil").
+
+**Tutarlılık taraması** (`changes_rule_scan.csv`): 15.2 sırasında eklenen üç kural (miktar → B,
+hasarlı/sağlam gelme → K, ağırlık → B) regex adayları okunarak 300'e sistematik uygulandı: 2 değişiklik.
+İçerik/durum kuralı taraması: 4 değişiklik.
+
+**Kör etiketleme ve Q/P tanım değişikliği** (`agreement.py`, `data/aspect_labels/human_blind_20.csv`):
+Görkan, etiketlerimi görmeden 20 yorumu (val 10 + test 10, tabakalı) sadece kurallarla etiketledi. Başta 40
+olarak planlanmıştı, Görkan'ın isteğiyle 20'ye indirildi. Görkan'ın etiketlerimi gördüğü 30 yorum dışarıda
+tutuldu. Şeffaflık notu: format örneği yanlışlıkla 2 ve 3 numaranın gerçek etiketleriydi, bu yüzden o
+ikisi kör değil.
+
+| Uyum (Claude vs Görkan, 20 yorum) | konu F1 | çift F1 | kappa Q | kappa P | kappa K | kappa F |
+|---|---|---|---|---|---|---|
+| Eski kurallar | 0.562 | 0.531 (18 kör yorumda 0.483) | **0.25** | **0.26** | 0.69 | 0.57 |
+| **Yeni Q/P tanımı, karar öncesi** | 0.697 | **0.667** | 0.52 | 0.38 | 0.69 | 0.57 |
+| Anlaşmazlıklar karara bağlandıktan sonra | 0.746 | 0.716 | 0.63 | 0.63 | 0.69 | 0.57 |
+
+(kappa sadece n≥5 konular için; boyut, görünüm ve satıcı için n yetersiz. Ortak konularda duygu uyumu 24/25.)
+
+Anlaşmazlıkların neredeyse tamamı KONU SINIRINDAYDI, duyguda değil. Görkan Q'yu "ürün genel olarak iyi mi"
+anlamında kullanıyordu; eski kurallarda ise genel övgü "konu yok", işe yarama ise P'ydi. Görkan'ın
+kararıyla **yeni tanım** getirildi:
+- **Q** = ürünün GENEL iyi/kötü olması ("süper ürün", "memnun kaldım", "pişman oldum") + genel olarak işe
+  yarayıp yaramaması ("işe yaramıyor", "bozuldu", "şarj etmiyor", "pil ömrü kısa") + malzeme/işçilik.
+- **P** = ADI KONAN belirli bir özellik: güç, ses, kamera/ekran, hız, uyumluluk, kurulum/kullanım
+  kolaylığı, koku/kalıcılık, tat.
+- Kalıp tavsiye ("alın", "tavsiye ederim") tek başına Q değil.
+300'ün tamamı yeni tanıma göre tek tek yeniden okundu: **128 değişiklik**. Tüm turlarla toplam **136**
+altın etiket değişikliği; hepsi kural sütunuyla `changes_rule_scan.csv`'de. Kalan 11 anlaşmazlığın dağılımı
+(`disagreements_resolved.csv`): 8 Görkan hatası (çoğu küçük konu/kural detayı: kargo ücreti → K,
+iade → S, "…duruyor" → G), 1 Claude hatası, 1 ikisinin de hatası, 1 kural belirsiz (kalıp tavsiye).
+Yeni dağılım (val/test): Q 59/130, P 43/86, F 27/48, K 22/34, B 12/25, G 7/17, S 6/15; konusuz 7 yorum.
+**İnsan tavanı olarak 0.667 (çift F1) kullanılıyor, ama İYİMSER** (bkz. sınırlama 6). İkinci, bağımsız bir
+kör etiketleme turu planlandı, Görkan'ın isteğiyle iptal edildi.
+
+**15.3 Temel çizgi (eğitim yok)** (`baseline.py`, log: `log_baseline_val.txt`):
+- Yöntem: anahtar kelime regex'i ile konu tespiti (kelime başından eşleşme, Türkçe ekler için) → yorumu
+  cümleciklere böl → konunun geçtiği cümlecik(ler)e V2b → birden çok cümlecik varsa olasılıklar toplanır.
+- Anahtar kelime listeleri SADECE `explore_300`'den türetildi. Yeni Q/P tanımıyla V2 listesi yazıldı:
+  genel yargılar Q'ya eklendi, "işe yar/fayda/etki/şarj/çalış" P'den Q'ya taşındı. Fark logda. Val'e bakarak
+  kelime eklenmedi.
+- Val sadece iki genel karar için kullanıldı: bölme kuralı (A: . ! ? ; + "ama/fakat/ancak/lakin/yalnız";
+  B: A + virgül; yok) ve nötr seçeneği (a: V2b bias 0, 3 sınıf; b: sadece poz/neg argmax). V2b'nin +3.00
+  nötr bias'ı KULLANILMADI: o tüm yorum için seçilmişti (~%11 nötr), konu içi nötr ise %3.
+
+| Val (100 yorum), her satır kendi val seçimiyle | ayar | duygu micro/macro | karisik=0 | uçtan uca F1 micro/macro | insan tavanı |
+|---|---|---|---|---|---|
+| eski kurallar + eski liste (V1) | A/b | 0.856/0.846 | 0.867 | 0.673/0.640 | — |
+| yeni kurallar + eski liste (V1) | A/b | 0.850/0.842 | 0.856 | 0.572/0.571 | 0.667 |
+| **yeni kurallar + yeni liste (V2)** | **A/b** | **0.889/0.856** | 0.893 | **0.696**/0.625 | 0.667 |
+
+Konu tespiti P/R (V2, val): kargo 0.91/0.91 (n=22), fiyat 0.93/0.96 (27), kalite 0.83/0.82 (60),
+performans 0.77/**0.57** (42), boyut 0.70/0.58 (12), görünüm 0.50/0.86 (7), satıcı 0.50/0.43 (7).
+**Seçilen ayar: bölme A + nötr kapalı (sadece poz/neg).** A ile B val'de birebir eşit; eşitlikte daha basit
+olan seçildi. Nötrü kapatmak en fazla ~%3 kaybettirir, (a)'nın verdiği nötrlerin hiçbiri skoru artırmadı.
+Test (15.4) henüz ÖLÇÜLMEDİ.
+
+**Dersler:**
+- **Cümleciğe bölmek işe yarıyor:** bölme yok → A ile duygu doğruluğu micro +4-7 puan, macro +6-7 puan.
+  Aynı yorumdaki "ama"dan sonraki şikâyet, önceki övgüyle karışmıyor.
+- **0.673 aslında "Claude'a benzeme" skoruydu.** Model, etiketleyenle aynı kafadan yazılmış kelimeleri
+  kullandığı için insan-insan uyumundan (0.531) yüksek çıktı. Etiketler bir insanın sezgisiyle
+  karşılaştırılınca Q/P kavramları çöktü (kappa 0.25/0.26). Bu yüzden V2'nin 0.696'sı da tavanı (0.667)
+  "geçmiş" sayılmamalı: model Claude'un altın etiketlerine göre ölçülüyor, tavan ise Claude-Görkan uyumu.
+  Elmayla elma kıyası için modelin Görkan'ın etiketlerine karşı skoru gerekir.
+- **Tek etiketleyicili kavram tanımları güvenilmez.** Kör ikinci etiketleyici olmadan Q/P'nin belirsiz
+  olduğunu hiç görmeyecektik; konu tespiti sayıları ise yüksek görünmeye devam edecekti.
+- **Anahtar kelime tanımın aynasıdır:** tanım değişince eski liste Q'da recall 0.37'ye düştü; listeyi yeni
+  tanıma göre yazınca 0.82'ye çıktı. Performans (P) recall'u iki listede de ~0.57: adı konan özelliklerin
+  kelimeleri kategoriye bağlı. Adım 16'nın (öğrenilmiş konu modeli) ana gerekçesi bu.
+
+**Sınırlamalar:**
+1. Set 50/50 poz/neg havuz etiketli, gerçek dağılım ise %94 pozitif. Sayılar gerçek trafiği temsil etmiyor.
+2. Negasyon kalıbı içeren yorumlar ("fena değil", "kötü değil") sızıntıyı önlemek için dışarıda. Yani
+   negasyon ile konu etkileşimi ölçülmüyor.
+3. 8 kelimeden kısa yorumlar dışarıda. Önceki adımlarda en zor grup buydu.
+4. Anahtar kelime listelerini yazan Claude, val ve test yorumlarını etiketlerken okudu. Listeler
+   `explore_300`'den türetildi, ama bu dolaylı bir aşinalık.
+5. Test cümleciklerinin V2b logit'leri cache'lendi (`clause_logits.npz`, commit'lenmiyor), ama hiçbir metrik
+   hesaplanmadı ve bakılmadı.
+6. **İnsan tavanı (0.667) iyimser:** kurallar aynı 20 yoruma bakılarak ve Görkan'ın kararlarıyla netleşti.
+   Yeni tanım bağımsız bir kör setle doğrulanmadı; bu 20 yorumun 2'si de kör değil.
+
+## Yapılacaklar (2026-09-29'da güncellendi)
+
+0. **Adım 15.4:** V2 listesi + val'de seçilen ayarla (A/b) test ölçümü; konu başına n, n<30 → "gürültülü";
+   hata kovaları (konu: örtük / kelime eksik / yanlış eşleşme; duygu: bölme hatası / V2b hatası).
+   gorkanai-fd onayı bekleniyor. Adım 16 (BERT ile çok etiketli konu modeli) 15.4'ten sonra.
 
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).

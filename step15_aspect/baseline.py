@@ -37,7 +37,8 @@ def turkish_lower(text):
 
 
 W = r"(?<!\w)"   # kelime başı: "kargo" -> "kargoya", "kargosu" da eşleşir (Türkçe ekler)
-KEYWORDS = {
+# V1: ESKİ Q/P tanımıyla yazılmış liste (15.3 ilk sürüm) — sadece kıyas için duruyor.
+KEYWORDS_V1 = {
     "kargo": [r"kargo", r"teslim", r"gönderi", r"gönderil", r"sevkiyat", r"paketlen", r"kolilen", r"ambalaj",
               r"elime", r"elimize", r"elimde", r"eli̇me", r"kapıma", r"kapımda", r"ulaştı", r"ulaşti", r"ertesi gün",
               r"\d+ ?günde", r"\d+ gün (?:içinde|sonra)", r"hızlı gel", r"gecik", r"kurye", r"yarın kapında"],
@@ -55,7 +56,40 @@ KEYWORDS = {
     "satici": [r"satıcı", r"mağaza", r"firma", r"iletişim", r"müşteri hizmet", r"iade", r"değişim", r"servis",
                r"garanti", r"eksik", r"kılavuz", r"klavuz"],
 }
-PATTERNS = {a: re.compile(W + "(?:" + "|".join(ws) + ")") for a, ws in KEYWORDS.items()}
+
+# V2: YENİ Q/P tanımı (2026-09-29). Yine SADECE explore_300'den türetildi, val'e bakılarak kelime eklenmedi.
+#   Q = genel yargı + genel işe yarama/arıza/pil-şarj + malzeme/işçilik
+#   P = adı konan özellik/teknik ölçü
+# Kalıp tavsiye ("tavsiye ederim", "alın") bilerek listede YOK (kural: tek başına Q değil).
+GENERIC_PRODUCT = r"(?:ürün|urun|cihaz|makine|makina|alet|telefon)"
+KEYWORDS = {
+    "kargo": KEYWORDS_V1["kargo"] + [r"tedarik", r"kargola", r"geç teslim"],                  # explore: 3256, 3263, 3260
+    "fiyat": KEYWORDS_V1["fiyat"] + [r"paraya", r"fırsat"],                                   # explore: 3277, 3270
+    "kalite": KEYWORDS_V1["kalite"] + [
+        # genel yargı (explore: 3013, 3054, 3117, 3254, 3257, 3275, 3285, 3290 ...)
+        r"mükemmel", r"harika", r"muhteşem", r"süper", r"berbat", r"rezalet", r"hayal kırıklığı",
+        r"memnun", r"beğen", r"pişman", r"başarılı", r"başarısız", r"vasat", r"sıradan",
+        r"(?:güzel|iyi|kötü|harika|süper) bir " + GENERIC_PRODUCT,
+        GENERIC_PRODUCT + r" (?:çok |gayet |gerçekten )?(?:güzel|iyi|kötü|harika|süper|mükemmel|berbat)",
+        # genel işe yarama / arıza / pil-şarj (V1'de P'deydi -> Q'ya taşındı)
+        r"işe yar", r"iş gör", r"işimi gör", r"işinizi gör", r"fayda", r"etki", r"çalışm[ıa]", r"çalışıyor",
+        r"şarj", r"sarj", r"pil(?!\w)", r"pili", r"batarya", r"severek", r"bayıl"],
+    "performans": [r"ses(?:i|li|siz)?(?!\w)", r"gürültü", r"performans", r"ısın", r"çekim", r"çekiş", r"emiş",
+                   r"ekran", r"görüntü", r"kamera", r"hızı", r"uyum", r"kullanış", r"kullanım", r"kurulum",
+                   r"montaj", r"pratik", r"ergonomi", r"fonksiyon", r"özellik", r"koku", r"kalıcı", r"tadı",
+                   r"lezzet", r"konfor", r"rahat(?!lıkla)", r"ayar", r"menü", r"ışık", r"lümen", r"temizl"],
+    "boyut": KEYWORDS_V1["boyut"] + [r"ağır(?!\w|lık)", r"ağırlı", r"kapasite", r"\d+ ?(?:ml|lt|litre)(?!\w)"],
+    "gorunum": KEYWORDS_V1["gorunum"] + [r"duruyor", r"zarif"],                                 # explore: 3258, 3290
+    "satici": KEYWORDS_V1["satici"] + [r"yanında gel", r"içinde yok", r"promosyon"],           # explore: 3288, 3298
+}
+
+
+def compile_patterns(keywords):
+    return {a: re.compile(W + "(?:" + "|".join(ws) + ")") for a, ws in keywords.items()}
+
+
+PATTERNS_V1 = compile_patterns(KEYWORDS_V1)
+PATTERNS = compile_patterns(KEYWORDS)
 
 CONTRAST = r"(?<!\w)(?:ama|fakat|ancak|lakin|yalnız|yalniz|ne var ki|oysa)(?!\w)"
 SPLITTERS = {
@@ -74,9 +108,10 @@ def split_clauses(text, variant):
     return [p for p in parts if len(p) > 1] or [text]
 
 
-def detect(text):
+def detect(text, patterns=None):
+    patterns = patterns or PATTERNS
     t = turkish_lower(text)
-    return {a for a, pat in PATTERNS.items() if pat.search(t)}
+    return {a for a, pat in patterns.items() if pat.search(t)}
 
 
 def clause_logits(texts):
@@ -110,14 +145,15 @@ def decide(logits, mode):
     return LABELS[int(probs.sum(0).argmax())]               # birden çok cümlecik: olasılıkları topla
 
 
-def predict(df, variant, mode, cache):
+def predict(df, variant, mode, cache, patterns=None):
     """Her yorum için {konu: duygu} ve hangi cümlecik(ler)in kullanıldığı."""
+    patterns = patterns or PATTERNS
     out = []
     for text in df["text"]:
         clauses = split_clauses(text, variant)
         pred, used = {}, {}
-        for a in detect(text):
-            cl = [c for c in clauses if PATTERNS[a].search(c)] or [turkish_lower(text)]
+        for a in detect(text, patterns):
+            cl = [c for c in clauses if patterns[a].search(c)] or [turkish_lower(text)]
             pred[a] = decide([cache[c] for c in cl], mode)
             used[a] = cl
         out.append((pred, used))
@@ -170,6 +206,52 @@ def load_labels():
     return pd.read_csv(os.path.join(HERE, "..", "data", "aspect_labels", "aspect_labels.csv"), keep_default_na=False)
 
 
+HUMAN_CEILING = 0.667   # insan-insan uçtan uca çift F1 (20 kör yorum, yeni kurallar, karar öncesi) — İYİMSER
+
+
+def select_config(val, cache, patterns, title):
+    """Val'de 3 bölme x 2 nötr seçeneği; seçim: duygu micro, sonra macro, sonra basit olan."""
+    lines = [f"--- {title} ---"]
+    rows, _ = metrics(val, predict(val, "A", "b", cache, patterns))
+    lines.append("  konu P/R: " + " | ".join(f"{a} {r['P']:.2f}/{r['R']:.2f} (n={r['n']})" for a, r in rows.items()))
+    lines.append(f"  {'bölme':<6}{'nötr':<24}{'duygu_micro':>12}{'duygu_macro':>12}{'duygu_k0':>10}"
+                 f"{'uç_F1_micro':>12}{'uç_F1_macro':>12}{'tah.nötr':>9}")
+    results = []
+    for v in SPLITTERS:
+        for m in MODES:
+            _, sm = metrics(val, predict(val, v, m, cache, patterns))
+            results.append((sm["duygu_acc_micro"], sm["duygu_acc_macro"], v, m, sm))
+            lines.append(f"  {v:<6}{m + ' (' + MODES[m] + ')':<24}{sm['duygu_acc_micro']:>12.3f}"
+                         f"{sm['duygu_acc_macro']:>12.3f}{sm['duygu_acc_micro_k0']:>10.3f}{sm['uc_F1_micro']:>12.3f}"
+                         f"{sm['uc_F1_macro']:>12.3f}{sm['tahmin_notr']:>9d}")
+    # Eşitlik = val bu farkı ölçemiyor -> daha basit ayar (daha az bölme: yok < A < B).
+    simplicity = {"yok": 0, "A": 1, "B": 2}
+    key = lambda r: (round(r[0], 6), round(r[1], 6))
+    best = max(results, key=lambda r: key(r) + (-simplicity[r[2]],))
+    ties = [(r[2], r[3]) for r in results if key(r) == key(best)]
+    lines.append(f"  SEÇİLEN: bölme={best[2]}, nötr={best[3]} ({MODES[best[3]]})"
+                 + (f" — val'de eşit: {ties}" if len(ties) > 1 else ""))
+    return lines, best, rows
+
+
+def list_diff():
+    lines = ["Anahtar kelime listesi farkı (V1 -> V2):"]
+    for a in ASPECTS:
+        old, new = set(KEYWORDS_V1[a]), set(KEYWORDS[a])
+        if old != new:
+            lines.append(f"  {a}: + {sorted(new - old)}" + (f"  - {sorted(old - new)}" if old - new else ""))
+    return lines
+
+
+def old_labels():
+    """Q/P tanım değişikliğinden ÖNCEKİ altın etiketler (commit 4a5b8d6)."""
+    import io
+    import subprocess
+    csv = subprocess.run(["git", "show", "4a5b8d6:data/aspect_labels/aspect_labels.csv"], capture_output=True,
+                         text=True, check=True, cwd=HERE).stdout
+    return pd.read_csv(io.StringIO(csv), keep_default_na=False)
+
+
 if __name__ == "__main__":
     labels = load_labels()
     # Test cümleciklerinin logit'leri de burada cache'lenir (sadece hesaplanır, SONUÇLARINA bakılmaz).
@@ -178,34 +260,25 @@ if __name__ == "__main__":
     cache = clause_logits(all_clauses)
 
     val = labels[labels["split"] == "val"].reset_index(drop=True)
-    lines = [f"VAL ({len(val)} yorum) — 3 bölme x 2 nötr seçeneği. Konu tespiti bölmeden bağımsız:"]
-    rows, _ = metrics(val, predict(val, "A", "a", cache))
-    lines.append("  " + " | ".join(f"{a} P{r['P']:.2f}/R{r['R']:.2f} (n={r['n']})" for a, r in rows.items()))
-    lines.append(f"{'bölme':<6}{'nötr':<24}{'duygu_micro':>12}{'duygu_macro':>12}{'duygu_k0':>10}"
-                 f"{'uç_F1_micro':>12}{'uç_F1_macro':>12}{'tah.nötr':>9}")
-    results = []
-    for v in SPLITTERS:
-        for m in MODES:
-            _, sm = metrics(val, predict(val, v, m, cache))
-            results.append((sm["duygu_acc_micro"], sm["duygu_acc_macro"], v, m))
-            lines.append(f"{v:<6}{m + ' (' + MODES[m] + ')':<24}{sm['duygu_acc_micro']:>12.3f}"
-                         f"{sm['duygu_acc_macro']:>12.3f}{sm['duygu_acc_micro_k0']:>10.3f}{sm['uc_F1_micro']:>12.3f}"
-                         f"{sm['uc_F1_macro']:>12.3f}{sm['tahmin_notr']:>9d}")
-    lines.append(f"(altın nötr çift sayısı val'de: {sm['altin_notr']})")
-    # Seçim: duygu doğruluğu micro, sonra macro; hâlâ eşitse DAHA BASİT ayar (daha az bölme: yok < A < B;
-    # nötr seçeneğinde a < b sırası yok, ölçüt karar verir). Eşitlik = val bu farkı ölçemiyor demek.
-    simplicity = {"yok": 0, "A": 1, "B": 2}
-    best = max(results, key=lambda r: (round(r[0], 6), round(r[1], 6), -simplicity[r[2]]))
-    ties = [r for r in results if round(r[0], 6) == round(best[0], 6) and round(r[1], 6) == round(best[1], 6)]
-    lines.append(f"SEÇİLEN (val duygu doğruluğu micro, eşitlikte macro, sonra basit olan): bölme={best[2]}, "
-                 f"nötr={best[3]} ({MODES[best[3]]})" + (f" — val'de eşit: {[(r[2], r[3]) for r in ties]}"
-                                                         if len(ties) > 1 else ""))
-    va = predict(val, "A", best[3], cache)
-    vb = predict(val, "B", best[3], cache)
-    n_diff = sum(pa != pb for (pa, _), (pb, _) in zip(va, vb))
-    lines.append(f"A ile B'nin val'de farklı tahmin verdiği yorum sayısı: {n_diff}")
+    old_val = old_labels().query("split == 'val'").reset_index(drop=True)
+    setups = [("eski kurallar + eski liste (V1)", old_val, PATTERNS_V1),
+              ("yeni kurallar + eski liste (V1)", val, PATTERNS_V1),
+              ("yeni kurallar + yeni liste (V2)", val, PATTERNS)]
+    lines, summary = [f"VAL ({len(val)} yorum)"] + list_diff(), []
+    for title, df, pats in setups:
+        l, best, _ = select_config(df, cache, pats, title)
+        lines += l
+        summary.append((title, best))
+    lines.append(f"\nÖZET (her satır kendi val seçimiyle) — insan tavanı (çift F1): {HUMAN_CEILING} (iyimser)")
+    lines.append(f"{'kurulum':<34}{'ayar':<8}{'duygu mic/mac':>15}{'k0':>7}{'uç F1 mic/mac':>15}{'tavana oran':>13}")
+    for title, b in summary:
+        sm = b[4]
+        lines.append(f"{title:<34}{b[2] + '/' + b[3]:<8}{sm['duygu_acc_micro']:>8.3f}/{sm['duygu_acc_macro']:.3f}"
+                     f"{sm['duygu_acc_micro_k0']:>7.3f}{sm['uc_F1_micro']:>8.3f}/{sm['uc_F1_macro']:.3f}"
+                     f"{sm['uc_F1_micro'] / HUMAN_CEILING:>13.2f}")
     print("\n".join(lines))
     with open(os.path.join(HERE, "log_baseline_val.txt"), "w") as f:
         f.write("\n".join(lines) + "\n")
+    final = summary[-1][1]
     with open(os.path.join(HERE, "chosen_config.json"), "w") as f:
-        json.dump({"split": best[2], "mode": best[3]}, f)
+        json.dump({"split": final[2], "mode": final[3], "keywords": "V2"}, f)
