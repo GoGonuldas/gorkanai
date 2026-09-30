@@ -631,6 +631,9 @@ tamamı etiket farkından: sadece 12 gerçek model hatası sayılsa Q precision'
 "Cömert Q"nun iki kalıbı: (i) işe yarama/şikâyet ifadesi altında P, yeni etiketlerde Q ("çok işe yarıyor",
 "yetersiz", "hakkını veriyor"); (ii) **kitaplar**: altın içerik yorumunu P sayıyor ("çok ağır ilerliyor" → P),
 bu oturum Q etiketledi. 12 yorumda "Q/P takası" var (aynı yorumda kalite FP + performans FN); tersi sadece 2.
+gorkanai-1e 31 FP'yi bağımsız okudu, sınıflamaya katıldı ve şu okumayı ekledi: "cömert Q"ların çoğu yazılı kurala göre
+savunulabilir Q — yani bu bir etiketleyici kaymasından çok **kuralın kendi belirsizliği**: "işe yarama → Q" maddesi ile
+"adı konan özellik → P" maddesi aynı cümleye uyuyor (Adım 15'teki kappa 0.25 bulgusunun devamı).
 
 **3. Görünüm FN (7; recall 0.82 → 0.59) ve boyut FN (8):** görünümde 5'i AÇIK ifade ("muşamba gibi duruyor",
 "rastgele renkler geliyor", "hoş duruyor", "görüntüsü", "ucuz duruyor"), 2'si örtük. Boyutta 6'sı açık ("küçücük",
