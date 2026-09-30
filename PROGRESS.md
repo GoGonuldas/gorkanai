@@ -679,9 +679,10 @@ kelime eşleşmesini modele özellik olarak vermek); (b) nadir konular için kon
 
 ## Yapılacaklar (2026-09-30'da güncellendi)
 
-0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (yukarıda). Sırada (her biri ayrı onayla):
-   (a) ablasyonlar (hata kovaları yapıldı: 16.5); (b) **konuya koşullu duygu modeli** ((konu, yorum) çiftini birlikte okuyan
-   model; 800 yeni yorumun duygu etiketleri hazır); (c) Görkan'ın `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
+0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (16.1-16.5, yukarıda).
+   **Adım 17: konuya koşullu duygu modeli — PLAN AŞAMASINDA** (`step17_aspect_sentiment/PLAN.md`, Görkan'ın onayı
+   bekleniyor; kod/eğitim başlamadı). Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
+   `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
 3. ~~Modeli Hugging Face Hub'a yükle.~~ — **yapıldı** (yukarıda). Uygulamayı internete açmak ERTELENDİ (PRO gerekiyor).
