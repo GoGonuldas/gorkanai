@@ -102,3 +102,16 @@ eşik değişikliği, Q/P birleştirme: bu adıma karışmaz. Konu modeli dondur
   bu oturum kendi etiketlerini `data/aspect_labels_step17/gold_macmini.csv` olarak commit'ler (gorkanai-1e'ninkini
   açmadan ÖNCE) → gorkanai-1e `data/aspect_labels_step17/gold_1e.csv` commit'ler → uyum raporu → eğitim.
   gorkanai-1e de bu oturumun etiket dosyasını kendi commit'inden önce açmaz.
+
+## Test öncesi güncellenmiş beklenti (2026-09-30, val görüldükten sonra, testler ölçülmeden; AYAR DEĞİL, sadece kayıt)
+- **Dondurulan:** v2b başlangıcı, epoch 8, tohum 0/1/2 olasılık ortalaması (`frozen_config.json`; iki altın dosyasının
+  sha256'sı içinde). Konu modeli: Adım 16, dondurulmuş.
+- **Val sonucu:** (i) 0.867 → 0.889, fark +0.021 [−0.006, +0.047]; uçtan uca 0.735 → 0.753, +0.018 [−0.006, +0.042].
+  İki aralık da 0'ı içeriyor. Zıt duygulu alt küme 0.728 → 0.744 (hedefti, kıpırdamadı); örtük çiftlerde 0.869 → 0.848
+  (kötüleşti); eski val'de uçtan uca kazanç 0.
+- **İlk beklenti (madde 6) fazla iyimserdi.** Güncel beklenti, yeni testte (gorkanai-1e altını): (i) **+1 ile +3 puan**,
+  aralık büyük olasılıkla 0'ı içerir → "gürültüden ayrılamıyor"; uçtan uca 0 ile +2 puan; zıt duygulu alt kümede kazanç
+  beklenmiyor; örtük çiftlerde küçük bir kötüleşme olası. Eski testte uçtan uca 0.697 → 0.69-0.72.
+- Başarı ölçütü değişmedi: "kazandı" = (i) micro farkının bootstrap aralığı 0'ı dışlıyor. "Fark yok" sonucu da kayda girer.
+- Yeni test ayrıca Adım 16 konu modelinin ilk temiz ölçümü: beklenti konu F1 micro ~0.80-0.83 (eski test 0.811;
+  yeni test altını eğitim etiketlerine biraz daha yakın).
