@@ -86,3 +86,19 @@ eşik değişikliği, Q/P birleştirme: bu adıma karışmaz. Konu modeli dondur
 2. Kör etiketleme: gorkanai-1e (ana altın) ve bu oturum (ikinci) → uyum raporu → commit.
 3. Eğitim (2 başlangıç × 3 tohum) → val raporu → dondur → DUR.
 4. (onay) → yeni test + eski test, bir kez → rapor, PROGRESS, hata kovaları ayrı onayla.
+
+## Ekler (gorkanai-1e değerlendirmesi, 2026-09-30; onay beklerken, kod yok)
+1. **Ana altının körlüğünün sınırı:** gorkanai-1e yeni 200'ü ve hiçbir model çıktısını görmedi; ama eski testin 31 kalite
+   FP'sini ve tur 1 etiketlerinden 28 örneği okudu, bu oturumun Q/P eğilimini biliyor. Yani "bağımsız ama aynı
+   ailedeki üçüncü bir Claude" — **insan altını değil**. Aynı oturum değerlendirici de olduğu için etiketleri model
+   eğitilmeden ÖNCE commit'lenir ve sonradan değişmez; dosyanın sha256'sı `frozen_config.json`'a yazılır.
+2. **Tek kural kaynağı:** `step17_aspect_sentiment/LABEL_RULES.md` (docstring + Adım 16 netleştirmeleri; örnekler
+   uydurma, test/val cümlesi yok). İki etiketleyici de sadece onu kullanır.
+3. **Uyum raporu** (iki altın arasında): konu F1, çift F1, konu başına kappa (Q, P özellikle) + **ortak konularda duygu
+   uyumu** (Adım 15'te 24/25). Duygu uyumu, (i) ölçüsünün pratik tavanıdır.
+4. **(i) için üç satır:** gorkanai-1e altınıyla (konular da onun — ANA), bu oturumun altınıyla (konular bu oturumun),
+   ve **iki altının ortak çiftlerinde** (aynı konu + aynı duygu verilenler; etiketleyiciden en az etkilenen sayı).
+- **Dosya düzeni ve sıra:** bu oturum `step17_aspect_sentiment/test17_batch_01..04.csv` (id + text, 50'şer) commit'ler →
+  bu oturum kendi etiketlerini `data/aspect_labels_step17/gold_macmini.csv` olarak commit'ler (gorkanai-1e'ninkini
+  açmadan ÖNCE) → gorkanai-1e `data/aspect_labels_step17/gold_1e.csv` commit'ler → uyum raporu → eğitim.
+  gorkanai-1e de bu oturumun etiket dosyasını kendi commit'inden önce açmaz.
