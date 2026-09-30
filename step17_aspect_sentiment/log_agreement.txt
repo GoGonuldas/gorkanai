@@ -18,7 +18,65 @@ Adım 16 kayma kontrolleri (bu oturum vs Adım 15 altını, 30'ar yorum) çift F
   sadece macmini'nin verdiği konular: {'performans': 8, 'kalite': 7}
   Q/P takası (biri Q, diğeri P demiş) olan yorum: 8
 
-(Görkan'ın kör 20'si henüz doldurulmadı.)
+GÖRKAN'IN KÖR 20'Sİ (n=20, sadece fikir verir; etiketlere dokunulmadı)
+--- görkan vs 1e (20 yorum) ---
+  çift sayısı: görkan 31, 1e 36 (oran 1.16)
+  konu F1 0.687 | (konu, duygu) çift F1 0.567 | ortak konu 23, duygu uyumu 19/23 = 0.826
+  konu           görkan       1e  ortak   kappa  duygu uyumu
+  kargo               6        6      6    1.00          6/6
+  fiyat               5        6      5    0.87          5/5
+  kalite             15       12     10    0.22         7/10
+  performans          5        7      2    0.06          1/2
+  boyut               0        1      0    0.00          0/0
+  gorunum             0        3      0    0.00          0/0
+  satici              0        1      0    0.00          0/0
+--- görkan vs macmini (20 yorum) ---
+  çift sayısı: görkan 31, macmini 34 (oran 1.10)
+  konu F1 0.738 | (konu, duygu) çift F1 0.615 | ortak konu 24, duygu uyumu 20/24 = 0.833
+  konu           görkan  macmini  ortak   kappa  duygu uyumu
+  kargo               6        6      6    1.00          6/6
+  fiyat               5        6      5    0.87          4/5
+  kalite             15       12     11    0.44         8/11
+  performans          5        6      2    0.13          2/2
+  boyut               0        1      0    0.00          0/0
+  gorunum             0        2      0    0.00          0/0
+  satici              0        1      0    0.00          0/0
+--- 1e vs macmini (20 yorum) ---
+  çift sayısı: 1e 36, macmini 34 (oran 0.94)
+  konu F1 0.943 | (konu, duygu) çift F1 0.857 | ortak konu 33, duygu uyumu 30/33 = 0.909
+  konu               1e  macmini  ortak   kappa  duygu uyumu
+  kargo               6        6      6    1.00          6/6
+  fiyat               6        6      6    1.00          5/6
+  kalite             12       12     11    0.79        11/11
+  performans          7        6      6    0.89          5/6
+  boyut               1        1      1    1.00          1/1
+  gorunum             3        2      2    0.77          1/2
+  satici              1        1      1    1.00          1/1
+
+  BİLGİ: olası 2 yazım hatası ([6103, 6026]; düzeltilmedi) HARİÇ 18 yorumda:
+  konu F1 0.644 | (konu, duygu) çift F1 0.610 | ortak konu 19, duygu uyumu 18/19 = 0.947   [görkan vs 1e]
+  konu F1 0.702 | (konu, duygu) çift F1 0.632 | ortak konu 20, duygu uyumu 18/20 = 0.900   [görkan vs macmini]
+  Görkan'ın 20 etiketi (no | id | görkan | 1e | macmini):
+     1 | 6012 | Qp             | Qp,Pp          | Qp,Pp
+     2 | 6102 | Fp,Qp          | Fp,Pp          | Fp,Pp
+     3 | 6027 | Qn             | Qp,Pn          | Qp,Pn
+     4 | 6103 | Qp             | Qn             | Qn
+     5 | 6113 | Qn,Fp          | Qn,Fp          | Qn,Fx
+     6 | 6099 | Kp,Qp          | Gp,Kp          | Gp,Kp
+     7 | 6046 | Qn             | Qn             | Qn
+     8 | 6193 | Qp             | Qp             | Qp
+     9 | 6014 | Pn,Qn          | Qn             | Qn
+    10 | 6188 | Kp,Qp,Pp       | Kp,Fp,Bp       | Kp,Fp,Qp,Bp
+    11 | 6018 | Kp,Qp          | Kp,Pp          | Kp,Pp
+    12 | 6074 | Qn             | Qn             | Qn
+    13 | 6183 | Pn             | Gp*            | Gn*
+    14 | 6061 | Kp,Fp,Qp       | Kp,Fp,Qp       | Kp,Fp,Qp
+    15 | 6022 | Fp             | Fp,Gx          | Fp
+    16 | 6026 | Kp,Qn,Pp       | Kp,Qp,Pn       | Kp,Pp*,Qp
+    17 | 6101 | Pp             | Qp,Pp*         | Pp*
+    18 | 6041 | Fp             | Sp,Fp          | Fp,Sp
+    19 | 6195 | Qp             | Pp             | 0
+    20 | 6107 | Kp             | Kp,Qp          | Kp,Qp
 
 FARKLAR (id | 1e | macmini | metin):
   6001 | Bn,Pn,Qp,Fn      | Bn,Pn,Qx,Fn      | ürün çok kaba, klozet etrafını kaplıyor, ayak basamakları yan tarafta kalıyor.rahat bir oturma pozisyonu sağlamıyor.yerden yüksek olması nedeniyle aya

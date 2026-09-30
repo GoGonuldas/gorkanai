@@ -7,6 +7,7 @@ Kullanım: python agreement.py -> log_agreement.txt
 """
 
 import os
+import re
 import sys
 
 import pandas as pd
@@ -66,13 +67,24 @@ out.append(f"  Q/P takası (biri Q, diğeri P demiş) olan yorum: {swap}")
 
 human_path = os.path.join(HERE, "human_blind_20.csv")
 human = pd.read_csv(human_path, keep_default_na=False)
+norm_label = lambda s: ",".join(t for t in re.split(r"[,\s]+", s.strip()) if t)   # Görkan boşlukla da virgülle de ayırmış
+SUSPECT = [6103, 6026]   # olası yazım hatası görünen 2 kör etiket — DÜZELTİLMEDİ, sadece "hariç" bilgi satırı için
 if (human["etiket"].str.strip() != "").all():
-    gh = {r.id: parse(r.etiket.replace(" ", ""))[0] for r in human.itertuples()}
+    gh = {r.id: parse(norm_label(r.etiket))[0] for r in human.itertuples()}
     hid = sorted(gh)
-    out.append("\nGÖRKAN'IN KÖR 20'Sİ (n=20, sadece fikir verir)")
+    out.append("\nGÖRKAN'IN KÖR 20'Sİ (n=20, sadece fikir verir; etiketlere dokunulmadı)")
     compare(gh, g1e, hid, "görkan", "1e", out)
     compare(gh, gmm, hid, "görkan", "macmini", out)
     compare(g1e, gmm, hid, "1e", "macmini", out)
+    out.append(f"\n  BİLGİ: olası 2 yazım hatası ({SUSPECT}; düzeltilmedi) HARİÇ 18 yorumda:")
+    h18 = [i for i in hid if i not in SUSPECT]
+    tmp = []
+    compare(gh, g1e, h18, "görkan", "1e", tmp); out.append("  " + tmp[2].strip() + "   [görkan vs 1e]")
+    tmp = []
+    compare(gh, gmm, h18, "görkan", "macmini", tmp); out.append("  " + tmp[2].strip() + "   [görkan vs macmini]")
+    out.append("  Görkan'ın 20 etiketi (no | id | görkan | 1e | macmini):")
+    for r in human.itertuples():
+        out.append(f"    {r.no:>2} | {r.id} | {norm_label(r.etiket):<14} | {raw1e[r.id]:<14} | {rawmm[r.id]}")
 else:
     out.append("\n(Görkan'ın kör 20'si henüz doldurulmadı.)")
 
