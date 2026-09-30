@@ -589,9 +589,8 @@ görünümde BERT daha kötü. Uçtan uca kazanç +4.4 puan, sınırda anlamlı.
   için yeterli, satıcı (44) ve görünüm (68) için değil. "Model daha iyi" cümlesi sadece sık konular için doğru.
 - **Güven aralığı olmadan 4 puanlık fark iddia edilmez.** n=200 ile uçtan uca +0.044'ün aralığı [+0.004, +0.085].
   Ölçütü testten önce yazmak, sonucu gördükten sonra "kazandı" tanımını esnetmeyi engelledi.
-- **Örtük konuyu bulmak duyguyu çözmez.** BERT örtük bir konu bulduğunda o konunun kelimesi hiçbir cümlecikte
-  geçmiyor; duygu tüm yorumdan alınıyor (yedek kural). Konu kazancı +4.8, uçtan uca kazanç +4.4 ama macro'da
-  sadece +2.0: bölme artık darboğaz. Konuya koşullu duygu modelinin gerekçesi bu.
+- ~~Örtük konuyu bulmak duyguyu çözmez; bölme artık darboğaz~~ — **bu ders 16.5'te YANLIŞLANDI** (tahmindi, ölçülmemişti):
+  örtük konularda tüm-yorum yedek kuralı duygu hatasının kaynağı değil (bkz. 16.5, madde 5).
 
 **Sınırlamalar:**
 1. Adım 15'in 1-3. sınırlamaları aynen geçerli (50/50 poz/neg örneklem, negasyon kalıpları ve 8 kelimeden kısa
@@ -606,12 +605,79 @@ görünümde BERT daha kötü. Uçtan uca kazanç +4.4 puan, sınırda anlamlı.
 6. Bağımsız insana karşı kanıt yok: Görkan'ın 10 kör test yorumunda BERT anahtar kelimeden kötü (0.545'e 0.649).
    n=10 ile hüküm verilemez, ama "BERT insana daha çok benziyor" da denemez.
 7. "Altın şüpheli" val yorumları (4089, 4196, 4200, 4177) düzeltilmedi; test altınında benzer hatalar olabilir.
-8. Hata kovaları ve ablasyonlar (hedefli/kararsız yarıyı çıkarma, daha uzun eğitim) yapılmadı.
+8. Ablasyonlar (hedefli/kararsız yarıyı çıkarma, daha uzun eğitim) yapılmadı. Hata kovaları: 16.5.
+
+### Adım 16.5: BERT test hata kovaları — TAMAMLANDI (2026-09-30)
+`step16_topic_bert/error_buckets.py`, log: `log_error_buckets.txt`, elle sınıflandırma: `test_bert_errors_manual.csv`
+(132 hatanın hepsi). Eğitim yok, ayar yok; sadece dondurulmuş test tahminlerinin analizi. Test altınına dokunulmadı.
+**Buradan çıkan her fikir "test görüldü → yeni test gerekir" notuyla okunmalı.**
+
+| Test | konu FP | konu FN | duygu hatası (yedek kural / bölme / V2b) |
+|---|---|---|---|
+| Anahtar kelime V2 | 67 | 96 | 38 (0 / 15 / 23) |
+| BERT | 57 | 75 | 40 (5 / 13 / 22) |
+
+Konu başına FP → FN (kelime → BERT): kargo 6→4 / 9→4; fiyat 5→3 / 2→2; **kalite 17→31 / 41→21**; performans
+14→12 / 24→21; boyut 10→2 / 5→8; görünüm 8→3 / 3→7; satıcı 7→2 / 12→12.
+
+**1. Geçiş tablosu** (anahtar kelimenin 96 FN'si, Adım 15.4 kovaları): örtük 44'ün **24'ü düzeldi (%55)**; kelime
+eksik 52'nin 37'si (%71): yeni kelime 17/27, yazım varyantı 13/15, ek/yumuşama 7/10. Anahtar kelimenin 67 FP'sinin
+49'u BERT'te yok; ama BERT **39 yeni FP** ve **40 yeni FN** (kelime tutuyordu, BERT kaçırdı: 263'ün %15'i; kalite 12,
+performans 12, görünüm 6, satıcı 4, boyut 4) üretti. Yani BERT anahtar kelimenin üstüne eklenmiyor; hataların yerini
+değiştiriyor. 75 FN'nin 20'sinde olasılık 0.40-0.59 (eşiğin hemen altı).
+
+**2. Kalite FP'leri (31; precision 0.84 → 0.78):** **cömert Q 17**, model hatası 12, altın şüpheli 2. Yani düşüşün
+tamamı etiket farkından: sadece 12 gerçek model hatası sayılsa Q precision'ı ~0.90 olurdu (anahtar kelime 0.84).
+"Cömert Q"nun iki kalıbı: (i) işe yarama/şikâyet ifadesi altında P, yeni etiketlerde Q ("çok işe yarıyor",
+"yetersiz", "hakkını veriyor"); (ii) **kitaplar**: altın içerik yorumunu P sayıyor ("çok ağır ilerliyor" → P),
+bu oturum Q etiketledi. 12 yorumda "Q/P takası" var (aynı yorumda kalite FP + performans FN); tersi sadece 2.
+
+**3. Görünüm FN (7; recall 0.82 → 0.59) ve boyut FN (8):** görünümde 5'i AÇIK ifade ("muşamba gibi duruyor",
+"rastgele renkler geliyor", "hoş duruyor", "görüntüsü", "ucuz duruyor"), 2'si örtük. Boyutta 6'sı açık ("küçücük",
+"ebat ideal", "orta boyutlarda", "inceliği ve hafifliği"), 2'si örtük (miktar). Bunlar anahtar kelimenin zaten
+yakaladığı kolay örnekler: 68 ve 72 eğitim örneği bu konuları öğrenmeye yetmemiş; model çok konulu yorumlarda
+nadir konuyu atlıyor.
+
+**4. Satıcı (FN 12, FP 2):** kaçan 12'nin 8'i örtük (eksik aksesuar "kablosu da olsaymış", yanlış marka geldi,
+"siteden memnunum", "güvenilir"), 4'ü açık (servis, kılavuz çıkmadı, eksiksiz). FP sadece 2 (soru cümlesi, teşekkür
+kalıbı). Model satıcıyı nadiren söylüyor (8 tahmin), söylediğinde çoğunlukla doğru; recall'da kazanç yok.
+
+**5. Duygu tarafı — beklenenin TERSİ:** BERT'in doğru bulduğu 284 konudan 40'ında duygu yanlış (%14.1). Konunun
+kelimesi hiçbir cümlecikte geçmeyen (örtük) 61 doğru konuda hata **7 (%11.5)**; kelimesi geçen 223'te 33 (%14.8).
+Tüm-yorum yedek kuralına bağlanabilen hata sadece 5. Yani **örtük konularda duygu hattı daha kötü çalışmıyor**;
+16.4'te yazdığım "bölme artık darboğaz" dersi veriyle desteklenmedi. Hataların dağılımı anahtar kelimeyle aynı:
+V2b hatası 22, bölme hatası 13; ayrıca 40'ın 11'i altın nötr (nötr kapalı olduğu için hiç yakalanamaz).
+Konuya koşullu duygu modelinin gerekçesi bu yüzden "örtük konular" DEĞİL, hâlâ Adım 15.4'teki iki kova:
+V2b'nin cümlecikte kayması (22) ve zıt duygulu konuları aynı cümlecikte taşıyan bölme (13).
+
+**6. Elmayla elma (10 kör yorum, nitel):** BERT'in Görkan'dan ayrıştığı yerler çoğunlukla aynı Q/P kayması:
+4144 (Görkan ve altın: performans negatif; BERT: kalite pozitif), 4062 (BERT kaliteyi kaçırdı), 4141 (BERT
+performans ve görünümü kaçırdı, kalite ekledi), 4279 (görünüm yerine fiyat: "ucuz duruyor").
+
+**Altın şüpheli listesi** (12 çift, düzeltilmedi): 4006, 4009, 4045, 4060, 4082, 4092, 4124, 4230 ve kitap yorumları
+4180, 4182, 4185, 4199.
+
+**Dersler (16.5):**
+- **Precision düşüşü model değil, etiket farkıydı.** Hatalara tek tek bakmadan "BERT kalitede daha çok yanlış alarm
+  veriyor" sonucuna varırdık; oysa 31 FP'nin 19'u iki etiketleyici oturumunun Q/P sınırını farklı çizmesinden.
+  Q/P sınırı Adım 15'te insan-insan uyumunu, Adım 16'da oturum-oturum uyumunu bozdu: görevin en zayıf halkası tanım.
+- **Ölçmeden gerekçe yazma.** "Örtük konuda duygu tüm yorumdan alınıyor, o yüzden uçtan uca kazanç küçük" makul
+  görünüyordu ve PROGRESS'e ders diye yazıldı; sayım bunu yanlışladı (%11.5'e %14.8).
+- **Öğrenilmiş model, kuralın kolay yaptığını unutabiliyor.** 40 yeni FN'nin çoğu açık ifade. Bu yüzden "BERT VEYA
+  anahtar kelime" satırı testte en yüksek macro'yu verdi (0.783) — ama bu teste bakılarak görüldü; iddia etmek için
+  yeni bir test gerekir.
+- **Kitap gibi bir ürün kategorisi, konu tanımını sessizce bozabilir.** "Performans" kitap için ne demek, kurallarda
+  yok; iki oturum farklı karar verdi.
+
+**Test görüldü → yeni test gerekir (fikirler, UYGULANMADI):** (a) BERT ile anahtar kelimeyi birleştirmek (VEYA ya da
+kelime eşleşmesini modele özellik olarak vermek); (b) nadir konular için konu başına kotalı hedefli etiketleme;
+(c) Q/P tanımına "kitap/içerik" ve "işe yarama" için açık örnekler ekleyip iki etiketleyiciyle yeniden uyum ölçmek;
+(d) eşiği düşürmek (20 FN eşiğin hemen altında) — bu doğrudan teste bakarak ayar olur, yeni val + yeni test ister.
 
 ## Yapılacaklar (2026-09-30'da güncellendi)
 
 0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (yukarıda). Sırada (her biri ayrı onayla):
-   (a) test hata kovaları ve ablasyonlar; (b) **konuya koşullu duygu modeli** ((konu, yorum) çiftini birlikte okuyan
+   (a) ablasyonlar (hata kovaları yapıldı: 16.5); (b) **konuya koşullu duygu modeli** ((konu, yorum) çiftini birlikte okuyan
    model; 800 yeni yorumun duygu etiketleri hazır); (c) Görkan'ın `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).

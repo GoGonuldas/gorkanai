@@ -1,0 +1,74 @@
+ADIM 16.5 — BERT test hata kovaları (dondurulmuş tahminler: eşik 0.6, tohumlar [0, 1, 2])
+
+1) SAYIM (test) — anahtar kelime V2 vs BERT
+                    konu FP  konu FN  duygu hatası  (yedek kural / bölme / V2b)
+anahtar kelime           67       96            38  (0 / 15 / 23)
+BERT                     57       75            40  (5 / 13 / 22)
+konu              FP kelime → BERT      FN kelime → BERTduygu h. kelime → BERT
+kargo                        6 → 4                 9 → 4                 4 → 4
+fiyat                        5 → 3                 2 → 2                 5 → 5
+kalite                     17 → 31               41 → 21                 9 → 8
+performans                 14 → 12               24 → 21               13 → 15
+boyut                       10 → 2                 5 → 8                 6 → 6
+gorunum                      8 → 3                 3 → 7                 0 → 0
+satici                       7 → 2               12 → 12                 1 → 2
+
+1b) GEÇİŞ — anahtar kelimenin 96 FN'si (Adım 15.4 elle kovaları): BERT kaçını düzeltti
+  örtük                    24 / 44  düzeldi (55%), 20 kaldı
+  kelime eksik (toplam)    37 / 52  düzeldi (71%), 15 kaldı
+    yeni kelime            17 / 27  düzeldi (63%), 10 kaldı
+    yazım varyantı         13 / 15  düzeldi (87%), 2 kaldı
+    ek/yumuşama             7 / 10  düzeldi (70%), 3 kaldı
+  anahtar kelimenin 67 FP'sinden BERT'te kalmayan: 49; BERT'in YENİ FP'si (kelime yok, BERT var): 39; ortak FP: 18
+  BERT'in YENİ FN'si (kelime tutuyordu, BERT kaçırdı): 40 / 263 -> kalite 12, performans 12, gorunum 6, satici 4, boyut 4, fiyat 1, kargo 1
+
+2-4) ELLE KOVALAR (test_bert_errors_manual.csv) — BERT'in tüm konu hataları
+konu        tür    n  kovalar
+kargo       FP     4  model hatası 4
+kargo       FN     4  örtük 3, açık ifade 1
+fiyat       FP     3  altın şüpheli 2, model hatası 1
+fiyat       FN     2  örtük 2
+kalite      FP    31  cömert Q 17, model hatası 12, altın şüpheli 2
+kalite      FN    21  açık ifade 15, örtük 6
+performans  FP    12  model hatası 10, altın şüpheli 2
+performans  FN    21  açık ifade 13, örtük 4, altın şüpheli 4
+boyut       FP     2  altın şüpheli 2
+boyut       FN     8  açık ifade 6, örtük 2
+gorunum     FP     3  model hatası 3
+gorunum     FN     7  açık ifade 5, örtük 2
+satici      FP     2  model hatası 2
+satici      FN    12  örtük 8, açık ifade 4
+TOPLAM FP: 57 -> model hatası 32, cömert Q 17, altın şüpheli 8
+TOPLAM FN: 75 -> açık ifade 44, örtük 27, altın şüpheli 4
+
+ALTIN ŞÜPHELİ listesi (test altınına DOKUNULMADI; 12 çift):
+  4006 [FP performans] altın=Qp | "çok fonksiyonel": P olabilir | neredeyse 15 kişiye aldırdım, süper bir cihaz, çok fonksiyonel. son derece başarılı bir çalışma, çok işime yar
+  4009 [FP kalite] altın=Fn | "para ile satmayınız": genel olumsuz yargı, Q olabilir | asla para ile satmayınız ve bunun yerine yarar herhangi bir şey vermeniz daha anlamlı ..
+  4045 [FP performans] altın=Qn | "etkili, kolay ve hızlı": kullanım kolaylığı P olabilir | pek memnun kalmadım. eskiden düzleştirici ile dalga yapıyordum, bu ürün daha pratik gözüktüğü için bunu deneme
+  4060 [FP fiyat] altın=Gn,Pn | "bu paraya ne bekliyorsun": F bahsi var | ürün 5 yıl önceki tv ler gibi arkası baya kalın görüntü kalitesi full hd uydu alıcısı kullanırsan belki iyi ol
+  4082 [FP fiyat] altın=Pn* | "ucuz bir fan arıyorsanız": F bahsi var | ürünü ilk aldığımda sesi katlanılabilirdi, işimi görüyordu. yaklaşık 5 saat çalıştırdıktan sonra ses katlanıla
+  4092 [FP boyut] altın=Kp,Gn,Sp | "çok kalın ve kaba": boyut olabilir (altın G) | kılıf hızlı şekilde elime ulaştı ama beklediğimden çok kalın ve biraz kaba  çıkınca iade ettim. hızlı ödeme ia
+  4124 [FP kalite] altın=Pn | "bebeğimiz hiç sevmedi": kurala göre Q ("köpeğim bayılıyor" örneği) | ağız yapısından dolayı bebeğimiz hiç sevmedi bu ürünü - defalarca denememize rağmen.
+  4180 [FN performans] altın=Pp | KİTAP içeriği: kurala göre genel beğeni Q | konusunun güncel olması  hoşuma gitti okunması gereken bir  kitap tavsiye ediyorum.
+  4182 [FN performans] altın=Pn,Qn | KİTAP | kitapta bol miktarda çelişki mevcut bolca ikilem içinde kaldık. memnun kalmadık kitaptan.
+  4185 [FN performans] altın=Pn | KİTAP | çok ağır ilerliyor.kitap okumaya yeni başlamıştım soğudum o derece yani
+  4199 [FN performans] altın=Pn,Fn | KİTAP | kitap cinsellik ve erotizim üzerine yazılmış cok fazlaca cinsellik taşıyor, arkadaşlar tafsiye etmemişlerdi be
+  4230 [FP boyut] altın=Qp,Pp | "boyutuna göre ... her yere götürebilirsiniz" | müzik severler için vazgeçilmez bir ürün. boyutuna göre çok fazla ses çıkarıyor.bence hiç düşünmeden alın. çok
+
+5) DUYGU HATALARI (konu doğru, duygu yanlış) — BERT konularıyla
+  doğru bulunan konu: 284; duygu hatası 40 (14.1%)
+  tür: yedek kural (çok cümlecikli yorumda duygu TÜM yorumdan) 5, bölme hatası 13, V2b hatası 22
+  konunun kelimesi hiçbir cümlecikte geçmeyen (örtük) doğru konular: 61; bunlarda duygu hatası 7 (11.5%) | kelimesi geçenler: 223, hata 33 (14.8%)
+  karışık (altında karisik=1) yorumlardaki hata: 4; altın nötr olup kaçan: 11
+
+6) ELMAYLA ELMA — testteki 10 kör yorum (n=10, SADECE NİTEL): Görkan | altın | anahtar kelime | BERT
+  4055 G[kal:neg] A[kal:neg] K[kal:poz] B[kal:poz] | ürünü alalı 2 gün oldu ve yaklaşık günde 2 saat kullandım. fakat terlettiğini söylemek yan
+  4113 G[fiy:neg,per:neg] A[fiy:neg,per:neg] K[fiy:neg,per:neg] B[fiy:neg,per:neg] | ürün 1600 w ve çekim gücü çok zayıf , ürün fiyatını haketmiyor
+  4192 G[fiy:poz,per:neg] A[per:poz] K[per:neg] B[per:neg] | i̇ki yıldır kullanıyorum kamerası 1.5 gibi hissettirmiyor net ve güzel 4.5 g uyumluda deği
+  4248 G[kal:neg] A[kal:neg] K[kal:neg] B[kal:neg] | bezi bağladıktan sonra her kontrol edişimizde bantların ayrıldığını görüyoruz. kalite gerç
+  4129 G[fiy:poz,kal:poz] A[fiy:poz,kal:poz,kar:poz] K[fiy:poz,kal:poz,kar:poz] B[fiy:poz,kal:poz,kar:poz] | kesinlikle süper bir ürün bizim köpeğimiz bayılıyor.fiyat olarak da çok uygun ve kargo bed
+  4279 G[kal:neg] A[gor:neg,kal:neg] K[fiy:neg,gor:neg,kal:neg] B[fiy:neg,kal:neg] | aldigima çok pişman oldum çok kalitesiz ince ve ucuz duruyor
+  4141 G[kar:poz,per:poz] A[fiy:poz,gor:poz,kal:poz,kar:poz,per:poz] K[fiy:poz,gor:poz,kar:poz,per:poz] B[fiy:poz,kal:poz,kar:poz] | urun bugün sorunsuz bir şekilde elime ulaştı. gri kalmamıştı kahverengi aldım. başta tered
+  4005 G[kal:poz] A[boy:nöt,kal:poz] K[boy:poz] B[boy:poz] | yorumları okuyup xl almam iyi oldu, aksi halde çok dar olabilirdi, ürüne gelince uzun band
+  4062 G[kal:poz,kar:poz,per:poz] A[fiy:poz,kal:poz,kar:poz] K[fiy:poz,kal:poz,kar:poz] B[fiy:poz,kar:poz] | hızlı bir şekilde ulaştı. hediye olarak gelen ahşap testeresiyle ilk denememi yaptım. gaye
+  4144 G[per:neg] A[per:neg] K[kal:poz,per:neg] B[kal:poz] | audacity programı kullanıyorum. gürültü kaldırıyorum ses gitsede aynı ses hale geliyor. 3 
