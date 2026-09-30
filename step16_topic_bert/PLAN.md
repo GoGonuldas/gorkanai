@@ -41,3 +41,14 @@ Eski val'den 30 yorum altın etiketlere bakılmadan yeniden etiketlendi: konu F1
 (Claude-Görkan 0.667); kappa Q 0.73, P 0.80. Fark yönü: bu oturum daha ÇOK etiket veriyor (61'e 52) —
 özellikle belirli özellik övgüsünün yanına ek Q ve bilgi amaçlı bahsedilen konular (iade, indirim).
 Kalibrasyon kararı: Q sadece açık bir GENEL yargı varsa; sadece bilgi olarak geçen konu yazılmaz/az yazılır.
+
+## Ekler (2026-09-30, tur 1 etiketlemesi sırasında; yine val/test model sayıları görülmeden)
+- **İkinci kayma kontrolü** (`log_drift_check_b.txt`, kalibrasyon kararından sonra, eski val'den başka 30 yorum):
+  konu F1 0.916, çift F1 0.897; etiket sayısı 53 yeni / 54 altın (oran 0.98; ilk turda 61/52 = 1.17). Q kappa 1.00.
+- **Tanı satırı (val raporu):** global eşik eski-100'de ve yeni-200'de ayrı ayrı seçilseydi hangi değer çıkardı ve
+  F1 ne olurdu. Ana kural değişmez (val 300, tek global eşik); ikisi belirgin ayrışırsa testten önce konuşulur.
+- **"Altın şüpheli" listesi** (val altınına dokunulmadı; test sonrası hata analizinde bakılacak):
+  4089 ("8 inç tabletlere olmuyor": altın Bn, bence Pn/uyumluluk), 4196 ("sessiz ama tozları çekmiyor": altın Pp),
+  4200 ("incelik olarak iyi": altın Gp, bence Bp), 4177 ("çok ince ... daha kalın matları tercih edin": altında B yok).
+- Altından öğrenilen ve tur 1'de uygulanan ince kurallar: aksesuar/çanta/kılavuz eksikliği -> S (altın 4190);
+  sade "X günde geldi / teslim aldım" -> K nötr, "ertesi gün / çok hızlı" -> K pozitif.

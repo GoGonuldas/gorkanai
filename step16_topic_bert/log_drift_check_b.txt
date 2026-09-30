@@ -1,0 +1,19 @@
+konu           n   kappa
+kargo          5    0.87
+fiyat          8    0.91
+kalite        22    1.00
+performans    14    0.79
+boyut          5    0.71
+gorunum        3    0.78
+satici         1    0.00
+
+Konu F1: 0.916 (54 altın / 53 yeni / 49 ortak)
+Çift F1: 0.897   (kıyas: Claude-Görkan 0.667)
+
+FARKLAR (id | altın | yeni | metin):
+4237 | Qn,Pn          | Qn,Fp          | 2 koli aldım fakat bu zamana kadar kullandığım kağıtların el kalitesizi buydu herhalde.. çoklu çıktılarda 1 sayfayı yazıyor ve 3 5 kağıt birlikte çıkarıyor. fiyatı uygun diye aldım ama ucuz etin yahni
+4264 | Gn             | Gx,Pp          | renk seçeneği yoktu. yeşil gelmiş olsun. pratik birazda idareten bir ürün
+4252 | Kx,Pp          | Pp             | ürünü teslim aldım ve hemen kahve keyfimizi yaptık. kullanımı ve temizliği çok kolay. teşekkürler hepsiburada.com ailesi.
+4200 | Gp,Pn          | Bp,Pn          | incelik olarak iyi yalniz kullanimi insanin sinirini bozuyor.zor aciliyor.
+4190 | Qp,Pp,Sn       | Qp,Pp*         | ürününü 1 hafta önce aldım. oldukça kaliteli bir ürün. pille çalışıyor ve suya dayanıklı. tek eksiği çantasının olmaması.
+4177 | Qn,Pn          | Bn,Qn          | çok ince, çok kalitesiz ve elektrik çarpıyor sürtündükçe. daha kötüsü olamaz herhalde. anca parçalara kesip kullanılabilirler sanırım.   daha kalın matları tercih edin.

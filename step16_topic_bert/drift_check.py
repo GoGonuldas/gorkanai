@@ -10,6 +10,7 @@ Kullanım:
   python drift_check.py prepare            -> drift_30.csv (id, text) — altın etiket YOK
   python drift_check.py save <grup> ...    -> drift_30_labels.csv ("/" ile ayrılmış 10'luk gruplar)
   python drift_check.py                    -> uyum tablosu + farklar
+  (ikinci tur için her komutun sonuna "b")
 """
 
 import os
@@ -21,17 +22,25 @@ from common import HERE, ROOT  # step15_aspect'i sys.path'e ekler
 from agreement import kappa  # noqa: E402
 from save_aspect_labels import ASPECTS, parse  # noqa: E402
 
-TEXTS = os.path.join(HERE, "drift_30.csv")
-LABELS = os.path.join(HERE, "drift_30_labels.csv")
+# İkinci tur (kalibrasyon kararından sonra): komut sonuna "b" eklenir -> drift_30b*.csv, ilk 30 dışarıda.
+ROUND_B = sys.argv[-1] == "b"
+if ROUND_B:
+    sys.argv.pop()
+TEXTS = os.path.join(HERE, "drift_30b.csv" if ROUND_B else "drift_30.csv")
+LABELS = os.path.join(HERE, "drift_30b_labels.csv" if ROUND_B else "drift_30_labels.csv")
 
 if len(sys.argv) > 1 and sys.argv[1] == "prepare":
     ls = pd.read_csv(os.path.join(ROOT, "step15_aspect", "label_set.csv"))
     val = ls[(ls["split"] == "val") & (ls["id"] != 4001)]
-    pick = pd.concat([val[val["pool_label"] == lab].sample(15, random_state=160) for lab in ("pozitif", "negatif")])
-    pick = pick.sample(frac=1, random_state=161)
+    seed = 160
+    if ROUND_B:
+        val = val[~val["id"].isin(pd.read_csv(os.path.join(HERE, "drift_30.csv"))["id"])]
+        seed = 170
+    pick = pd.concat([val[val["pool_label"] == lab].sample(15, random_state=seed) for lab in ("pozitif", "negatif")])
+    pick = pick.sample(frac=1, random_state=seed + 1)
     assert (pick["split"] == "val").all()
     pick[["id", "text"]].to_csv(TEXTS, index=False)
-    print(f"{len(pick)} val yorumu -> drift_30.csv")
+    print(f"{len(pick)} val yorumu -> {os.path.basename(TEXTS)}")
 elif len(sys.argv) > 1 and sys.argv[1] == "save":
     groups = [g.split("/") for g in sys.argv[2:]]
     assert all(len(g) == 10 for g in groups), [len(g) for g in groups]
@@ -42,7 +51,7 @@ elif len(sys.argv) > 1 and sys.argv[1] == "save":
     assert len(tokens) == len(df)
     df["raw_new"] = tokens
     df.to_csv(LABELS, index=False)
-    print(f"{len(df)} etiket -> drift_30_labels.csv")
+    print(f"{len(df)} etiket -> {os.path.basename(LABELS)}")
 else:
     new = pd.read_csv(LABELS, keep_default_na=False)
     gold = pd.read_csv(os.path.join(ROOT, "data", "aspect_labels", "aspect_labels.csv"), keep_default_na=False)
