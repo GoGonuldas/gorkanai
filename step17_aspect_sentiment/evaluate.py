@@ -113,9 +113,24 @@ def report(name, df, topic_pred, base, new, explicit, out, mask_pairs=None):
         macro = lambda t: np.mean([2 * t[:, j].sum() / max(topic_pred[:, j].sum() + full[:, j].sum(), 1) for j in range(len(ASPECTS))])
         out.append(f"(ii) uçtan uca çift F1 (Adım 16 konuları, eşik {TOPIC_THR}): "
                    + " | ".join(f"{k} micro {f1(t):.3f} macro {macro(t):.3f}" for k, t in tp.items()))
-        tdet = topic_pred & full
-        out.append(f"     konu tespiti (aynı konular, iki hat için ortak): P {tdet.sum() / max(topic_pred.sum(), 1):.3f} "
-                   f"R {tdet.sum() / full.sum():.3f} F1 {2 * tdet.sum() / (topic_pred.sum() + full.sum()):.3f}")
+        # Adım 16 konu modelinin bu kümedeki ölçümü (anahtar kelime V2 çizgisiyle) — duygu hattından bağımsız
+        kw = np.array([[bool(PATTERNS[a].search(turkish_lower(t))) for a in ASPECTS] for t in df["text"]])
+        tf1 = lambda pr, idx=slice(None): 2 * (pr & full)[idx].sum() / max(pr[idx].sum() + full[idx].sum(), 1)
+        tmac = lambda pr: np.mean([2 * (pr & full)[:, j].sum() / max(pr[:, j].sum() + full[:, j].sum(), 1) for j in range(len(ASPECTS))])
+        out.append("     KONU TESPİTİ (Adım 16 modeli dondurulmuş; duygudan bağımsız):")
+        for k_, pr in (("anahtar kelime V2", kw), ("BERT (Adım 16)", topic_pred)):
+            miss = full & ~kw
+            out.append(f"       {k_:<20} P {(pr & full).sum() / max(pr.sum(), 1):.3f} R {(pr & full).sum() / full.sum():.3f} "
+                       f"F1 micro {tf1(pr):.3f} macro {tmac(pr):.3f} | kelime tutmayan çiftlerde R {(pr & miss).sum() / max(miss.sum(), 1):.3f} (n={int(miss.sum())})")
+        out.append("       konu başına F1 (kelime → BERT, n): " + ", ".join(
+            f"{a} {2 * (kw & full)[:, j].sum() / max(kw[:, j].sum() + full[:, j].sum(), 1):.2f}→"
+            f"{2 * (topic_pred & full)[:, j].sum() / max(topic_pred[:, j].sum() + full[:, j].sum(), 1):.2f} ({int(full[:, j].sum())})"
+            for j, a in enumerate(ASPECTS)))
+        rng_t = np.random.default_rng(16)
+        dt = np.array([tf1(topic_pred, i) - tf1(kw, i) for i in (rng_t.integers(0, len(df), len(df)) for _ in range(2000))])
+        lo_t, hi_t = np.quantile(dt, [0.025, 0.975])
+        out.append(f"       bootstrap BERT − kelime, konu F1 micro: {tf1(topic_pred) - tf1(kw):+.3f} [{lo_t:+.3f}, {hi_t:+.3f}] "
+                   + ("0'ı DIŞLIYOR" if lo_t > 0 or hi_t < 0 else "0'ı içeriyor"))
     # (iii) bootstrap
     rng = np.random.default_rng(17)
     idxs = [rng.integers(0, len(df), len(df)) for _ in range(2000)]
