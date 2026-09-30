@@ -1,21 +1,21 @@
 no,id,text,etiket
-1,6012,her sene alıyorum 2.3 çift kışı sıcak ve rahat geçiriyorum tavsiye ederim,
-2,6102,bu fiyata bu ürün ancak bu kadar güzel olabilir. özelikleri açısından çok iyi,
-3,6027,ürün güzel olmasına rağmen uyguladıktan belli süre sonra kullandığım spigen kılıf dolayısıyla kalkma yaptı.,
-4,6103,"bos bi kitap okuyucuya bi sey katmaz yani okumazsaniz hic bi sey kaybetmezsiniz, kitap bitince neden okudum ki bunu diyorsunuz.",
-5,6113,çok kaliteli değil. parasına göre belki iyi olabilir. benim ihtiyaçlarımı karşılayamayacağı için geri yolluyorum.,
-6,6099,"aynen fotoğrafta görüldüğü şekilde bir ürün, sadece mıknatıs yapışık görünüyor fotoğrafta ürün suntalem lake karışımı ahşap bir malzeme, mıknatıs kafanızı karıştırmasın. sevkiyatta süper hızlı geldi. teşekkürler",
-7,6046,"bebekler bi farkına varsın sadece, gerisini söylemeye gerek yok. bantları 3m felan ama bebekler bile çekip çıkarıyor.",
-8,6193,"öğrenci olarak ilk seferde donmuş pizzalardan denedim ve düşük ısıda biraz bekleyince güzel oldu. i̇lk attığım pizzada fazla sıcak yapmışım, yandılar.",
-9,6014,kesinlikle tavsiye etmiyorum aracımın boyasını matlaştırdı bmw 3.20d,
-10,6188,ürün kısa sürede elime ulaştı. bu fiyata alabileceğiniz iyi bir eldiven.  beden konusu kafama takılmıştı ama medium gayet iyi geldi.,
-11,6018,hb tsk. ctesi siparis verdim sali evimdeydi. ben salincagin yaninda barfiks demiri aldim kapinin arasina demiri gergi yapip salincagi oraya astım.  oda degisikligi yada annemlere gidince cok basit bir sekilde tasiyip hicbiyeri delmek zorunda kalmicam,
-12,6074,ürünü aldım 2 hafta giydim. ürünün sağı ve solundaki dalgalı şekillerden yırtılıyor.,
-13,6183,i̇çinde kağıt yok iken  kötü duruyor. kağıt varken güzel.,
-14,6061,"hızlı kargo, uygun fiyat için hepsi buradaya çok teşekkür ederim. gilette ürünler çok kaliteli ve kalitesi farklı ürünlerin cildi tahriş etmesi nedeniyle daha iyi anlaşılıyor.",
-15,6022,"eğer ""sırf ankastre görüntüsü"" olsun diye almak isteyen olursa, bulacağı en ucuz davlumbaz budur.",
-16,6026,hızlı kargo ve sağlam paketleme . ürün kullanışlı ve güzel yanlız biraz ses çıkarıyor onuda alt kısmın kenarlarına yumusak bir parça eklenerek çözülebilir.,
-17,6101,yaklaşık 3 aydır kullanıyorum çok kullanışlı ve hızlı bütün mini mouse larda olduğu gibi uzun kullanımlarda eli yoruyor. fakat performans olarak tavsiye ederim.,
-18,6041,"gönderirken yanına hediye de eklemişler, ince düşünce nazik satıcı. teşekkür ederim. fiyat piyasaya göre çok uygun ve dermokozmetik içerik.",
-19,6195,bu parfümede kalıcı değil yazmışlar ya artık yorumlara bakmam bi yerde dener öyle burdan alırım.,
-20,6107,bir cok çeyiz ürünümü burdan alıyorum bu yemek takımından da aldım cok güzel paketlenmiş bir şekilde bugun elime geçti aldığım herşeyden cok memnunum tşk ederim titiz çalışmanız için hepsiburada??,
+1,6012,her sene alıyorum 2.3 çift kışı sıcak ve rahat geçiriyorum tavsiye ederim,Qp
+2,6102,bu fiyata bu ürün ancak bu kadar güzel olabilir. özelikleri açısından çok iyi,Fp Qp
+3,6027,ürün güzel olmasına rağmen uyguladıktan belli süre sonra kullandığım spigen kılıf dolayısıyla kalkma yaptı.,Qn
+4,6103,"bos bi kitap okuyucuya bi sey katmaz yani okumazsaniz hic bi sey kaybetmezsiniz, kitap bitince neden okudum ki bunu diyorsunuz.",Qp
+5,6113,çok kaliteli değil. parasına göre belki iyi olabilir. benim ihtiyaçlarımı karşılayamayacağı için geri yolluyorum.,Qn Fp
+6,6099,"aynen fotoğrafta görüldüğü şekilde bir ürün, sadece mıknatıs yapışık görünüyor fotoğrafta ürün suntalem lake karışımı ahşap bir malzeme, mıknatıs kafanızı karıştırmasın. sevkiyatta süper hızlı geldi. teşekkürler",Kp Qp
+7,6046,"bebekler bi farkına varsın sadece, gerisini söylemeye gerek yok. bantları 3m felan ama bebekler bile çekip çıkarıyor.",Qn
+8,6193,"öğrenci olarak ilk seferde donmuş pizzalardan denedim ve düşük ısıda biraz bekleyince güzel oldu. i̇lk attığım pizzada fazla sıcak yapmışım, yandılar.",Qp
+9,6014,kesinlikle tavsiye etmiyorum aracımın boyasını matlaştırdı bmw 3.20d,"Pn,Qn"
+10,6188,ürün kısa sürede elime ulaştı. bu fiyata alabileceğiniz iyi bir eldiven.  beden konusu kafama takılmıştı ama medium gayet iyi geldi.,Kp Qp Pp
+11,6018,hb tsk. ctesi siparis verdim sali evimdeydi. ben salincagin yaninda barfiks demiri aldim kapinin arasina demiri gergi yapip salincagi oraya astım.  oda degisikligi yada annemlere gidince cok basit bir sekilde tasiyip hicbiyeri delmek zorunda kalmicam,Kp Qp
+12,6074,ürünü aldım 2 hafta giydim. ürünün sağı ve solundaki dalgalı şekillerden yırtılıyor.,Qn
+13,6183,i̇çinde kağıt yok iken  kötü duruyor. kağıt varken güzel.,Pn
+14,6061,"hızlı kargo, uygun fiyat için hepsi buradaya çok teşekkür ederim. gilette ürünler çok kaliteli ve kalitesi farklı ürünlerin cildi tahriş etmesi nedeniyle daha iyi anlaşılıyor.",Kp Fp Qp
+15,6022,"eğer ""sırf ankastre görüntüsü"" olsun diye almak isteyen olursa, bulacağı en ucuz davlumbaz budur.",Fp
+16,6026,hızlı kargo ve sağlam paketleme . ürün kullanışlı ve güzel yanlız biraz ses çıkarıyor onuda alt kısmın kenarlarına yumusak bir parça eklenerek çözülebilir.,Kp Qn Pp
+17,6101,yaklaşık 3 aydır kullanıyorum çok kullanışlı ve hızlı bütün mini mouse larda olduğu gibi uzun kullanımlarda eli yoruyor. fakat performans olarak tavsiye ederim.,Pp
+18,6041,"gönderirken yanına hediye de eklemişler, ince düşünce nazik satıcı. teşekkür ederim. fiyat piyasaya göre çok uygun ve dermokozmetik içerik.",Fp
+19,6195,bu parfümede kalıcı değil yazmışlar ya artık yorumlara bakmam bi yerde dener öyle burdan alırım.,Qp
+20,6107,bir cok çeyiz ürünümü burdan alıyorum bu yemek takımından da aldım cok güzel paketlenmiş bir şekilde bugun elime geçti aldığım herşeyden cok memnunum tşk ederim titiz çalışmanız için hepsiburada??,Kp
