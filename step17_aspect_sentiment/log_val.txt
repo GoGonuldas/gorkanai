@@ -1,0 +1,61 @@
+ADIM 17 — VAL (300 yorum, 513 altın çift; nötr 10 -> nötr kapalıyken tavan 0.981). Testlere dokunulmadı.
+(i) ölçüsünün pratik tavanı (iki altının yeni testte ortak konulardaki duygu uyumu): 0.967
+
+1) IZGARA — val (i) micro doğruluk: tohum 0/1/2 | ortalama (min-max) | 3 tohum olasılık ortalaması
+  bert  epoch  2: 0.809 0.842 0.842 | 0.831 (0.809-0.842) | 0.862
+  bert  epoch  4: 0.828 0.858 0.865 | 0.851 (0.828-0.865) | 0.875
+  bert  epoch  6: 0.864 0.860 0.864 | 0.862 (0.860-0.864) | 0.871
+  bert  epoch  8: 0.887 0.832 0.869 | 0.863 (0.832-0.887) | 0.895
+  bert  epoch 12: 0.881 0.873 0.864 | 0.873 (0.864-0.881) | 0.881
+  bert  epoch 16: 0.865 0.865 0.877 | 0.869 (0.865-0.877) | 0.879
+  v2b   epoch  2: 0.854 0.854 0.877 | 0.862 (0.854-0.877) | 0.862
+  v2b   epoch  4: 0.879 0.865 0.875 | 0.873 (0.865-0.879) | 0.877
+  v2b   epoch  6: 0.891 0.883 0.875 | 0.883 (0.875-0.891) | 0.889
+  v2b   epoch  8: 0.891 0.877 0.893 | 0.887 (0.877-0.893) | 0.889
+  v2b   epoch 12: 0.895 0.889 0.889 | 0.891 (0.889-0.895) | 0.897
+  v2b   epoch 16: 0.889 0.877 0.899 | 0.888 (0.877-0.899) | 0.893
+  en yüksek ortalama 0.891; 0.005 içindekiler: [('v2b', 8), ('v2b', 12), ('v2b', 16)]
+  SEÇİLEN: başlangıç = v2b, epoch = 8
+
+2) SEÇİLEN MODEL vs ADIM 15 DUYGU HATTI (val)
+
+=== VAL 300: 300 yorum, 513 altın çift (nötr 10, karışık 19; zıt duygulu yorum 51) ===
+(i) altın konularla duygu doğruluğu         micro   macro  karisik=0  nötr hariç  zıt duyg.  tek duyg.   örtük    açık
+  eski hat                               0.867   0.821      0.872       0.885      0.728      0.912   0.869   0.867
+  YENİ                                   0.889   0.861      0.889       0.907      0.744      0.936   0.848   0.905
+  (alt küme çift sayıları)                 513                494         503        125        388     145     368
+  konu başına (eski → YENİ, n): kargo 0.80→0.85 (55), fiyat 0.81→0.84 (68), kalite 0.93→0.93 (199), performans 0.87→0.90 (124), boyut 0.79→0.82 (28), gorunum 0.75→0.75 (24), satici 0.80→0.93 (15)
+  iki hattın anlaşmadığı çift: 53 (YENİ doğru 30, eski doğru 19)
+(ii) uçtan uca çift F1 (Adım 16 konuları, eşik 0.6): eski hat micro 0.735 macro 0.671 | YENİ micro 0.753 macro 0.691
+     konu tespiti (aynı konular, iki hat için ortak): P 0.867 R 0.803 F1 0.834
+(iii) eşleştirilmiş bootstrap (2000, tohum 17), YENİ − eski hat, %95 aralık:
+  (i) micro doğruluk      +0.021  [-0.006, +0.047]  0'ı içeriyor -> gürültüden ayrılamıyor
+  (ii) uçtan uca micro    +0.018  [-0.006, +0.042]  0'ı içeriyor -> gürültüden ayrılamıyor
+
+=== ESKİ VAL 100 (Adım 15 altını): 100 yorum, 177 altın çift (nötr 4, karışık 3; zıt duygulu yorum 21) ===
+(i) altın konularla duygu doğruluğu         micro   macro  karisik=0  nötr hariç  zıt duyg.  tek duyg.   örtük    açık
+  eski hat                               0.876   0.821      0.879       0.896      0.760      0.921   0.833   0.889
+  YENİ                                   0.887   0.850      0.885       0.908      0.740      0.945   0.810   0.911
+  (alt küme çift sayıları)                 177                174         173         50        127      42     135
+  konu başına (eski → YENİ, n): kargo 0.82→0.86 (22), fiyat 0.81→0.85 (27), kalite 0.95→0.95 (60), performans 0.90→0.88 (42), boyut 0.83→0.83 (12), gorunum 0.71→0.71 (7), satici 0.71→0.86 (7)
+  iki hattın anlaşmadığı çift: 17 (YENİ doğru 9, eski doğru 7)
+(ii) uçtan uca çift F1 (Adım 16 konuları, eşik 0.6): eski hat micro 0.732 macro 0.697 | YENİ micro 0.732 macro 0.673
+     konu tespiti (aynı konular, iki hat için ortak): P 0.862 R 0.774 F1 0.815
+(iii) eşleştirilmiş bootstrap (2000, tohum 17), YENİ − eski hat, %95 aralık:
+  (i) micro doğruluk      +0.011  [-0.030, +0.055]  0'ı içeriyor -> gürültüden ayrılamıyor
+  (ii) uçtan uca micro    +0.000  [-0.034, +0.034]  0'ı içeriyor -> gürültüden ayrılamıyor
+
+=== YENİ VAL 200 (bu oturumun etiketleri): 200 yorum, 336 altın çift (nötr 6, karışık 16; zıt duygulu yorum 30) ===
+(i) altın konularla duygu doğruluğu         micro   macro  karisik=0  nötr hariç  zıt duyg.  tek duyg.   örtük    açık
+  eski hat                               0.863   0.823      0.869       0.879      0.707      0.908   0.883   0.854
+  YENİ                                   0.890   0.869      0.891       0.906      0.747      0.931   0.864   0.901
+  (alt küme çift sayıları)                 336                320         330         75        261     103     233
+  konu başına (eski → YENİ, n): kargo 0.79→0.85 (33), fiyat 0.80→0.83 (41), kalite 0.93→0.93 (139), performans 0.85→0.90 (82), boyut 0.75→0.81 (16), gorunum 0.76→0.76 (17), satici 0.88→1.00 (8)
+  iki hattın anlaşmadığı çift: 36 (YENİ doğru 21, eski doğru 12)
+(ii) uçtan uca çift F1 (Adım 16 konuları, eşik 0.6): eski hat micro 0.736 macro 0.657 | YENİ micro 0.764 macro 0.701
+     konu tespiti (aynı konular, iki hat için ortak): P 0.870 R 0.818 F1 0.844
+(iii) eşleştirilmiş bootstrap (2000, tohum 17), YENİ − eski hat, %95 aralık:
+  (i) micro doğruluk      +0.027  [-0.009, +0.061]  0'ı içeriyor -> gürültüden ayrılamıyor
+  (ii) uçtan uca micro    +0.028  [-0.003, +0.058]  0'ı içeriyor -> gürültüden ayrılamıyor
+
+DONDURULAN -> frozen_config.json: {"init": "v2b", "epoch": 8, "seeds": [0, 1, 2], "model_sha256_16": ["8d42c445da8e88ea", "3c4c7014142dc4e9", "ae71cb9b903627d1"], "gold_1e_sha256": "3346bea967ddb5f003e1ecec535650efeedc496e85d2c134325ce21e26f1cd8b", "gold_macmini_sha256": "74de402fbae8fc8045ef9ca71c6e75e0b8612f79e6cb79bcb1c331662e303173", "topic_model": "step16_topic_bert/frozen_config.json (epoch 12, eşik 0.60, tohum 0/1/2)"}

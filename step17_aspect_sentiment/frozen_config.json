@@ -1,0 +1,17 @@
+{
+ "init": "v2b",
+ "epoch": 8,
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "model_sha256_16": [
+  "8d42c445da8e88ea",
+  "3c4c7014142dc4e9",
+  "ae71cb9b903627d1"
+ ],
+ "gold_1e_sha256": "3346bea967ddb5f003e1ecec535650efeedc496e85d2c134325ce21e26f1cd8b",
+ "gold_macmini_sha256": "74de402fbae8fc8045ef9ca71c6e75e0b8612f79e6cb79bcb1c331662e303173",
+ "topic_model": "step16_topic_bert/frozen_config.json (epoch 12, eşik 0.60, tohum 0/1/2)"
+}

@@ -144,7 +144,7 @@ def run_val():
     train, val = load_data()
     val = val.reset_index(drop=True)
     vp = pairs(val)
-    npz = np.load(os.path.join(HERE, "val_probs.npz"))
+    npz = np.load(os.path.join(HERE, "val_probs.npz"), allow_pickle=True)
     assert (npz["ids"] == vp["id"].to_numpy()).all() and (npz["konu"] == vp["konu"].to_numpy()).all()
     gold = vp["duygu"].to_numpy()
     acc = lambda p: float((np.where(p >= 0.5, "pozitif", "negatif") == gold).mean())

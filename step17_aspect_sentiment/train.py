@@ -23,7 +23,13 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..")
 sys.path.insert(0, os.path.join(ROOT, "step16_topic_bert"))
-from train import ASPECTS, DEVICE, load_data  # noqa: E402  (Adım 16: veri + sızıntı assert'leri)
+import importlib.util  # noqa: E402
+
+# Adım 16'nın train.py'si (veri + sızıntı assert'leri) — bu dosyayla aynı adı taşıdığı için "train16" adıyla yüklenir.
+_spec = importlib.util.spec_from_file_location("train16", os.path.join(ROOT, "step16_topic_bert", "train.py"))
+_train16 = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_train16)
+ASPECTS, DEVICE, load_data = _train16.ASPECTS, _train16.DEVICE, _train16.load_data
 from baseline import turkish_lower  # noqa: E402
 
 INITS = {"bert": ("dbmdz/bert-base-turkish-cased", (0, 1)),                      # (model, (negatif, pozitif) logit sütunu)
