@@ -17,3 +17,6 @@ server_log.txt
 # Adım 15: V2b cümlecik logit cache'i (baseline.py yeniden üretir) ve çalışma çıktıları
 step15_aspect/clause_logits.npz
 step15_aspect/run_*.out
+
+# editör geçmişi (Local History eklentisi)
+.history/
