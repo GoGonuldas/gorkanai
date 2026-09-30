@@ -1,0 +1,71 @@
+ADIM 17 — yeni test (id 6000-6199) etiketleyici uyumu. Kıyas: Adım 15 Claude-Görkan çift F1 0.667;
+Adım 16 kayma kontrolleri (bu oturum vs Adım 15 altını, 30'ar yorum) çift F1 0.867 / 0.897.
+
+--- 1e vs macmini (200 yorum) ---
+  çift sayısı: 1e 363, macmini 346 (oran 0.95)
+  konu F1 0.934 | (konu, duygu) çift F1 0.903 | ortak konu 331, duygu uyumu 320/331 = 0.967
+  konu               1e  macmini  ortak   kappa  duygu uyumu
+  kargo              33       33     33    1.00        32/33
+  fiyat              49       48     48    0.99        46/48
+  kalite            152      149    142    0.77      139/142
+  performans         80       71     63    0.73        59/63
+  boyut              19       19     19    1.00        19/19
+  gorunum            16       15     15    0.97        14/15
+  satici             14       11     11    0.87        11/11
+
+  birebir aynı etiketlenen yorum: 152/200
+  sadece 1e'nin verdiği konular: {'performans': 17, 'kalite': 10, 'satici': 3, 'fiyat': 1, 'gorunum': 1}
+  sadece macmini'nin verdiği konular: {'performans': 8, 'kalite': 7}
+  Q/P takası (biri Q, diğeri P demiş) olan yorum: 8
+
+(Görkan'ın kör 20'si henüz doldurulmadı.)
+
+FARKLAR (id | 1e | macmini | metin):
+  6001 | Bn,Pn,Qp,Fn      | Bn,Pn,Qx,Fn      | ürün çok kaba, klozet etrafını kaplıyor, ayak basamakları yan tarafta kalıyor.rahat bir oturma pozisyonu sağlamıyor.yerden yüksek olması nedeniyle aya
+  6002 | Qp               | Pp,Qp            | bu ürün gerçekten kullanışlı. siz musluğu ne kadar açarsanız açın hi. boşa gitmiyor. akan suda zaten fazlasıyla yeterli. çok su tüketilen yerler için 
+  6003 | Qn,Pp            | Qn               | pek fark yaratmadı. kısmen konfor sağlıyor. ayakkabının tabanı sert ise  işe yaramıyor.
+  6006 | Pp,Qn            | Qn*              | eldeki hissi iyi.  6 ayda yırtıldı.  daha kaliteli birşey alın.
+  6009 | Pp,Fp,Kp         | Qp,Fp,Kp         | mükemmel topaklaşan bir kumu çok çok uygun fiyata aldım. sorunsuz bir teslimat yaşadım
+  6022 | Fp,Gx            | Fp               | eğer "sırf ankastre görüntüsü" olsun diye almak isteyen olursa, bulacağı en ucuz davlumbaz budur.
+  6026 | Kp,Qp,Pn         | Kp,Pp*,Qp        | hızlı kargo ve sağlam paketleme . ürün kullanışlı ve güzel yanlız biraz ses çıkarıyor onuda alt kısmın kenarlarına yumusak bir parça eklenerek çözüleb
+  6028 | Qn,Pn            | Qn               | kesinlikle beğenmedim zaten üflemeli olduğunu düşünerek aldım. almadan önce ürün açıklamasını okumayı ihmal etmeyin.
+  6031 | Bp,Qp,Pp,Fp      | Bp,Qp,Fp         | nerdeyse havludan buyuk saglam dayanikli arabanin disi icin on numara disi ocin gerek yok dunya para vermeye urunu alinca anliyorsunuz aninda suyu cek
+  6036 | Qp*,Pp           | Qp*              | ben bir htc kullanıcısı olarak telefonu çok beğenerek aldım. mükemmel bir cihaz herşeyiyle kusursuz , yalnız pil konusunda beklentiyi fazla tutmuşlar.
+  6047 | Qp,Pn            | Qp               | telefon güzel laki̇n bb10 i̇şleti̇m i̇stemi̇ i̇le kiyasladiğinda ben bb10 deri̇m  ben z10 kullanicisydim whatsapp desteği̇ni̇ çekti̇ği̇ i̇çi̇n mecbure
+  6051 | Qp,Pp*,Fp        | Pp*,Fp           | usb bellek gayet kullanışlı ancak içindeki şifreleme uygulamasının düzgün çalıştığını söyleyemem kaldı ki o konu önemli değil fiyat / performans açısı
+  6064 | Fx,Pp            | Fp,Pp            | i̇ndirimli fiyatıyla aldım sesi gayet az harcadığı elektrik ve çekiş gücüyle alınabilir
+  6068 | Qn,Pn            | Qn               | ben pek beğenmedim açıkçası.hele ki bilgisayar başında vakit geçiren biri olarak daha iyi serinletmesini beklerdim.
+  6073 | Kp,Qp,Sp         | Kp,Qp            | arkadaşlar ürün siparişini verdim ve 2 gün içinde elime geçti bu yüzden hepsiburada.coma teşekkür ederim. ürünün kalitesi tartışılmaz sinek kaydı bir 
+  6077 | Bn,Qp*           | Bn               | girişi dar aldıktan sonra törpülemek zorunda kalıyorsunuz. tırnak makasıyla 10-15 dk törpüledikten sonra iş görüyor.
+  6089 | Pn,Qp            | Pp*              | hızlı şarj özelliği yok ama kullanışlı fazla bişey beklemeyin
+  6090 | Qp*,Fp           | Qx,Fp            | okunmasa da olur yani, ama okuyun.zaman geçmiş olur, fiyatı da uygun..daha ne olsun
+  6096 | Qp,Pp            | Qp               | bu ürünü alalı neredeyse 1 yıl oldu .hiçbir sıkıntım yok ,bana çok gürültülü gelmiyor ama temizliği çok başarılı .kesinlikle tavsiye ederim
+  6101 | Qp,Pp*           | Pp*              | yaklaşık 3 aydır kullanıyorum çok kullanışlı ve hızlı bütün mini mouse larda olduğu gibi uzun kullanımlarda eli yoruyor. fakat performans olarak tavsi
+  6104 | Qp,Pp            | Qp               | ürünün açıklama kitapçığında bir kaç şarjdan sonra performansının daha da yükseleceğini yazmışlar. i̇lk şarjda güzel performans gösterdi herhangi kıl 
+  6105 | Qp,Sp,Kp         | Qp,Kp            | philips aventin bazı ürünlerini kullandım ve bebeğim hiç reddetmedi su içmeyen oglum su içiyor güle oynaya.ürünlerin detaylı gösterimi acıklayıcı anla
+  6106 | Px               | Pn               | bazı kanallarda epg çıktı bazılarında çıkmadı. wifi takınca hepsinde çıkacak mı merak ediyorum.
+  6113 | Qn,Fp            | Qn,Fx            | çok kaliteli değil. parasına göre belki iyi olabilir. benim ihtiyaçlarımı karşılayamayacağı için geri yolluyorum.
+  6118 | Qp               | Qp,Pp            | mükemmel derecesi̇nde güzel kullanişli bi̇r kulaklik mutlaka her i̇nsanda olmasi gereken radyasyondan uzak ve de kullanişli olmasi açisindan mükemmel 
+  6119 | Kx,Qp            | Kx,Qp,Pp         | ürün elime 2 günde ulaştı. ve çok kaliteli ve konforlu duruyor. daha deneme fırsatım olmadı. yanağın yumuşak olmasından dolayı inş kasislerde balonlam
+  6129 | Qp,Pp*           | Pp*              | şok ses cikartmasina ramen  kullanişli pi̇rati̇k  boyama şekli̇  elle boyamadan daha kolay sade kenar köşelerle maki̇nayla olmuyo kenarlar köşeler ell
+  6132 | Qp,Kp,Sp         | Qp,Sp,Kx         | ürünü yorumlara bakarak aldık. i̇yi ki de almışız. perşembe akşamı sipariş verdim, bugün kargo teslim etti ve kargonun tesliminden 2 saat sonra servis
+  6133 | Qp,Fp            | Pp,Fp            | eşim gayet kullanışlı olduğunu düşünüyor.diğer markalara göre de daha uygun.günlük kullanılacak bir ürün olduğundan stok yapmak daha akıllıca.düşünenl
+  6134 | Pn,Fp            | Qn,Fp            | yorumlara kanarak simsiz ve doğal bir görünümü olduğunu düşünmüştüm fakat hiç de öyle olmadı.  bildiğimiz wet n wild ın 4 lü kapatıcı paletindeki high
+  6141 | Qp,Pp,Fp         | Qp,Fp            | i̇nsan ömrü 70 yıl dersek 7 veya 8 tane bu saatle ömrünü tamamlayabilir:) kesinlikle su geçirmiyor. gerçekten kaliteli ve ucuz bir saat. kesinlikle ta
+  6142 | Qp,Sp            | Qp               | hp ve hb bir numara herkese tavsiye ederim..
+  6144 | Qp*              | Qx               | deterjanı doğru oranda koyamıyor muyum bilmiyorum ama bazen çamaşırlar çok iyi çıkıyor bazen çok kötü belki makimemde var problem..ama çok fazla koydu
+  6152 | Qp,Gp            | Qp,Gp,Pp         | kaliteli ama biraz sert ileride yumuşama yapabilir ama aynen resimdeki gibi güzel ve kullanışlı el bilek kaslarını geliştirmek için almıştım .
+  6155 | Qp               | Qp,Pp            | ürün genel anlamda güzel kullanişli bi̇r ürün. tabi̇ki̇ profesyonel olarak düşünüldüğünde profesyonelli̇k beklenti̇leri̇ni̇n altinda kalir ama normal 
+  6157 | Qn,Pn            | Qn               | evdeki ocağım indiksiyon ocak. tavanın tabanı tam ocağı öpmediğinden arada hava boşluğu olduğundan ısıtmadı. iki parça birbirinden kolay ayrılmadı. be
+  6158 | Pn               | Qn               | ürünün kapağının üstü elimi değdirdiğimde yanlarına göre daha soğuk. üst kapağın izolasyonunu çok iyi becerememişler.
+  6162 | Fp,Qn            | Fp,Pn            | fiyatına göre iyi gibi görünsede makinede bazı kullanışsızlıklar var.
+  6169 | Qp,Bn            | Pp,Bn            | bence ürün pratik (sıvı gıda) kullanımlar için uygun, yalnız daha kalın pamuk yüzeyli önlük bekliyordum.
+  6175 | Pp*,Bp,Fp        | Bp,Qp,Fp,Pn      | arabayı tamponla beraber sarıyor fakat aynalar için ayrı bi cebi yok, aracı örterken aynaları kapatmak faydalı olur. gayet hafif, su geçirmeyen bi yap
+  6176 | Fp,Qp            | Fp               | banyo dolabı için fazla para harcamadan dağınıklık için bir çözüm arıyorsanız ve beklentiniz de fazla değilse tavsiye ederim
+  6183 | Gp*              | Gn*              | i̇çinde kağıt yok iken  kötü duruyor. kağıt varken güzel.
+  6186 | Pn,Gp            | Gp,Qn            | dün geldi tarihi ayarladım ama bugün tarih aynı duruyor saat şekli duruşu güzel ideal yani. şimdi tekrar yaptım bakalım nolacak
+  6188 | Kp,Fp,Bp         | Kp,Fp,Qp,Bp      | ürün kısa sürede elime ulaştı. bu fiyata alabileceğiniz iyi bir eldiven.  beden konusu kafama takılmıştı ama medium gayet iyi geldi.
+  6191 | Qn,Fp            | Qn               | ürünün yapısı ve şekli çok kalitesiz duruyor. üst kapağını bir türlü kapayamadım. i̇şçilik ve malzeme çok kötü. kullanamadan iadesini istedim. ev için
+  6192 | Bp,Qp,Fp         | Bp,Fp            | 600 ml olması çok uzun süre kullanım sağlayacağı için bu ürünü tercih ettim, uzun süre işime yarayacak gibi görünüyor. fiyatına göre oldukça uygun bir
+  6195 | Pp               | 0                | bu parfümede kalıcı değil yazmışlar ya artık yorumlara bakmam bi yerde dener öyle burdan alırım.
+  6196 | Pn*              | Qn*              | sakal kısmı güzel alıyor. ama tüy alma kısmını hiç beğenmedim hiç de güzel almıyor. hatta bu yüzden iade etmeyi de düşündüm.
