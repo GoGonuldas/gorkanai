@@ -1,7 +1,10 @@
 """
 ADIM 16 - Etiketlenecek yorumları seçmek, tur 2: eğitim 300 = 150 rastgele + 150 "kararsız" (active learning).
 
-Tur 1'in 300 eğitim yorumuyla kaba bir konu modeli eğitilir (tohum 0, 5 epoch — val'e bakılmadan sabit).
+Tur 1'in 300 eğitim yorumuyla kaba bir konu modeli eğitilir (tohum 0, 15 epoch — val'e bakılmadan sabit).
+İlk deneme 5 epoch'tu (log_prepare_round2_run1_undertrained.txt): eğitim kaybı 0.74 -> 0.57, model neredeyse hiçbir şey
+öğrenmemişti; tüm olasılıklar 0.5 civarındaydı (medyan u 0.033), yani "kararsız" seçimi anlamsızdı. Hiçbir yorum
+etiketlenmeden atıldı ve epoch sayısı SADECE eğitim kaybına bakılarak artırıldı.
 Aday havuzunun rastgele 20000'lik alt kümesinde her yorum için u = min_k |p_k - 0.5| hesaplanır (7 konu);
 u en küçük 150 yorum (yarı "pozitif" yarı "negatif" havuz etiketli) = modelin en kararsız olduğu yorumlar.
 Rastgele 150, aynı alt kümenin kalanından. Kaba model val/test metinlerini hiç görmez (aday havuzu onlardan ayrık).
@@ -17,7 +20,7 @@ import pandas as pd
 from common import HERE, LABEL_SET, candidate_pool, check_no_leak, norm
 from train import ASPECTS, load_data, predict, train_model
 
-N_SUB, ROUGH_EPOCHS = 20000, 5
+N_SUB, ROUGH_EPOCHS = 20000, 15
 
 prev = pd.read_csv(LABEL_SET)
 assert set(prev["round"]) == {1}, "tur 2 zaten eklenmiş"
@@ -35,6 +38,8 @@ model, tokenizer = train_model(train, seed=0, n_epochs=ROUGH_EPOCHS)
 p = predict(model, tokenizer, sub["text"].tolist())
 sub = sub.assign(u=np.abs(p - 0.5).min(1), en_kararsiz_konu=[ASPECTS[k] for k in np.abs(p - 0.5).argmin(1)])
 np.save(os.path.join(HERE, "round2_pool_probs.npy"), p)
+print("u dağılımı (alt küme) çeyrekler 5/25/50/75/95:", np.round(np.quantile(sub["u"], [.05, .25, .5, .75, .95]), 3))
+print("alt kümede konu başına ortalama olasılık:", dict(zip(ASPECTS, np.round(p.mean(0), 2))))
 
 parts = []
 for label, seed in (("pozitif", 61), ("negatif", 62)):

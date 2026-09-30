@@ -52,3 +52,17 @@ Kalibrasyon kararı: Q sadece açık bir GENEL yargı varsa; sadece bilgi olarak
   4200 ("incelik olarak iyi": altın Gp, bence Bp), 4177 ("çok ince ... daha kalın matları tercih edin": altında B yok).
 - Altından öğrenilen ve tur 1'de uygulanan ince kurallar: aksesuar/çanta/kılavuz eksikliği -> S (altın 4190);
   sade "X günde geldi / teslim aldım" -> K nötr, "ertesi gün / çok hızlı" -> K pozitif.
+
+## Ekler (2026-09-30, tur 2 sırasında; val/test model sayıları hâlâ görülmedi)
+- **train.py sabitleri (kayıt için):** lr 3e-5 sabit (ısınma/azalma yok), batch 16, max_len 128, AdamW wd 0.01,
+  pos_weight = sqrt(neg/pos), epoch adayları aynı çalıştırmanın ara kayıtları.
+- **Epoch adaylarına 12 eklendi (3/5/8/12).** Gerekçe SADECE eğitim kaybı: tur 2 kaba modeli (300 yorum) 5 epoch'ta
+  0.74 -> 0.57 ile neredeyse hiç öğrenmemişti, 15 epoch'ta 0.107'ye indi. 600 yorumla 8 epoch ≈ 300 adım (kaba modelin
+  15. epoch'una denk); 3 ve 5 epoch büyük olasılıkla az eğitilmiş kalır, 12 üst tarafı da görmek için.
+- **Tur 2 ilk denemesi atıldı** (`log_prepare_round2_run1_undertrained.txt`): 5 epoch'luk kaba modelde tüm olasılıklar
+  0.5 civarındaydı (medyan u 0.033) -> "kararsız" seçimi anlamsız. Hiçbir yorum etiketlenmeden 15 epoch ile yeniden yapıldı
+  (medyan u 0.12; `log_prepare_round2.txt`).
+- **P kuralı (tur 2'de açıkça uygulandı, gorkanai-1e notu):** adı konan özellik (ses, koku/kalıcılık, hız, güç,
+  ekran/kamera, uyumluluk, kurulum/kullanım kolaylığı, tat) arıza/şikâyet biçiminde geçse de P; genel
+  "çalışmıyor/işe yaramadı" Q; ikisi birlikte olabilir. Tur 1 etiketleri yeniden etiketlenmedi ->
+  SINIRLAMA: tur 1'de (val eki 200 dahil) P altına göre hafif eksik, Q hafif fazla olabilir.

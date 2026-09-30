@@ -1,0 +1,29 @@
+Aday alt kümesi: {'pozitif': 19148, 'negatif': 852}
+
+  tohum 0 epoch 1: eğitim kaybı 0.7389
+  tohum 0 epoch 2: eğitim kaybı 0.7061
+  tohum 0 epoch 3: eğitim kaybı 0.6822
+  tohum 0 epoch 4: eğitim kaybı 0.6259
+  tohum 0 epoch 5: eğitim kaybı 0.5692
+  tohum 0 epoch 6: eğitim kaybı 0.5138
+  tohum 0 epoch 7: eğitim kaybı 0.4549
+  tohum 0 epoch 8: eğitim kaybı 0.3888
+  tohum 0 epoch 9: eğitim kaybı 0.3249
+  tohum 0 epoch 10: eğitim kaybı 0.2645
+  tohum 0 epoch 11: eğitim kaybı 0.2204
+  tohum 0 epoch 12: eğitim kaybı 0.1812
+  tohum 0 epoch 13: eğitim kaybı 0.1504
+  tohum 0 epoch 14: eğitim kaybı 0.1309
+  tohum 0 epoch 15: eğitim kaybı 0.1070
+u dağılımı (alt küme) çeyrekler 5/25/50/75/95: [0.011 0.054 0.12  0.211 0.376]
+alt kümede konu başına ortalama olasılık: {'kargo': np.float32(0.24), 'fiyat': np.float32(0.32), 'kalite': np.float32(0.55), 'performans': np.float32(0.48), 'boyut': np.float32(0.12), 'gorunum': np.float32(0.09), 'satici': np.float32(0.08)}
+pozitif: kararsız 75'in u aralığı 0.000-0.001 (alt kümede medyan u 0.119)
+negatif: kararsız 75'in u aralığı 0.000-0.021 (alt kümede medyan u 0.140)
+Kararsız 150'de en kararsız konu: {'kalite': 87, 'performans': 37, 'satici': 10, 'fiyat': 9, 'kargo': 3, 'boyut': 3, 'gorunum': 1}
+source    pool_label
+kararsiz  negatif       75
+          pozitif       75
+rastgele  negatif       75
+          pozitif       75
+300 yorum -> label_set16.csv (id 5500-5799) + batch_11..16.csv | sızıntı kontrolleri geçti
+EXIT

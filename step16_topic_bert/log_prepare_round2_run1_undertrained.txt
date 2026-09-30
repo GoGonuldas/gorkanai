@@ -1,0 +1,17 @@
+Aday alt kümesi: {'pozitif': 19148, 'negatif': 852}
+
+  tohum 0 epoch 1: eğitim kaybı 0.7389
+  tohum 0 epoch 2: eğitim kaybı 0.7061
+  tohum 0 epoch 3: eğitim kaybı 0.6822
+  tohum 0 epoch 4: eğitim kaybı 0.6259
+  tohum 0 epoch 5: eğitim kaybı 0.5692
+pozitif: kararsız 75'in u aralığı 0.000-0.000 (alt kümede medyan u 0.033)
+negatif: kararsız 75'in u aralığı 0.000-0.009 (alt kümede medyan u 0.116)
+Kararsız 150'de en kararsız konu: {'performans': 69, 'kalite': 51, 'boyut': 19, 'satici': 6, 'fiyat': 3, 'kargo': 2}
+source    pool_label
+kararsiz  negatif       75
+          pozitif       75
+rastgele  negatif       75
+          pozitif       75
+300 yorum -> label_set16.csv (id 5500-5799) + batch_11..16.csv | sızıntı kontrolleri geçti
+EXIT 0

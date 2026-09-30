@@ -1,0 +1,16 @@
+grup (% yorumda konu var)     n   kargo   fiyat  kalite  perfor   boyut  gorunu  satici    ort. konusuz
+Adım 15 val (eski altın)    100      22      27      60      42      12       7       7    1.77       2
+Adım 15 test (altın)        200      17      24      65      44      12       8       9    1.79       2
+yeni val (rastgele)         200      16      20      70      41       8       8       4    1.68       2
+tur 1 rastgele              150      15      19      73      31      10       9       6    1.62       2
+tur 1 hedefli:boyut          30      17      30      70      27      63      17       7    2.30       0
+tur 1 hedefli:gorunum        30      13      13      67      43       3      40       7    1.87       0
+tur 1 hedefli:kargo          20      75      20      50      40      15       5       0    2.05       0
+tur 1 hedefli:kelime_yok     40       2       0      68      25       2       2       8    1.07      15
+tur 1 hedefli:satici         30      40      27      63      20      13       7      47    2.17       3
+tur 2 rastgele              150      13      19      71      44      12       9       3    1.71       1
+tur 2 kararsiz              150      24      30      65      38       7      13       7    1.85       2
+EĞİTİM toplam               600      19      21      68      36      12      11       7    1.75       2
+
+Eğitimde konu başına örnek: {'kargo': 114, 'fiyat': 127, 'kalite': 411, 'performans': 214, 'boyut': 72, 'gorunum': 68, 'satici': 44}
+Val (eski+yeni) konu başına örnek: {'kargo': 55, 'fiyat': 68, 'kalite': 199, 'performans': 124, 'boyut': 28, 'gorunum': 24, 'satici': 15}

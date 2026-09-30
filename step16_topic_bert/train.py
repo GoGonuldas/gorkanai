@@ -6,7 +6,7 @@ bir yorumda birden çok konu olabilir). Kayıp: BCE, nadir konular için pos_wei
 Eğitim: data/aspect_labels_step16 içindeki split=train yorumları. Val = Adım 15 val 100 + yeni val 200.
 Test'e bu script HİÇ dokunmaz (evaluate_test.py, onaydan sonra bir kez).
 
-PLAN.md'de önceden sabitlenenler: 3 tohum (0,1,2); epoch adayları 3/5/8 (aynı çalıştırmanın ara kayıtları,
+PLAN.md'de önceden sabitlenenler: 3 tohum (0,1,2); epoch adayları 3/5/8/12 (aynı çalıştırmanın ara kayıtları,
 sabit öğrenme oranı); her (tohum, epoch) için val olasılıkları val_probs.npz'ye, model model_s{tohum}_e{epoch}/'a.
 
 Kullanım: python train.py            -> 3 tohum x (3,5,8) epoch, val olasılıkları + modeller
@@ -24,7 +24,7 @@ from baseline import ASPECTS, turkish_lower  # noqa: E402
 
 MODEL_NAME = "dbmdz/bert-base-turkish-cased"
 SEEDS = (0, 1, 2)
-EPOCHS = (3, 5, 8)
+EPOCHS = (3, 5, 8, 12)   # 12: val görülmeden eklendi (kaba modelin eğitim kaybı 5 epochta hâlâ 0.57 idi)
 LR, BATCH, MAX_LEN = 3e-5, 16, 128
 DEVICE = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 NEW_LABELS = os.path.join(ROOT, "data", "aspect_labels_step16", "aspect_labels16.csv")
