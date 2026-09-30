@@ -1,0 +1,2 @@
+Aday havuzu: {'pozitif': 139941, 'negatif': 702}
+{'negatif': 100, 'pozitif': 100} -> test17_set.csv, test17_batch_01..04.csv, human_blind_20.csv | sızıntı kontrolleri geçti
