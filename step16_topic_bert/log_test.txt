@@ -1,0 +1,30 @@
+ADIM 16 — TEST (200 yorum), BİR KEZ. DONDURULAN: {"epoch": 12, "threshold": 0.6, "seeds": [0, 1, 2]}
+Kıyas (Adım 15.4): konu F1 micro/macro 0.763/0.722, uçtan uca 0.653/0.616.
+
+                                        P      R   F1mic   F1macR(kelime+)R(kelime-) uçtan uca   macro
+Anahtar kelime V2 (Adım 15.4)       0.797  0.733   0.763   0.722     1.000     0.000     0.653   0.616
+BERT 3 tohum ort., eşik 0.60 (ANA)  0.833  0.791   0.811   0.763     0.848     0.635     0.697   0.636
+  tek tohumlar (aynı eşik): micro 0.803 0.810 0.807 | macro 0.748 0.744 0.764
+BERT konu başına eşik (İYİMSER)     0.786  0.841   0.813   0.740     0.890     0.708     0.697   0.619
+BERT VEYA anahtar kelime (bilgi)    0.753  0.903   0.821   0.783     1.000     0.635     0.707   0.665
+  R(kelime+) n=263, R(kelime-) n=96 (anahtar kelime çizgisi kelime-'de tanım gereği 0).
+
+KONU BAŞINA (test)
+konu            n   anahtar kelime P/R/F1             BERT P/R/F1
+kargo          34          0.81/0.74/0.77          0.88/0.88/0.88
+fiyat          48          0.90/0.96/0.93          0.94/0.96/0.95
+kalite        130          0.84/0.68/0.75          0.78/0.84/0.81
+performans     87          0.82/0.72/0.77          0.85/0.76/0.80
+boyut          25          0.67/0.80/0.73          0.89/0.68/0.77
+gorunum        17          0.64/0.82/0.72          0.77/0.59/0.67
+satici         18          0.46/0.33/0.39          0.75/0.33/0.46
+  örtük (kelime-) recall, konu başına BERT: kargo 6/9, fiyat 1/2, kalite 32/41, performans 15/24, boyut 1/5, gorunum 2/3, satici 4/12   (satıcı, görünüm, boyut: n<30, gürültülü)
+
+EŞLEŞTİRİLMİŞ BOOTSTRAP (2000 tekrar, tohum 16): BERT − anahtar kelime farkı, %95 aralık
+  konu F1 micro       +0.048  [+0.009, +0.089]  0'ı DIŞLIYOR
+  konu F1 macro       +0.041  [-0.027, +0.105]  0'ı içeriyor -> fark gürültüden ayrılamıyor
+  uçtan uca F1 micro  +0.044  [+0.004, +0.085]  0'ı DIŞLIYOR
+
+ELMAYLA ELMA (Görkan'ın kör etiketleri, testteki 10 yorum), çift F1 — Claude-Görkan 0.703
+  anahtar kelime   model-Claude 0.762 | model-Görkan 0.649
+  BERT             model-Claude 0.632 | model-Görkan 0.545

@@ -480,10 +480,139 @@ konu tespiti** (bağlamdan örtük konuları öğrenmek); ardından belki **konu
 çiftini birlikte okuyan bir model, bölmeye gerek bırakmaz. Eğitim verisi 300 etiketle çok az; Adım 16'nın
 ilk sorusu etiketli veriyi nasıl büyüteceğimiz olacak (Adım 14'teki active learning yöntemi).
 
-## Yapılacaklar (2026-09-29'da güncellendi)
+## Adım 16: BERT ile çok etiketli konu tespiti — TAMAMLANDI (2026-09-30)
+**Görev:** Adım 15'in anahtar kelimeli konu tespitini öğrenilmiş bir modelle değiştirmek; asıl hedef ÖRTÜK konular
+(konu hiç adlandırılmıyor: "arka kapak oturmuyor" → kalite). Klasör: `step16_topic_bert/`, etiketler:
+`data/aspect_labels_step16/`. Koordinasyon: gorkanai-1e değerlendirdi, bu oturum (Mac mini) uyguladı, kararları
+Görkan onayladı. Val/test sayıları görülmeden sabitlenen tüm kurallar: `step16_topic_bert/PLAN.md`.
 
-0. **Adım 16** (onay bekliyor): BERT ile çok etiketli konu tespiti. Önce etiketli veriyi büyütme planı (active
-   learning, Adım 14 yöntemi), sonra belki konuya koşullu duygu. Gerekçe: Adım 15.4 hata kovaları.
+**16.1 Veri büyütme (800 yeni etiket, id 5000-5799).** Elde sadece val 100 / test 200 vardı; ikisi de eğitime
+giremez. Hepsi 8-40 kelime, yarı "pozitif" yarı "negatif" havuz etiketli, daha önce hiçbir adımda görülmemiş
+(`common.check_no_leak`: ham + normalleştirilmiş metinle assert). Bölme ve kaynak etiketlemeden ÖNCE sabitlendi;
+etiketleme dosyalarında sadece id + text vardı (kaynak/bölme/havuz etiketi görülmeden etiketlendi).
+- **Val eki 200** (rastgele) → val = 300. Gerekçe: Adım 14 dersi (val'de satıcı 7 örnekti).
+- **Eğitim tur 1, 300:** 150 rastgele + 150 anahtar kelimeyle hedefli (`prepare_round1.py`).
+- **Eğitim tur 2, 300:** 150 rastgele + 150 "kararsız" (`prepare_round2.py`): tur 1 ile eğitilen kaba modelin
+  20000 adayda `u = min_k |p_k − 0.5|` en küçük verdiği yorumlar (Adım 14'teki active learning).
+- **Etiketleyici kayması kontrolü** (`drift_check.py`): Adım 15'in altınını başka bir oturum vermişti. Eski val'den
+  30 yorum altına bakmadan yeniden etiketlendi: çift F1 0.867 ama bu oturum %17 FAZLA etiket veriyordu (61'e 52).
+  "Q sadece açık genel yargı varsa" kalibrasyonundan sonra ikinci 30'da: çift F1 0.897, etiket oranı 53/54.
+  (Kıyas: Claude-Görkan 0.667.)
+
+| % yorumda konu var | n | K | F | Q | P | B | G | S | ort. konu |
+|---|---|---|---|---|---|---|---|---|---|
+| test (Adım 15 altını) | 200 | 17 | 24 | 65 | 44 | 12 | 8 | 9 | 1.79 |
+| yeni val (rastgele) | 200 | 16 | 20 | 70 | 41 | 8 | 8 | 4 | 1.68 |
+| tur 1 rastgele | 150 | 15 | 19 | 73 | 31 | 10 | 9 | 6 | 1.62 |
+| tur 1 hedefli: boyut / görünüm / satıcı / kargo | 30/30/30/20 | | | | | **63** | **40** | **47** | (K **75**) |
+| tur 1 hedefli: hiçbir kelime tutmuyor | 40 | 2 | 0 | 68 | 25 | 2 | 2 | 8 | 1.07 |
+| tur 2 rastgele | 150 | 13 | 19 | 71 | 44 | 12 | 9 | 3 | 1.71 |
+| tur 2 kararsız | 150 | 24 | 30 | 65 | 38 | 7 | 13 | 7 | 1.85 |
+
+Eğitim (600) konu başına örnek: K 114, F 127, Q 411, P 214, B 72, G 68, S 44. Val (300): K 55, F 68, Q 199,
+P 124, B 28, G 24, S 15.
+
+**16.2 Model** (`train.py`, log: `log_train.txt`): `dbmdz/bert-base-turkish-cased` + 7 sigmoid çıkış (her konu ayrı
+evet/hayır), BCE, pos_weight = sqrt(neg/pos), lr 3e-5 sabit, batch 16. 3 tohum; epoch adayları 3/5/8/12.
+
+**16.3 Val** (`evaluate.py val`, log: `log_val.txt`). Epoch seçimi (val micro-F1, eşik 0.5, 3 tohum ort. ve min-max):
+3 → 0.740 (0.699-0.772), 5 → 0.789, 8 → 0.816, **12 → 0.822 (0.812-0.832)**. Global eşik eğrisi düz (0.15-0.75
+arası hepsi 0.821-0.834); seçilen 0.60. Dondurulan (`frozen_config.json`): epoch 12, tek global eşik 0.60,
+3 tohumun olasılık ortalaması.
+
+| Val | konu F1 micro/macro | örtük recall | uçtan uca micro/macro |
+|---|---|---|---|
+| Anahtar kelime V2, val 300 | 0.750/0.691 | 0 | 0.650/0.575 |
+| **BERT, val 300** | **0.834/0.785** | 0.607 (n=145) | 0.735/0.671 |
+| Anahtar kelime → BERT, eski val 100 (Adım 15 altını) | 0.783 → 0.815 (+3.2) | 0.405 | 0.696 → 0.732 |
+| Anahtar kelime → BERT, yeni val 200 (bu oturumun etiketleri) | 0.733 → 0.844 (+11.1) | 0.689 | 0.626 → 0.736 |
+
+"Örtük recall" = altın (yorum, konu) çiftlerinden V2 anahtar kelimesinin TUTMADIĞI alt kümede recall (anahtar
+kelime çizgisi orada tanım gereği 0). Val'in iki yarısı arasındaki fark yüzünden test beklentisi testten önce
+0.79-0.81 olarak yazıldı (PLAN.md).
+
+**16.4 Test — BİR KEZ** (`evaluate.py test`, log: `log_test.txt`, olasılıklar: `test_probs.npz`). Ölçümden önce
+dondurulan ayarlar ve başarı ölçütü commit 66f5020'de. Sonuçtan sonra hiçbir şey değiştirilmedi.
+
+| Test (200) | P | R | **konu F1 micro/macro** | R (kelime tutuyor, n=263) | **R (kelime tutmuyor, n=96)** | **uçtan uca micro/macro** |
+|---|---|---|---|---|---|---|
+| Anahtar kelime V2 (Adım 15.4) | 0.797 | 0.733 | 0.763/0.722 | 1.000 | 0.000 | 0.653/0.616 |
+| **BERT, 3 tohum ort., eşik 0.60 (ANA)** | 0.833 | 0.791 | **0.811/0.763** | 0.848 | **0.635** | **0.697/0.636** |
+| BERT konu başına eşik (iyimser) | 0.786 | 0.841 | 0.813/0.740 | 0.890 | 0.708 | 0.697/0.619 |
+| BERT VEYA anahtar kelime (bilgi) | 0.753 | 0.903 | 0.821/0.783 | 1.000 | 0.635 | 0.707/0.665 |
+
+Tek tohumlar aynı eşikte: micro 0.803 / 0.810 / 0.807, macro 0.748 / 0.744 / 0.764.
+
+| Konu (test) | n | anahtar kelime P/R/F1 | BERT P/R/F1 | BERT örtük recall | not |
+|---|---|---|---|---|---|
+| kargo | 34 | 0.81/0.74/0.77 | 0.88/0.88/**0.88** | 6/9 | |
+| fiyat | 48 | 0.90/0.96/0.93 | 0.94/0.96/0.95 | 1/2 | |
+| kalite | 130 | 0.84/0.68/0.75 | 0.78/0.84/**0.81** | 32/41 | precision düştü, recall arttı |
+| performans | 87 | 0.82/0.72/0.77 | 0.85/0.76/0.80 | 15/24 | |
+| boyut | 25 | 0.67/0.80/0.73 | 0.89/0.68/0.77 | 1/5 | gürültülü (n<30) |
+| görünüm | 17 | 0.64/0.82/0.72 | 0.77/0.59/**0.67** | 2/3 | gürültülü; BERT DAHA KÖTÜ |
+| satıcı | 18 | 0.46/0.33/0.39 | 0.75/0.33/0.46 | 4/12 | gürültülü; recall aynı |
+
+**Eşleştirilmiş bootstrap** (yorum bazında, 2000 tekrar, tohum 16), BERT − anahtar kelime, %95 aralık. Ölçüt
+testten önce yazıldı: "kazandı" demek için aralık 0'ı dışlamalı.
+- konu F1 micro **+0.048 [+0.009, +0.089]** → 0'ı dışlıyor.
+- konu F1 macro +0.041 [−0.027, +0.105] → **0'ı içeriyor, fark gürültüden ayrılamıyor.**
+- uçtan uca F1 micro **+0.044 [+0.004, +0.085]** → 0'ı dışlıyor (alt sınır 0'a çok yakın).
+
+**Elmayla elma** (Görkan'ın kör etiketleri, testteki 10 yorum; n=10, SADECE FİKİR VERİR): çift F1
+anahtar kelime model-Görkan 0.649 / model-Claude 0.762; **BERT model-Görkan 0.545 / model-Claude 0.632**;
+Claude-Görkan 0.703. Bu 10 yorumda BERT anahtar kelimeden KÖTÜ. (Not: Adım 15.4 tablosundaki Claude sütunları
+"karar öncesi" altınla hesaplanmıştı, burada güncel altın kullanıldı; model-Görkan 0.649 iki tabloda aynı.)
+
+**Sonuç:** BERT, konu tespitinde micro F1'i 0.763 → 0.811'e çıkardı (beklenti aralığının üst sınırı, 0.79-0.81) ve
+anahtar kelimenin hiç yakalayamadığı 96 örtük çiftin 61'ini (%64) buldu. Kazanç sık konulardan (kalite, kargo,
+performans) geliyor; nadir konularda (boyut, görünüm, satıcı) kanıt yok — macro farkı gürültüden ayrılamıyor,
+görünümde BERT daha kötü. Uçtan uca kazanç +4.4 puan, sınırda anlamlı. Val 300'deki +8.4 puan iyimserdi.
+
+**Dersler:**
+- **Val, modelle aynı etiketleyiciden geliyorsa iyimserdir.** Aynı model, bu oturumun etiketlediği yeni val'de +11.1,
+  Adım 15 oturumunun etiketlediği eski val'de +3.2 puan kazandırdı; test (+4.8) eski val'e yakın çıktı. İki ayrı
+  Claude oturumu bile birbirinin "ikinci etiketleyicisi" gibi davranıyor. Eski-100 / yeni-200 ayrımını raporlamak
+  test beklentisini doğru kurmamızı sağladı (tahmin 0.79-0.81, sonuç 0.811).
+- **Etiketleyici kaymasını etiketlemeden ÖNCE ölç.** 30 yorumluk kör kontrol, bu oturumun %17 fazla etiket verdiğini
+  gösterdi; 800 yorumu etiketledikten sonra fark edilseydi hepsi çöpe giderdi. Yine de kalan fark (P kuralı tur 1
+  ile tur 2 arasında netleşti) eğitim setinin iki yarısını hafif farklı yaptı.
+- **Kararsızlık örneklemesi nadir sınıfları getirmez.** `min_k |p_k − 0.5|` en sık ve en bulanık sınıra kilitlendi:
+  150 kararsız yorumun 124'ü Q ya da P'de kararsızdı; B/G/S artmadı. Bu, Adım 15'in bulgusuyla tutarlı (en bulanık
+  sınır Q/P — model, insanın kararsız olduğu yerde kararsız). Nadir sınıf için anahtar kelimeli hedefleme çok daha
+  etkiliydi (boyut %10 → %63, satıcı %6 → %47). Konu başına kotalı kararsızlık daha iyi olurdu.
+- **Başarısız deneme — az eğitilmiş modelle active learning:** tur 2'nin ilk aday seçimi 5 epoch'luk kaba modelle
+  yapıldı; eğitim kaybı 0.74 → 0.57, tüm olasılıklar 0.5 civarı (medyan u 0.033), seçim anlamsızdı. Hiçbir yorum
+  etiketlenmeden atıldı, 15 epoch ile tekrarlandı (`log_prepare_round2_run1_undertrained.txt`). Ders: kararsızlık
+  ancak model bir şey öğrendiyse bilgi taşır; seçimden önce eğitim kaybına ve u dağılımına bak.
+- **Micro ile macro farklı hikâye anlatır.** Micro kazanç anlamlı, macro değil: 600 eğitim yorumu kalite (411 örnek)
+  için yeterli, satıcı (44) ve görünüm (68) için değil. "Model daha iyi" cümlesi sadece sık konular için doğru.
+- **Güven aralığı olmadan 4 puanlık fark iddia edilmez.** n=200 ile uçtan uca +0.044'ün aralığı [+0.004, +0.085].
+  Ölçütü testten önce yazmak, sonucu gördükten sonra "kazandı" tanımını esnetmeyi engelledi.
+- **Örtük konuyu bulmak duyguyu çözmez.** BERT örtük bir konu bulduğunda o konunun kelimesi hiçbir cümlecikte
+  geçmiyor; duygu tüm yorumdan alınıyor (yedek kural). Konu kazancı +4.8, uçtan uca kazanç +4.4 ama macro'da
+  sadece +2.0: bölme artık darboğaz. Konuya koşullu duygu modelinin gerekçesi bu.
+
+**Sınırlamalar:**
+1. Adım 15'in 1-3. sınırlamaları aynen geçerli (50/50 poz/neg örneklem, negasyon kalıpları ve 8 kelimeden kısa
+   yorumlar dışarıda).
+2. Eğitim etiketleri tek etiketleyiciden (Claude, bu oturum); test altını başka bir Claude oturumundan. Görkan'ın
+   30'luk gözden geçirmesi (`review_sample16.csv`) bu yazı yazılırken henüz yapılmamıştı.
+3. Yeni etiketlerde altına göre P hafif eksik, Q hafif fazla (tur 1 ve val eki); S muhtemelen eksik (rastgele
+   gruplarda %3-6, altında %7-9). Tur 1 etiketleri yeniden etiketlenmedi.
+4. Epoch 12 ızgaranın üst sınırıydı; val görüldükten sonra ızgara genişletilmedi. Daha uzun eğitim denenmedi.
+5. Eşik eğrisi düz olduğu için 0.60 seçimi büyük ölçüde gürültü; konu başına eşikler testte işe yaramadı
+   (macro 0.763 → 0.740).
+6. Bağımsız insana karşı kanıt yok: Görkan'ın 10 kör test yorumunda BERT anahtar kelimeden kötü (0.545'e 0.649).
+   n=10 ile hüküm verilemez, ama "BERT insana daha çok benziyor" da denemez.
+7. "Altın şüpheli" val yorumları (4089, 4196, 4200, 4177) düzeltilmedi; test altınında benzer hatalar olabilir.
+8. Hata kovaları ve ablasyonlar (hedefli/kararsız yarıyı çıkarma, daha uzun eğitim) yapılmadı.
+
+## Yapılacaklar (2026-09-30'da güncellendi)
+
+0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (yukarıda). Sırada (her biri ayrı onayla):
+   (a) test hata kovaları ve ablasyonlar; (b) **konuya koşullu duygu modeli** ((konu, yorum) çiftini birlikte okuyan
+   model; 800 yeni yorumun duygu etiketleri hazır); (c) Görkan'ın `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
 3. ~~Modeli Hugging Face Hub'a yükle.~~ — **yapıldı** (yukarıda). Uygulamayı internete açmak ERTELENDİ (PRO gerekiyor).
