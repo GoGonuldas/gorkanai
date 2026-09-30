@@ -66,3 +66,16 @@ Kalibrasyon kararı: Q sadece açık bir GENEL yargı varsa; sadece bilgi olarak
   ekran/kamera, uyumluluk, kurulum/kullanım kolaylığı, tat) arıza/şikâyet biçiminde geçse de P; genel
   "çalışmıyor/işe yaramadı" Q; ikisi birlikte olabilir. Tur 1 etiketleri yeniden etiketlenmedi ->
   SINIRLAMA: tur 1'de (val eki 200 dahil) P altına göre hafif eksik, Q hafif fazla olabilir.
+
+## Test öncesi: beklenti ve başarı ölçütü (2026-09-30, test ölçülmeden yazıldı)
+- **Dondurulan:** epoch 12, global eşik 0.60, tohum 0/1/2 olasılık ortalaması (`frozen_config.json`, model hash'leriyle).
+- **Beklenti:** val'in eski-100 yarısı (testle aynı oturumun altını) kazancı +3 puan gösteriyor, yeni-200 yarısı +11.
+  Test için dürüst beklenti eski-100'e göre: konu F1 micro ~0.79-0.81 (kıyas 0.763).
+- **Ana iddia ve ölçüt:** (1) "V2 anahtar kelimesi tutmuyor" alt kümesinde BERT recall'u > 0 (çift sayılarıyla);
+  (2) BERT − anahtar kelime farkı için eşleştirilmiş bootstrap (yorum bazında, 2000 tekrar, tohum 16) %95 aralığı:
+  konu F1 micro, macro ve uçtan uca micro. **"Kazandı" demek için aralığın 0'ı dışlaması gerekir**; içeriyorsa
+  "fark gürültüden ayrılamıyor" yazılır.
+- Ek çıktılar (aynı tek çalıştırma): konu başına örtük recall; Görkan'ın kör 20'sinden testteki 10 yorumda
+  model-Görkan çift F1 (n=10, sadece fikir verir).
+- Val'de (bilgi, aynı bootstrap): konu F1 micro +0.084 [+0.053, +0.120], macro +0.094 [+0.026, +0.162],
+  uçtan uca micro +0.084 [+0.051, +0.119].

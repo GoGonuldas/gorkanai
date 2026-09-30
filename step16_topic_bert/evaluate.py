@@ -67,8 +67,8 @@ def implicit_recall(y, kw, pred):
             pred[miss].mean() if miss.sum() else float("nan"), int(miss.sum()))
 
 
-def end_to_end(df, pred, cache):
-    """BERT (veya anahtar kelime) konuları + Adım 15 duygu hattı -> baseline.metrics özeti."""
+def e2e_preds(df, pred, cache):
+    """BERT (veya anahtar kelime) konuları + Adım 15 duygu hattı -> her yorum için ({konu: duygu}, cümlecikler)."""
     preds = []
     for text, row in zip(df["text"], pred):
         clauses = split_clauses(text, SPLIT)
@@ -78,7 +78,41 @@ def end_to_end(df, pred, cache):
                 cl = [c for c in clauses if PATTERNS[a].search(c)] or [turkish_lower(text)]
                 out[a], used[a] = decide([cache[c] for c in cl], MODE), cl
         preds.append((out, used))
-    return metrics(df.reset_index(drop=True), preds)[1]
+    return preds
+
+
+def end_to_end(df, pred, cache):
+    return metrics(df.reset_index(drop=True), e2e_preds(df, pred, cache))[1]
+
+
+def pair_correct(df, pred, cache):
+    """(yorum x konu) matrisi: konu tahmin edildi, altında var ve duygu da doğru."""
+    preds = e2e_preds(df, pred, cache)
+    return np.array([[float(a in p and r[a] != "" and p[a] == r[a]) for a in ASPECTS]
+                     for (p, _), (_, r) in zip(preds, df.iterrows())])
+
+
+def _scores(y, pred, c):
+    """(konu F1 micro, konu F1 macro, uçtan uca F1 micro) — yorum alt kümesi üzerinde."""
+    tp, npred, ngold = (y * pred).sum(0), pred.sum(0), y.sum(0)
+    macro = np.mean(2 * tp / np.maximum(npred + ngold, 1))
+    return np.array([2 * tp.sum() / max(npred.sum() + ngold.sum(), 1), macro,
+                     2 * c.sum() / max(pred.sum() + y.sum(), 1)])
+
+
+def paired_bootstrap(y, pred_a, c_a, pred_b, c_b, n_boot=2000, seed=16):
+    """Eşleştirilmiş bootstrap (yorum bazında yeniden örnekleme): a − b farkı, nokta tahmini + %95 aralık."""
+    rng = np.random.default_rng(seed)
+    point = _scores(y, pred_a, c_a) - _scores(y, pred_b, c_b)
+    diffs = np.array([_scores(y[i], pred_a[i], c_a[i]) - _scores(y[i], pred_b[i], c_b[i])
+                      for i in (rng.integers(0, len(y), len(y)) for _ in range(n_boot))])
+    return point, np.quantile(diffs, [0.025, 0.975], axis=0)
+
+
+def pair_f1(a, b):
+    A = {(i, k, v) for i, d in enumerate(a) for k, v in d.items()}
+    B = {(i, k, v) for i, d in enumerate(b) for k, v in d.items()}
+    return 2 * len(A & B) / max(len(A) + len(B), 1)
 
 
 def clause_cache(df):
@@ -210,7 +244,27 @@ def run_test():
     out += ["\nKONU BAŞINA (test)"] + topic_table(y, [kw, pred], ["anahtar kelime", "BERT"])
     out.append("  örtük (kelime-) recall, konu başına BERT: " + ", ".join(
         f"{a} {int((pred[:, k] * y[:, k] * (1 - kw[:, k])).sum())}/{int((y[:, k] * (1 - kw[:, k])).sum())}"
-        for k, a in enumerate(ASPECTS)))
+        for k, a in enumerate(ASPECTS)) + "   (satıcı, görünüm, boyut: n<30, gürültülü)")
+
+    # --- Eşleştirilmiş bootstrap: BERT − anahtar kelime (ölçüt PLAN.md'de testten önce yazıldı) ---
+    point, ci = paired_bootstrap(y, pred, pair_correct(test, pred, cache), kw, pair_correct(test, kw, cache))
+    out.append("\nEŞLEŞTİRİLMİŞ BOOTSTRAP (2000 tekrar, tohum 16): BERT − anahtar kelime farkı, %95 aralık")
+    for k, name in enumerate(("konu F1 micro", "konu F1 macro", "uçtan uca F1 micro")):
+        verdict = "0'ı DIŞLIYOR" if ci[0][k] > 0 or ci[1][k] < 0 else "0'ı içeriyor -> fark gürültüden ayrılamıyor"
+        out.append(f"  {name:<20}{point[k]:+.3f}  [{ci[0][k]:+.3f}, {ci[1][k]:+.3f}]  {verdict}")
+
+    # --- Elmayla elma: Görkan'ın kör 20'sinden testte olan 10 (karar öncesi etiketler; n=10, SADECE FİKİR VERİR) ---
+    from save_aspect_labels import parse
+    human = pd.read_csv(os.path.join(os.path.dirname(OLD_LABELS), "human_blind_20.csv"), keep_default_na=False)
+    human = human[human["split"] == "test"]
+    idx = [int(np.where(test["id"].to_numpy() == i)[0][0]) for i in human["id"]]
+    sub = test.iloc[idx].reset_index(drop=True)
+    gorkan = [parse(r)[0] for r in human["raw_gorkan"]]
+    claude = [{a: r[a] for a in ASPECTS if r[a]} for _, r in sub.iterrows()]
+    out.append(f"\nELMAYLA ELMA (Görkan'ın kör etiketleri, testteki {len(sub)} yorum), çift F1 — Claude-Görkan {pair_f1(claude, gorkan):.3f}")
+    for name, pr in (("anahtar kelime", kw), ("BERT", pred)):
+        m = [p for p, _ in e2e_preds(sub, pr[idx], cache)]
+        out.append(f"  {name:<16} model-Claude {pair_f1(m, claude):.3f} | model-Görkan {pair_f1(m, gorkan):.3f}")
     open(log, "w").write("\n".join(out) + "\n")
     print("\n".join(out))
 
