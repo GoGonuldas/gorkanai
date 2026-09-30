@@ -1,0 +1,62 @@
+ADIM 16 — VAL (300 yorum: eski 100 + yeni 200), eğitim 600 yorum. Test'e dokunulmadı.
+
+1) EPOCH SEÇİMİ — val micro-F1, eşik 0.5 (tohum başına, ortalama, min-max, 3 tohum ortalaması olasılık)
+  epoch  3: 0.772 0.750 0.699 | ort. 0.740 (min-max 0.699-0.772) | ortalama olasılık 0.747
+  epoch  5: 0.781 0.794 0.793 | ort. 0.789 (min-max 0.781-0.794) | ortalama olasılık 0.813
+  epoch  8: 0.814 0.811 0.824 | ort. 0.816 (min-max 0.811-0.824) | ortalama olasılık 0.822
+  epoch 12: 0.823 0.812 0.832 | ort. 0.822 (min-max 0.812-0.832) | ortalama olasılık 0.828
+  SEÇİLEN epoch = 12  (ızgaranın üst sınırı!)
+
+2) GLOBAL EŞİK (3 tohum ortalaması olasılık, val micro-F1): 0.05:0.754 0.10:0.809 0.15:0.821 0.20:0.826 0.25:0.829 0.30:0.827 0.35:0.832 0.40:0.826 0.45:0.826 0.50:0.828 0.55:0.830 0.60:0.834 0.65:0.828 0.70:0.821 0.75:0.821 0.80:0.800 0.85:0.777 0.90:0.766 0.95:0.697
+  SEÇİLEN eşik = 0.60
+  tanı: sadece eski val'de seçilseydi eşik 0.60 (F1 0.815); seçilen 0.60 ile o kümede F1 0.815
+  tanı: sadece yeni val'de seçilseydi eşik 0.25 (F1 0.847); seçilen 0.60 ile o kümede F1 0.844
+
+3) ANA TABLO (val 300)
+                                        P      R   F1mic   F1macR(kelime+)R(kelime-) uçtan uca   macro
+Anahtar kelime V2 (Adım 15)         0.786  0.717   0.750   0.691     1.000     0.000     0.650   0.575
+BERT 3 tohum ort., eşik 0.60 (ANA)  0.867  0.803   0.834   0.785     0.880     0.607     0.735   0.671
+  tek tohumlar (aynı eşik): micro 0.828 0.809 0.832 -> ort. 0.823, min-max 0.809-0.832 | macro 0.778 0.767 0.777
+BERT konu başına eşik (İYİMSER)     0.821  0.883   0.851   0.805     0.943     0.731     0.747   0.687
+  konu başına eşikler: kargo 0.75, fiyat 0.15, kalite 0.20, performans 0.35, boyut 0.70, gorunum 0.55, satici 0.70
+BERT VEYA anahtar kelime (bilgi)    0.763  0.889   0.821   0.768     1.000     0.607     0.716   0.643
+  R(kelime+) / R(kelime-): altın (yorum, konu) çiftlerinde recall; V2 anahtar kelimesinin tuttuğu / tutmadığı alt küme (n = 368 / 145).
+
+4) KONU BAŞINA (val 300)
+konu            n   anahtar kelime P/R/F1             BERT P/R/F1
+kargo          55          0.91/0.87/0.89          0.96/0.95/0.95
+fiyat          68          0.93/0.94/0.93          0.95/0.91/0.93
+kalite        199          0.86/0.66/0.75          0.85/0.82/0.84
+performans    124          0.73/0.68/0.70          0.82/0.76/0.79
+boyut          28          0.55/0.57/0.56          0.90/0.68/0.78
+gorunum        24          0.56/0.79/0.66          0.84/0.67/0.74
+satici         15          0.36/0.33/0.34          0.55/0.40/0.46
+  örtük (kelime-) recall, konu başına BERT: kargo 4/7, fiyat 1/4, kalite 53/67, performans 19/40, boyut 4/12, gorunum 1/5, satici 6/10
+
+5) ESKİ VAL 100 (Adım 15 oturumunun altını) vs YENİ VAL 200 (bu oturumun etiketleri)
+--- eski 100 ---
+                                        P      R   F1mic   F1macR(kelime+)R(kelime-) uçtan uca   macro
+Anahtar kelime V2                   0.804  0.763   0.783   0.724     1.000     0.000     0.696   0.625
+BERT (ANA)                          0.862  0.774   0.815   0.773     0.889     0.405     0.732   0.697
+konu            n   anahtar kelime P/R/F1             BERT P/R/F1
+kargo          22          0.91/0.91/0.91          0.95/0.91/0.93
+fiyat          27          0.93/0.96/0.95          0.93/0.96/0.95
+kalite         60          0.83/0.82/0.82          0.83/0.82/0.82
+performans     42          0.77/0.57/0.66          0.77/0.64/0.70
+boyut          12          0.70/0.58/0.64          1.00/0.67/0.80
+gorunum         7          0.50/0.86/0.63          0.83/0.71/0.77
+satici          7          0.50/0.43/0.46          1.00/0.29/0.44
+--- yeni 200 ---
+                                        P      R   F1mic   F1macR(kelime+)R(kelime-) uçtan uca   macro
+Anahtar kelime V2                   0.777  0.693   0.733   0.666     1.000     0.000     0.626   0.540
+BERT (ANA)                          0.870  0.818   0.844   0.790     0.876     0.689     0.736   0.657
+konu            n   anahtar kelime P/R/F1             BERT P/R/F1
+kargo          33          0.90/0.85/0.88          0.97/0.97/0.97
+fiyat          41          0.93/0.93/0.93          0.97/0.88/0.92
+kalite        139          0.87/0.60/0.71          0.86/0.82/0.84
+performans     82          0.71/0.73/0.72          0.85/0.82/0.83
+boyut          16          0.47/0.56/0.51          0.85/0.69/0.76
+gorunum        17          0.59/0.76/0.67          0.85/0.65/0.73
+satici          8          0.25/0.25/0.25          0.44/0.50/0.47
+
+DONDURULAN -> frozen_config.json: epoch 12, global eşik 0.60, tohumlar [0, 1, 2] (olasılık ortalaması)

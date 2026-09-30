@@ -1,0 +1,40 @@
+Eğitim 600 | val 300 ({'yeni': 200, 'eski': 100}) | cihaz mps
+Eğitimde konu başına örnek: {'kargo': np.int64(114), 'fiyat': np.int64(127), 'kalite': np.int64(411), 'performans': np.int64(214), 'boyut': np.int64(72), 'gorunum': np.int64(68), 'satici': np.int64(44)}
+  tohum 0 epoch 1: eğitim kaybı 0.7223
+  tohum 0 epoch 2: eğitim kaybı 0.6483
+  tohum 0 epoch 3: eğitim kaybı 0.4910
+  tohum 0 epoch 4: eğitim kaybı 0.3458
+  tohum 0 epoch 5: eğitim kaybı 0.2482
+  tohum 0 epoch 6: eğitim kaybı 0.1821
+  tohum 0 epoch 7: eğitim kaybı 0.1413
+  tohum 0 epoch 8: eğitim kaybı 0.1085
+  tohum 0 epoch 9: eğitim kaybı 0.0865
+  tohum 0 epoch 10: eğitim kaybı 0.0713
+  tohum 0 epoch 11: eğitim kaybı 0.0548
+  tohum 0 epoch 12: eğitim kaybı 0.0438
+  tohum 1 epoch 1: eğitim kaybı 0.7089
+  tohum 1 epoch 2: eğitim kaybı 0.5642
+  tohum 1 epoch 3: eğitim kaybı 0.3938
+  tohum 1 epoch 4: eğitim kaybı 0.2836
+  tohum 1 epoch 5: eğitim kaybı 0.2058
+  tohum 1 epoch 6: eğitim kaybı 0.1466
+  tohum 1 epoch 7: eğitim kaybı 0.1134
+  tohum 1 epoch 8: eğitim kaybı 0.0831
+  tohum 1 epoch 9: eğitim kaybı 0.0627
+  tohum 1 epoch 10: eğitim kaybı 0.0528
+  tohum 1 epoch 11: eğitim kaybı 0.0428
+  tohum 1 epoch 12: eğitim kaybı 0.0353
+  tohum 2 epoch 1: eğitim kaybı 0.7080
+  tohum 2 epoch 2: eğitim kaybı 0.6280
+  tohum 2 epoch 3: eğitim kaybı 0.5028
+  tohum 2 epoch 4: eğitim kaybı 0.3697
+  tohum 2 epoch 5: eğitim kaybı 0.2801
+  tohum 2 epoch 6: eğitim kaybı 0.2073
+  tohum 2 epoch 7: eğitim kaybı 0.1560
+  tohum 2 epoch 8: eğitim kaybı 0.1122
+  tohum 2 epoch 9: eğitim kaybı 0.0902
+  tohum 2 epoch 10: eğitim kaybı 0.0641
+  tohum 2 epoch 11: eğitim kaybı 0.0503
+  tohum 2 epoch 12: eğitim kaybı 0.0415
+val olasılıkları -> val_probs.npz ; modeller -> model_s*_e*/
+EXIT

@@ -1,0 +1,28 @@
+{
+ "epoch": 12,
+ "threshold": 0.6,
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "per_topic_thresholds_optimistic": {
+  "kargo": 0.75,
+  "fiyat": 0.15,
+  "kalite": 0.2,
+  "performans": 0.35,
+  "boyut": 0.7,
+  "gorunum": 0.55,
+  "satici": 0.7
+ },
+ "model_dirs": [
+  "step16_topic_bert/model_s0_e12",
+  "step16_topic_bert/model_s1_e12",
+  "step16_topic_bert/model_s2_e12"
+ ],
+ "model_sha256_16": [
+  "4b544e8fe0c1b6b6",
+  "2fa2d01da6ae9733",
+  "8beedc8d6f35d845"
+ ]
+}
