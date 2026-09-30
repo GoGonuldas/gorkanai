@@ -1,0 +1,17 @@
+Aday havuzu (8-40 kelime, görülmemiş): {'pozitif': 140341, 'negatif': 1102}
+split  source              pool_label
+train  hedefli:boyut       negatif        15
+                           pozitif        15
+       hedefli:gorunum     negatif        15
+                           pozitif        15
+       hedefli:kargo       negatif        10
+                           pozitif        10
+       hedefli:kelime_yok  negatif        20
+                           pozitif        20
+       hedefli:satici      negatif        15
+                           pozitif        15
+       rastgele            negatif        75
+                           pozitif        75
+val    rastgele            negatif       100
+                           pozitif       100
+500 yorum -> label_set16.csv + batch_01..10.csv | sızıntı kontrolleri geçti

@@ -1,0 +1,23 @@
+konu           n   kappa
+kargo         11    1.00
+fiyat          8    0.91
+kalite        19    0.73
+performans    15    0.80
+boyut          4    0.84
+gorunum        3    0.78
+satici         2    0.65
+
+Konu F1: 0.903 (52 altın / 61 yeni / 51 ortak)
+Çift F1: 0.867   (kıyas: Claude-Görkan 0.667)
+
+FARKLAR (id | altın | yeni | metin):
+4265 | Pp,Fp,Kp       | Pp,Qp,Fp,Kp    | gimpet malt softu uzun yıllardır kullanıyorum. diğer markaların malt ürünlerine kıyasla lezzet, kıvam ve etkinlik düzeyi çok yüksek. hepsiburadada her zaman uygun fiyatla bulabiliyorum ayrıca kargoyla
+4171 | Pp,Bn          | Pp,Bn,Qp       | 2.5 inç aktarım hızı da iyi 3.0 da ortalama 75 mb/s  ye ulaşıyor. ara kablosu daha uzun olabilirdi. daha iyisi yapılana kadar en iyisi bu herhalde.
+4289 | Pn,Qn          | Qn,Pn,Fx       | ürnü kullandım fakat pek memnun kalmadım, etkileyeci ve kalıcı bir koku değil. almak isteyenlerin iki defa düşünmesini dilerim. indirime girdi diye hemen zıplamamak lazım.
+4089 | Qp,Fp,Bn       | Qp,Fp,Pn       | urun cok kaliteli cok ucuz ama 8" tabletlere (amazon kindle fire hd 8) olmuyor.
+4262 | Bn,Kn          | Bn,Kn,Gp,Sx    | boyutları çok büyük geldi bize. ayrıca üründe darbeler vardı. sıfır olduğu konusunda tereddütler vardı. çok ağırdı. i̇ade ettik. ancak yazı yazılacak kısım gayet iyi görünüyordu.
+4273 | Kp,Qp          | Qp,Kp,Pp       | ürün harika 2 günde elime ulaştı. malzemesi kalitesi konforu mükemmel. yalnız dikkat edin, koltukta bulunan emniyet kemerini denerken sonuna kadar çekmişiz, kurtarana kadar çok ugrastık. aman siz yapm
+4196 | Qn,Pp          | Qn,Pn*         | bu süpürge çok kötü çile çekersiniz hanımlar.sessiz ama tozları çekmiyor
+4227 | Qn,Fn*         | Fp*,Qn,Pn      | parasını amorti ettiği kesin ama bende uzun süre aynı yapışkanlığını koruyacak sanıp almıştım. lakin öyle değilmiş. çok bişey beklemeyin. rulodaki rahatlığı alamadım ben. sıcak suyla temizlemeye harca
+4288 | Bn,Kp          | Bn,Qp,Kp       | resimdeki kadar büyük değil. onun dışında a4 ve hepsiburada kalitesiyle hızlı teslim.
+4115 | Pp,Kp          | Pp,Qp,Kp       | her marka pili şarj edebiliyor. varta 2400mah piller ile sorunsuz şekilde çalıştı. led bilgilendirmeleri gayet başarılı. hızlı ve sorunsuz teslimat oldu.
