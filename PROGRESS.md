@@ -736,17 +736,23 @@ Hata kovaları: 17.5 (aşağıda).
 6. Yeni test 17.5'ten sonra okunmuş sayılır; sonraki her iddia için yeni bir test gerekir.
 
 **Dersler (Adım 17):**
+- **Adım 18 dersi (genel):** 200'lük testte "fark yok" bir güç sorunuydu; aynı donmuş model 500'lük kasa testte
+  +0.035 [+0.016, +0.054]. 17.5'te n≈40 hata üzerinden çıkarılan alt küme "ders"leri tekrarlamadı → küçük alt kümelerden
+  ders çıkarırken aralık hesaplanmalı.
 - **"Fark yok" da sonuçtur, önceden yazılmış ölçüt olmasa kaybolurdu.** İkincil satırların üçü (eski test, ortak çiftler,
   birleşik 400) 0'ı dışlıyordu; ana ölçü önceden sabitlenmemiş olsaydı "kazandı" diye raporlamak çok kolaydı.
 - **Val'den sonra beklentiyi güncellemek işe yaradı.** İlk beklenti ("aralık 0'ı dışlar") fazla iyimserdi; val'de görülen
   tablo testte neredeyse aynen tekrarladı (val +0.021, test +0.019).
-- **(a) Örtük çiftlerde kötüleşme tutarlı:** val 0.869 → 0.848, test 0.874 → 0.849. Eski hat örtük konuda tüm yorumun
+- **(Adım 18'de YANLIŞLANDI)** ~~(a) Örtük çiftlerde kötüleşme tutarlı~~ — 500'lük kasa testte örtük çiftler (273) 0.894 → **0.919**;
+  val ve 200'lük testteki düşüş (net ~3 çift) küçük n'nin gürültüsüydü. Eski metin, kayıt için: val 0.869 → 0.848, test 0.874 → 0.849. Eski hat örtük konuda tüm yorumun
   duygusunu alıyor; tek duygulu yorumlarda bu çoğunlukla doğru. Yeni model konu ifadesine bakıp yorumdaki olumsuz
   yüzeyli kalıplara ("eksiği yok", "gerek yok", "yapmıyor") ya da başka konunun duygusuna kayıyor (17.5 madde 3).
-- **(c) Zıt duygulu hedef tutarlı kazanç vermedi:** yeni test (1e) 0.705 → 0.744 (+4), val 0.728 → 0.744 (+1.6),
+- **(Adım 18'de YANLIŞLANDI)** ~~(c) Zıt duygulu hedef tutarlı kazanç vermedi~~ — kasa testte zıt duygulu çiftler (128)
+  0.695 → **0.812** (+11.7); macmini altınında 0.673 → 0.770. Eski metin, kayıt için: yeni test (1e) 0.705 → 0.744 (+4), val 0.728 → 0.744 (+1.6),
   eski test 0.667 → 0.667 (0). Modelin varlık nedeni olan alt kümede kazanç küçük ve kararsız; 17.5'te YENİ'nin en büyük
   hata kovası hâlâ "başka konunun duygusu" (41'in 15'i, zıt duygulu yorumlarda 20'nin 14'ü).
-- **Konu-koşullu girdi tek başına yetmiyor:** [konu] [SEP] [yorum] girdisiyle 600 yorumluk eğitimde model, konunun
+- **(Adım 18'de ZAYIFLADI)** Konu-koşullu girdi tek başına yetmiyor — kasa testte zıt duygulu kazanç +11.7, ayrışan 93 çiftin
+  55'inde YENİ doğru (23'ünde eski); "başka konunun duygusu" hâlâ kalan hata olabilir ama kasa okunmadığı için bilinmiyor. Eski metin: [konu] [SEP] [yorum] girdisiyle 600 yorumluk eğitimde model, konunun
   hangi cümleye ait olduğunu güvenilir öğrenmedi; düzelttiği 8 "başka konu" hatasına karşı 6 yenisini yaptı.
 
 ### Adım 17.5: Duygu modeli test hata kovaları — TAMAMLANDI (2026-10-01)
