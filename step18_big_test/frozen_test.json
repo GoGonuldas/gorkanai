@@ -1,0 +1,59 @@
+{
+ "date": "2026-10-01",
+ "test_set": {
+  "file": "step18_big_test/test18_set.csv",
+  "ids": "8000-8499",
+  "n": 500,
+  "sha256": "2aaec8714f478160c2e0e20aaae5a36dffea009c3883228d446903ad0756f5f4"
+ },
+ "gold_main": {
+  "who": "fresh (taze Claude oturumu)",
+  "file": "data/aspect_labels_step18/test18_fresh.csv",
+  "sha256": "698fd7af043d923b5c8ecb86528d10a47f74ea9a4a68c1519b7dc2842e3d0ddd"
+ },
+ "gold_second": {
+  "who": "macmini (Mac mini oturumu)",
+  "file": "data/aspect_labels_step18/test18_macmini.csv",
+  "sha256": "73293fa9adb8c95067444d6e0c431fb64542854fef5dd2666dfa29262265a92b"
+ },
+ "label_rules": {
+  "file": "step17_aspect_sentiment/LABEL_RULES.md",
+  "sha256": "b069265a5ebdaf4ad5ea76a2acebdb0962aba4e010248d988c031c32d3cadeed"
+ },
+ "frozen_models": {
+  "step16_topic": {
+   "config": "step16_topic_bert/frozen_config.json",
+   "config_sha256": "628438668c7ea5ce4cb22465e552506e92f44278659210d02f825147212b38f6",
+   "epoch": 12,
+   "threshold": 0.6,
+   "seeds": [
+    0,
+    1,
+    2
+   ],
+   "model_sha256_16": [
+    "4b544e8fe0c1b6b6",
+    "2fa2d01da6ae9733",
+    "8beedc8d6f35d845"
+   ]
+  },
+  "step17_sentiment": {
+   "config": "step17_aspect_sentiment/frozen_config.json",
+   "config_sha256": "1c3f499c22bb5620bf90702bfb39334170825c9361f675bd173063958223960c",
+   "init": "v2b",
+   "epoch": 8,
+   "seeds": [
+    0,
+    1,
+    2
+   ],
+   "model_sha256_16": [
+    "8d42c445da8e88ea",
+    "3c4c7014142dc4e9",
+    "ae71cb9b903627d1"
+   ]
+  },
+  "step15_baseline": "step15_aspect/baseline.py (bölme A + V2b, nötr kapalı; Adım 17 evaluate.py baseline_matrix)"
+ },
+ "measurements": "PLAN.md madde 3: ölçüm 1-3 tek seferde (Görkan onayıyla); toplam en fazla 4 karşılaştırma. KASA: hata okunmaz."
+}
