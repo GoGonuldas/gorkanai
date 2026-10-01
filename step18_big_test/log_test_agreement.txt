@@ -1,0 +1,21 @@
+ADIM 18 — ana test 500 (id 8000-8499) iki altının uyumu. KASA: sadece toplu sayılar.
+ana altın fresh (698fd7af043d…), ikinci macmini (73293fa9adb8…); kurallar LABEL_RULES.md (b069265a5ebd…)
+Kıyas: kalibrasyon 100'de fresh–macmini çift F1 0.935, duygu uyumu 0.989; Adım 17 testinde 1e–macmini 0.903 / 0.967.
+
+çift sayısı: fresh 917 (nötr 43, karışık 49), macmini 934 (nötr 24, karışık 45); oran 1.02
+konu yok (0) yorum: fresh 13, macmini 12
+konu F1 0.966 | (konu, duygu) çift F1 0.935 | ortak konu 894, duygu uyumu 865/894 = 0.968
+birebir aynı etiketlenen yorum: 421/500
+
+konu           fresh  macmini  ortak   kappa   duygu uyumu
+kargo             80       79     79    0.99         77/79
+fiyat            135      133    132    0.98       124/132
+kalite           312      330    306    0.87       297/306
+performans       242      240    234    0.94       229/234
+boyut             64       64     61    0.95         60/61
+gorunum           46       48     45    0.95         45/45
+satici            38       40     37    0.94         33/37
+
+sadece fresh'in verdiği konular (sayı): {'performans': 8, 'kalite': 6, 'fiyat': 3, 'boyut': 3, 'satici': 1, 'kargo': 1, 'gorunum': 1}
+sadece macmini'nin verdiği konular (sayı): {'kalite': 24, 'performans': 6, 'gorunum': 3, 'satici': 3, 'boyut': 3, 'fiyat': 1}
+Q/P takası olan yorum sayısı: 6
