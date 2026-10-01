@@ -710,7 +710,8 @@ doğru yönde olduğu testte de görüldü. Nokta tahmini (0.887) ilk beklentini
   Bu satır önceden ikincil olarak tanımlanmıştı; ana sonucun yerine geçmez.
 - Görkan'ın kör 20'si (31 çift): 0.774 → 0.806, +0.032 [−0.062, +0.160] — sadece fikir verir.
 
-Okuma: farkın yönü bütün satırlarda aynı (+2 ile +3.5 puan) ve yeni model hiçbir altında kötüleşmiyor; ama önceden
+Okuma: farkın yönü bütün satırlarda aynı (+2 ile +3.5 puan) ve yeni model **genel micro'da** hiçbir altında
+kötüleşmiyor (alt kümelerde kötüleştiği yer var: örtük çiftler, aşağıda ve 17.5); ama önceden
 seçilen ana ölçü (1e altını, yeni test) gürültüden ayrılamıyor. Kayda geçen sonuç **"fark yok"**. Diğer altınlardaki
 0'ı dışlayan aralıklar sonradan ana iddiaya terfi ettirilmez (eski test görülmüş, ortak çiftler/birleşik ikincil).
 
@@ -721,13 +722,90 @@ fark +0.090 [+0.051, +0.131] (0'ı dışlıyor); kelime tutmayan 119 çiftte BER
 Macmini altınında +0.095 [+0.056, +0.134], eski testte +0.048 [+0.009, +0.089]. Bu, Adım 16 konu modelinin ilk temiz
 (görülmemiş testte) ölçümü; satıcıda BERT anahtar kelimeden kötü kalmaya devam ediyor (0.36 → 0.33).
 
-Hata kovaları başlamadı (ayrı onay gerekiyor).
+Hata kovaları: 17.5 (aşağıda).
+
+**Sınırlamalar (Adım 17):**
+1. Ana altın (gorkanai-1e) **insan altını değil**: bağımsız ama aynı ailedeki bir Claude oturumu; eski testin hatalarını
+   ve tur 1 etiketlerini okumuştu. Model de Claude etiketleriyle eğitildi. "Claude'a benzeme" ile "doğru okuma" ayrılamıyor.
+2. Görkan'ın kör 20'si (31 çift) tek insan kıyası: YENİ–Görkan duygu uyumu **0.806**, oysa YENİ–1e tüm testte 0.887
+   (aynı 20 yorumda 0.861). Ama **1e–Görkan da sadece 0.826** (19/23) — fark büyük ölçüde Görkan'ın Claude altınlarından
+   farklı okumasından geliyor, modelin kendisinden değil (17.5 madde 5). n=20, hüküm verilemez.
+3. n küçük: 363 çiftte ±3.5 puanlık aralık; +2 puanlık gerçek bir kazanç bu test boyutuyla ayırt edilemez.
+4. Nötr kapalı: altın nötr 6 çift (1e) iki hatta da ulaşılamaz hata; tavan 0.967.
+5. Val'den seçilen tek yapılandırma (v2b, epoch 8); başka başlangıç/epoch denenmedi, denenmeyecek (test görüldü).
+6. Yeni test 17.5'ten sonra okunmuş sayılır; sonraki her iddia için yeni bir test gerekir.
+
+**Dersler (Adım 17):**
+- **"Fark yok" da sonuçtur, önceden yazılmış ölçüt olmasa kaybolurdu.** İkincil satırların üçü (eski test, ortak çiftler,
+  birleşik 400) 0'ı dışlıyordu; ana ölçü önceden sabitlenmemiş olsaydı "kazandı" diye raporlamak çok kolaydı.
+- **Val'den sonra beklentiyi güncellemek işe yaradı.** İlk beklenti ("aralık 0'ı dışlar") fazla iyimserdi; val'de görülen
+  tablo testte neredeyse aynen tekrarladı (val +0.021, test +0.019).
+- **(a) Örtük çiftlerde kötüleşme tutarlı:** val 0.869 → 0.848, test 0.874 → 0.849. Eski hat örtük konuda tüm yorumun
+  duygusunu alıyor; tek duygulu yorumlarda bu çoğunlukla doğru. Yeni model konu ifadesine bakıp yorumdaki olumsuz
+  yüzeyli kalıplara ("eksiği yok", "gerek yok", "yapmıyor") ya da başka konunun duygusuna kayıyor (17.5 madde 3).
+- **(c) Zıt duygulu hedef tutarlı kazanç vermedi:** yeni test (1e) 0.705 → 0.744 (+4), val 0.728 → 0.744 (+1.6),
+  eski test 0.667 → 0.667 (0). Modelin varlık nedeni olan alt kümede kazanç küçük ve kararsız; 17.5'te YENİ'nin en büyük
+  hata kovası hâlâ "başka konunun duygusu" (41'in 15'i, zıt duygulu yorumlarda 20'nin 14'ü).
+- **Konu-koşullu girdi tek başına yetmiyor:** [konu] [SEP] [yorum] girdisiyle 600 yorumluk eğitimde model, konunun
+  hangi cümleye ait olduğunu güvenilir öğrenmedi; düzelttiği 8 "başka konu" hatasına karşı 6 yenisini yaptı.
+
+### Adım 17.5: Duygu modeli test hata kovaları — TAMAMLANDI (2026-10-01)
+`step17_aspect_sentiment/error_buckets.py`, log: `log_error_buckets.txt`, elle sınıflandırma: `test17_errors_manual.csv`
+(70 satır: yeni testte iki hattın en az birinin yanlış olduğu 63 çift + val'de örtük/eski doğru/YENİ yanlış 7 çift).
+Eğitim yok, ayar yok, test sayıları yeniden hesaplanmadı (script log_test'in 0.887 / 0.868'ini assert ediyor). Sadece
+dondurulmuş `test17_probs.npz` ve `val_probs.npz`; eski hat deterministik olarak yeniden üretildi. Altınlara dokunulmadı.
+**Yeni test (6000-6199) bu adımdan sonra OKUNMUŞ sayılır**: hataları tek tek okundu; artık temiz test değil. Buradan
+çıkan her fikir "test görüldü → yeni test gerekir" notuyla okunmalı.
+
+**1-2. Kovalar** (yeni test, 1e altını, altın konular verilmiş; "YENİ doğru" sütununda kova eski hattın hatası için):
+| kova | YENİ yanlış (41) | ikisi yanlış (26) | YENİ düzeltti (22) | YENİ bozdu (15) |
+|---|---|---|---|---|
+| altın nötr | 6 | 6 | 0 | 0 |
+| karışık | 5 | 1 | 2 | 4 |
+| başka konunun duygusu | 15 | 9 | 8 | 6 |
+| örtük/dolaylı duygu | 9 | 6 | 7 | 3 |
+| olumsuzlama/ironi | 4 | 2 | 2 | 2 |
+| altın şüpheli | 2 | 2 | 0 | 0 |
+| diğer model hatası | 0 | 0 | 3 | 0 |
+
+- YENİ'nin 41 yanlışının 26'sında gerçek duygu pozitif; YENİ 29'unda negatif demiş. Yanlışların 23'ünde emin
+  (p ≥ 0.9 ya da ≤ 0.1). Konu başına: kalite 19, performans 10, fiyat 6. Macmini altını bu 41'in 5'inde aynı konuya farklı
+  duygu vermiş, 11'inde o konuyu hiç vermemiş (yani ~%40'ında konu/duygu etiketi de tartışmalı).
+- **Düzelttiği:** eski hattın "başka konunun duygusu" (8; aynı cümlecikte zıt duygulu iki konu) ve "örtük/dolaylı"
+  (7; "beklediğimden de kötü", "fotoğraftaki gibi", "kaliteli ürün tercih edin") hataları. **Bozduğu:** yine en çok
+  "başka konunun duygusu" (6) ve karışık (4). Net: başka konu +2, örtük/dolaylı +4, karışık −2.
+- Kalan 41'in 11'i (altın nötr 6 + karışık 5) yapı gereği ulaşılamaz/belirsiz; 2'si altın şüpheli.
+
+**3. Örtük çiftler** (test 0.874 → 0.849; val 0.869 → 0.848): eski doğru/YENİ yanlış test 8 (karşılığında YENİ
+doğru/eski yanlış 5), val 7 (karşılığında 4). Desen val'de tekrarlıyor ve tek bir kovada toplanmıyor: test'te karışık 2,
+başka konu 2, örtük/dolaylı 2, olumsuzlama/ironi 2; val'de başka konu 3, olumsuzlama/ironi 3, örtük/dolaylı 1.
+Ortak okuma: konunun kelimesi yokken eski hat tüm yorumun duygusunu alıyor (çoğu zaman doğru); yeni model ise
+**olumsuz yüzeyli olumlu kalıplara** ("eksiği yoktu", "elektriklenme yapmıyor", "gerek yok", "israf etmeyin") ve
+yorumdaki **başka konunun** duygusuna kayıyor. 15 çiftin 5'i sınırda (0.41-0.51).
+
+**4. Zıt duygulu yorumlar** (33 yorum, 78 çift; 0.705 → 0.744): YENİ'nin 20 yanlışının **14'ü "başka konunun duygusu"**,
+3 örtük/dolaylı, 2 altın şüpheli, 1 karışık. Bu alt kümede düzelttiği 9, bozduğu 6. Modelin hedefi olan hata türü
+hâlâ en büyük kova; tipik kalıp "X güzel ama/yalnız/tek kusuru Y" (6027, 6067, 6115, 6156, 6174, 6189).
+
+**5. Görkan'ın kör 20'si** (31 Görkan çifti; YENİ–Görkan 25/31 = 0.806; **1e–Görkan 19/23 = 0.826**; YENİ–1e aynı
+20 yorumda 0.861). YENİ'nin Görkan'dan ayrıştığı 6 çiftin 3'ünde 1e modelle aynı (6103 kitap kalite, 6026 Q/P'nin
+ters dağıtımı ×2), 2'sinde Görkan'la aynı (6113 "parasına göre belki iyi", 6046 "bebekler bile çekip çıkarıyor"),
+1'inde 1e o konuyu vermemiş (6195). Yani model–Görkan ayrışmasının yarısı **Claude altınlarının da Görkan'dan ayrıştığı**
+yerde: model büyük olasılıkla Claude-tarzı okumayı öğrenmiş; Görkan kitap ve Q/P'de farklı okuyor. n=20, sadece fikir.
+
+**Altın şüpheli** (2 çift, düzeltilmedi): 6001 kalite ("idare eder", macmini Qx), 6006 performans ("eldeki hissi iyi",
+macmini P vermemiş).
+
+**Test görüldü → yeni test gerekir (fikirler, UYGULANMADI):** (a) olumsuz yüzeyli olumlu kalıplar ve "X güzel ama Y"
+yapısı için hedefli eğitim örnekleri; (b) örtük konuda eski hattın tüm-yorum duygusunu modele özellik olarak vermek ya da
+iki hattı birleştirmek; (c) nötr/karışık sınıfını açmak (11 hata yapı gereği); (d) Q/P ve kitap tanımı için insanla
+(Görkan) yeniden uyum ölçmek — model–insan farkının yarısı tanım farkı.
 
 ## Yapılacaklar (2026-10-01'de güncellendi)
 
 0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (16.1-16.5, yukarıda).
-   **Adım 17: konuya koşullu duygu modeli — TEST ÖLÇÜLDÜ** (yukarıda; ana sonuç "fark yok"). Sırada (ayrı onayla):
-   Adım 17 hata kovaları. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
+   **Adım 17: konuya koşullu duygu modeli — TEST ÖLÇÜLDÜ** (yukarıda; ana sonuç "fark yok"); 17.5 hata kovaları
+   yapıldı, yeni test artık okunmuş. Sonraki adım (yeni model/etiket/test) için ayrı onay gerekiyor. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
    `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).

@@ -1,0 +1,73 @@
+ADIM 17.5 — duygu modeli test hata kovaları (dondurulmuş: v2b, epoch 8, tohumlar [0, 1, 2]).
+Eğitim/ayar yok, test sayıları yeniden hesaplanmadı. Bu adımdan sonra yeni test (6000-6199) OKUNMUŞ sayılır.
+
+Yeni test, 1e altını: 363 çift | YENİ doğru 322 (0.887), eski doğru 315 (0.868) — log_test.txt ile aynı olmalı (0.887 / 0.868)
+
+1-2) KOVALAR — yeni test, 1e altını (kova, YENİ'nin hatası için; 'YENİ doğru' sütununda eski hattın hatası için)
+  kova                        YENİ yanlış (tümü)  ikisi yanlış  YENİ doğru/eski yanlış  eski doğru/YENİ yanlış
+  altın nötr                                   6             6                       0                       0
+  karışık                                      5             1                       2                       4
+  başka konunun duygusu                       15             9                       8                       6
+  örtük/dolaylı duygu                          9             6                       7                       3
+  olumsuzlama/ironi                            4             2                       2                       2
+  altın şüpheli                                2             2                       0                       0
+  diğer model hatası                           0             0                       3                       0
+  TOPLAM                                      41            26                      22                      15
+  okuma: 'YENİ doğru/eski yanlış' = yeni modelin düzelttiği; 'eski doğru/YENİ yanlış' = yeni modelin bozduğu.
+  YENİ'nin yanlışları konu başına: kalite 19, performans 10, fiyat 6, gorunum 2, boyut 2, kargo 2
+  YENİ'nin yanlışları, gerçek duygu: pozitif 26, negatif 9, nötr 6 | YENİ pozitif dedi: 12, negatif dedi: 29
+  YENİ'nin emin olduğu (p≥0.9 ya da ≤0.1) yanlışlar: 23 / 41
+  YENİ'nin yanlışlarında macmini altını: aynı konuya farklı duygu 5, o konuyu hiç vermemiş 11
+
+3) ÖRTÜK ÇİFTLER (konunun V2 kelimesi hiçbir cümlecikte yok)
+  test: 119 örtük çift; eski 0.874 → YENİ 0.849 | eski doğru/YENİ yanlış 8, YENİ doğru/eski yanlış 5
+  val : 145 örtük çift; eski 0.869 → YENİ 0.848 | eski doğru/YENİ yanlış 7, YENİ doğru/eski yanlış 4
+
+  örtük, eski doğru / YENİ yanlış — kovalar
+  kova                            test       val
+  altın nötr                         0         0
+  karışık                            2         0
+  başka konunun duygusu              2         3
+  örtük/dolaylı duygu                2         1
+  olumsuzlama/ironi                  2         3
+  altın şüpheli                      0         0
+  diğer model hatası                 0         0
+  TOPLAM                             8         7
+  test listesi:
+    6031 performans:pozitif p_yeni 0.35 p_eski 0.64 [olumsuzlama/ironi] tamamen olumlu ama "gerek yok", "israf etmeyin", "pahalıyı alıp" gibi olumsuz yüzeyli kalıplar; YENİ 0.35 | nerdeyse havludan buyuk saglam dayanikli arabanin disi icin on numara disi ocin gerek yok dunya para
+    6031 boyut:pozitif p_yeni 0.49 p_eski 0.64 [olumsuzlama/ironi] aynı yorum; "havludan büyük" B+, YENİ sınırda 0.49 | nerdeyse havludan buyuk saglam dayanikli arabanin disi icin on numara disi ocin gerek yok dunya para
+    6080 kalite:negatif p_yeni 0.61 p_eski 0.08 [karışık] altında karisik=kalite (çiziği kısmen kapattı) | aracımda çok ince bir çizik var acaba onu yok edermi diye aldım ama çizikten ötürü oluşan ince kazın
+    6126 kalite:pozitif p_yeni 0.34 p_eski 0.74 [örtük/dolaylı duygu] "ama gene de ... büyük nimet" dolaylı övgü; "taştan olsun" yüzeyi; YENİ 0.34 | ama gene de bulaşık makinesi olsun taştan olsun, büyük nimet.
+    6129 kalite:pozitif p_yeni 0.30 p_eski 0.74 [başka konunun duygusu] "şok ses çıkartmasına rağmen kullanışlı pratik"; ses + "makinayla olmuyor" olumsuzu baskın; macmini Q vermemiş | şok ses cikartmasina ramen  kullanişli pi̇rati̇k  boyama şekli̇  elle boyamadan daha kolay sade kena
+    6169 kalite:pozitif p_yeni 0.41 p_eski 0.83 [başka konunun duygusu] "pratik ... uygun, yalnız daha kalın önlük bekliyordum"; YENİ boyut şikâyetini aldı; macmini bunu P saymış | bence ürün pratik (sıvı gıda) kullanımlar için uygun, yalnız daha kalın pamuk yüzeyli önlük bekliyor
+    6175 performans:pozitif p_yeni 0.48 p_eski 0.99 [karışık] altında karisik=performans (ayna cebi yok, hafif/su geçirmez); macmini Pn | arabayı tamponla beraber sarıyor fakat aynalar için ayrı bi cebi yok, aracı örterken aynaları kapatm
+    6182 gorunum:negatif p_yeni 0.89 p_eski 0.02 [örtük/dolaylı duygu] "klips şeffaf değil siyah (resimde şeffaf)": resimle kıyas; YENİ 0.89 pozitif | ürün faydalı fakat güneşliğe takılan klips şeffaf değil siyah ,cam tutucuları zayıf  kullanımda düşü
+  val listesi:
+    4054 satici:pozitif p_yeni 0.18 p_eski 0.91 [olumsuzlama/ironi] "herhangi bir parça eksiği yoktu" (eksik yok = iyi); YENİ 0.18 | ürün 2 gün i̇çi̇nde eli̇me ulaşti. herhangi̇ bi̇r parça eksi̇ği̇ yoktu. fi̇yatina göre güzel bi̇r ür
+    4168 performans:pozitif p_yeni 0.09 p_eski 0.50 [başka konunun duygusu] "mıknatıs özelliği yüksek seviyede olması iyi" P+; küçük/az şikâyetleri baskın | 5 mm. bir düğmeden daha küçük olduğunu unutmayın. ve ürünün 10 tane olması az ancak mıknatıs özelliğ
+    4254 performans:pozitif p_yeni 0.38 p_eski 0.90 [olumsuzlama/ironi] "elektriklenme yapmıyor", "böyle bir etki görmedim": olumsuzlanmış kusurlar; YENİ 0.38 | diğer saç düzleştiriciler gibi elektriklenme yapmıyor ayrıca çoğuda saçın yağlanmasına neden oluyor 
+    5068 performans:negatif p_yeni 0.51 p_eski 0.22 [örtük/dolaylı duygu] "almayı düşünenler bir kez daha düşünmeli" dolaylı uyarı; YENİ 0.51 | sonuç olarak ürünü 4k media oynatmak için almayı düşünenler bir kez daha düşünmeli.
+    5191 fiyat:negatif p_yeni 0.76 p_eski 0.00 [olumsuzlama/ironi] "çöpe atacak paranız varsa alabilirsiniz" ironi; YENİ 0.76 | çöpe atıcak paranız varsa bunu alabilirsiniz. fabrika hataları çok , kurulum şeması yanlış vida yerl
+    5226 performans:negatif p_yeni 0.66 p_eski 0.02 [başka konunun duygusu] "telefon iyi güzel de SAR değeri çok yüksek"; YENİ olumluyu aldı (0.66) | telefon iyi güzel de sar değeri gerçekten çok yüksek 1,36, sağlığınız için bir kez daha düşünün.
+    5257 performans:pozitif p_yeni 0.48 p_eski 0.99 [başka konunun duygusu] "kalite biraz zayıf olsa da ürün kullanışlı ve hoş"; YENİ 0.48 sınırda | kalite biraz zayif olsada urun kullanisli ve hos bir urun
+  test: YENİ'nin bu çiftlerde verdiği yön — pozitif 2, negatif 6; zıt duygulu yorumdan 1 / 8
+  val: YENİ'nin bu çiftlerde verdiği yön — pozitif 3, negatif 4; zıt duygulu yorumdan 3 / 7
+
+4) ZIT DUYGULU YORUMLAR (33 yorum, 78 çift): eski 0.705 → YENİ 0.744; YENİ'nin yanlışı 20 -> başka konunun duygusu 14, örtük/dolaylı duygu 3, altın şüpheli 2, karışık 1
+  zıt duygulu çiftlerde düzelttiği 9, bozduğu 6
+
+5) GÖRKAN'IN KÖR 20'Sİ (n=20, SADECE FİKİR) — Görkan'ın verdiği her (konu, duygu) çifti: YENİ / eski / 1e
+  6103 kalite: Görkan pozitif | YENİ negatif (0.00) | eski negatif | 1e negatif | bos bi kitap okuyucuya bi sey katmaz yani okumazsaniz hic bi sey kaybetmezsiniz, kitap bitince neden okudum ki
+  6113 fiyat: Görkan pozitif | YENİ negatif (0.00) | eski negatif | 1e pozitif | çok kaliteli değil. parasına göre belki iyi olabilir. benim ihtiyaçlarımı karşılayamayacağı için geri yolluyor
+  6046 kalite: Görkan negatif | YENİ pozitif (0.67) | eski pozitif | 1e negatif | bebekler bi farkına varsın sadece, gerisini söylemeye gerek yok. bantları 3m felan ama bebekler bile çekip çık
+  6026 kalite: Görkan negatif | YENİ pozitif (0.99) | eski pozitif | 1e pozitif | hızlı kargo ve sağlam paketleme . ürün kullanışlı ve güzel yanlız biraz ses çıkarıyor onuda alt kısmın kenarla
+  6026 performans: Görkan pozitif | YENİ negatif (0.44) | eski pozitif | 1e negatif | hızlı kargo ve sağlam paketleme . ürün kullanışlı ve güzel yanlız biraz ses çıkarıyor onuda alt kısmın kenarla
+  6195 kalite: Görkan pozitif | YENİ negatif (0.00) | eski negatif | 1e — (konu yok) | bu parfümede kalıcı değil yazmışlar ya artık yorumlara bakmam bi yerde dener öyle burdan alırım.
+  YENİ–Görkan duygu uyumu: 25/31 (0.806); 1e–Görkan (1e'nin de konu verdiği çiftlerde): 19/23 (0.826)
+  karşılaştırma: YENİ–1e (aynı 20 yorum, 1e konuları): 31/36 (0.861); YENİ–1e tüm test 0.887
+
+ALTIN ŞÜPHELİ listesi (test altınına DOKUNULMADI; 2 çift):
+  6001 kalite:pozitif (macmini: Bn,Pn,Qx,Fn) | "kalitesi idare eder" ılık; macmini Qx (karışık) verdi; model geri kalan olumsuzluğu aldı | ürün çok kaba, klozet etrafını kaplıyor, ayak basamakları yan tarafta kalıyor.rahat bir oturma pozis
+  6006 performans:pozitif (macmini: Qn*) | "eldeki hissi iyi" P+ sayılmış; macmini P vermemiş (Qn*); his kalite/görünüm de olabilir | eldeki hissi iyi.  6 ayda yırtıldı.  daha kaliteli birşey alın.
+
+NOT: buradan çıkan her fikir 'test görüldü -> yeni test gerekir'. Yeni test (6000-6199) artık okunmuş sayılır.
