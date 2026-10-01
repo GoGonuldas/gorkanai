@@ -1,0 +1,210 @@
+ADIM 18 — kalibrasyon 100 (id 7000-7099) etiketleyici uyumu: fresh (taze Claude oturumu), macmini (Mac mini oturumu),
+görkan. Kıyas: Adım 17 Claude–Claude çift F1 0.903; Adım 17 kör 20'de Görkan–Claude çift F1 0.567 / 0.615.
+
+--- fresh vs macmini (100 yorum) ---
+  çift sayısı: fresh 185, macmini 187 (oran 1.01)
+  konu F1 0.946 | (konu, duygu) çift F1 0.935 | ortak konu 176, duygu uyumu 174/176 = 0.989
+  konu            fresh  macmini  ortak   kappa  duygu uyumu
+  kargo              14       14     14    1.00        14/14
+  fiyat              29       28     27    0.93        26/27
+  kalite             65       70     65    0.89        65/65
+  performans         45       41     40    0.88        39/40
+  boyut               9        8      8    0.94          8/8
+  gorunum            12       13     12    0.95        12/12
+  satici             11       13     10    0.81        10/10
+  birebir aynı etiketlenen yorum: 81/100
+  sadece fresh'nin verdiği konular: {'performans': 5, 'fiyat': 2, 'boyut': 1, 'satici': 1}
+  sadece macmini'nin verdiği konular: {'kalite': 5, 'satici': 3, 'fiyat': 1, 'performans': 1, 'gorunum': 1}
+  Q/P takası (biri Q, diğeri P demiş) olan yorum: 2
+
+--- görkan vs fresh (100 yorum) ---
+  çift sayısı: görkan 136, fresh 185 (oran 1.36)
+  konu F1 0.735 | (konu, duygu) çift F1 0.642 | ortak konu 118, duygu uyumu 103/118 = 0.873
+  konu           görkan    fresh  ortak   kappa  duygu uyumu
+  kargo              10       14     10    0.81         9/10
+  fiyat              26       29     24    0.82        19/24
+  kalite             68       65     56    0.53        53/56
+  performans         17       45     17    0.40        12/17
+  boyut               5        9      3    0.39          2/3
+  gorunum             1       12      1    0.14          1/1
+  satici              9       11      7    0.67          7/7
+  birebir aynı etiketlenen yorum: 37/100
+  sadece görkan'nin verdiği konular: {'kalite': 12, 'boyut': 2, 'satici': 2, 'fiyat': 2}
+  sadece fresh'nin verdiği konular: {'performans': 28, 'gorunum': 11, 'kalite': 9, 'boyut': 6, 'fiyat': 5, 'kargo': 4, 'satici': 4}
+  Q/P takası (biri Q, diğeri P demiş) olan yorum: 4
+
+--- görkan vs macmini (100 yorum) ---
+  çift sayısı: görkan 136, macmini 187 (oran 1.38)
+  konu F1 0.718 | (konu, duygu) çift F1 0.644 | ortak konu 116, duygu uyumu 104/116 = 0.897
+  konu           görkan  macmini  ortak   kappa  duygu uyumu
+  kargo              10       14     10    0.81         9/10
+  fiyat              26       28     24    0.85        20/24
+  kalite             68       70     57    0.44        54/57
+  performans         17       41     14    0.32        10/14
+  boyut               5        8      2    0.26          2/2
+  gorunum             1       13      1    0.13          1/1
+  satici              9       13      8    0.69          8/8
+  birebir aynı etiketlenen yorum: 37/100
+  sadece görkan'nin verdiği konular: {'kalite': 11, 'boyut': 3, 'performans': 3, 'fiyat': 2, 'satici': 1}
+  sadece macmini'nin verdiği konular: {'performans': 27, 'kalite': 13, 'gorunum': 12, 'boyut': 6, 'satici': 5, 'fiyat': 4, 'kargo': 4}
+  Q/P takası (biri Q, diğeri P demiş) olan yorum: 5
+
+BEKLENTİYLE KIYAS (PLAN.md madde 4, önceden):
+  fresh–macmini: çift F1 0.935 (beklenti 0.88-0.92 → ÜSTÜNDE); ortak konuda duygu uyumu 0.989; kappa kalite 0.89, performans 0.88
+  görkan–fresh: çift F1 0.642 (beklenti 0.60-0.70 → aralıkta); ortak konuda duygu uyumu 0.873 (beklenti ~0.85); kappa kalite 0.53, performans 0.40 (beklenti Q/P < 0.4)
+  görkan–macmini: çift F1 0.644 (beklenti 0.60-0.70 → aralıkta); ortak konuda duygu uyumu 0.897 (beklenti ~0.85); kappa kalite 0.44, performans 0.32 (beklenti Q/P < 0.4)
+
+GÜNDEM — Görkan iki Claude'dan da ayrışıyor, iki Claude kendi arasında birebir aynı: 48 yorum
+  (id | görkan | fresh = macmini | metin)
+  7001 | Fp,Qp          | Qp,Pp          | çok pahalı ürünler almaya gerek yok. bu ürün gerçekten kaliteli ve rahat. uyumanın tadını bu ürünle aldım. tavsiyem yazın alez kullanmanız. 4 ay önce buradan aldım. tavsiye ederim.
+  7003 | 0              | Pp             | bazi arkadaşlar kokuyordu balkonda bekletti̇k halen kokuyordu demi̇ş ben i̇ki̇ tane aldim ama hi̇ç koku almadim
+  7005 | 0              | Pn             | telefon ithalatçı garantili olduğundan çince açılıyor ve aparatlar çin'e göre ayarlı. aparat dönüştürücü ve türkçeye geçerken biraz destek lazım.
+  7007 | Qp             | Pn*,Sp,Gp,Qp   | fayansınız düz ise vakum başarılı, bizim fayansımızda hafif tırtık olduğundan vakum tutmadı ancak vialama aparatıda yedekte gönderildiği için vakum kullanmak zorunda olmamak güzel. ürün şık ve iş görüyor.
+  7009 | Kp,Fp,Qp,Sp    | Kp,Fp,Gp,Sp    | ürün elime gün içerisinde ulaştı. ürün fiyatına göre güzel ve şık almak isteyen herkese tavsiye ederim ayrıca yanında cam kavanoz içerisinde not katığı olan sürprizi de harikaydı ürünü tedarik eden firma yetkililerine teşekkür ediyorum.
+  7010 | Qn             | Qn,Sp          | ne yazıkki artık bezinizi almayacağım. çünkü sürekli sızdırma problemi oldu. i̇lk sızdırdığında bildirdim firmaya döndüler hemen yeni bezde gönderdiler ama bi şey değişmedi. artık prima kullanmayacağım. eski hali daha iyiydi bu bezin ilgililere duyurun lütfen.
+  7011 | Fp,Qn          | Qn,Fn          | ucuz diye aldım. ucuz etin yahnisi oldu. ürün kalitesiz. ilk yolculuğumda fermuarı bozuldu. açılmasın diye bavul kemelerleri falan aradım gittiğim yerde. aynı fiyata mercan yokuşundan bi tane aldım. ikisi arasında bariz kalite farkı var.
+  7013 | Qn             | Pn,Qn          | buradaki yorumlara bakarak aldım bu ürünü ama yazıklar olsun.fırçayı düşük ayarda 2 saniye yüzüme sürdüm tüm gün batma hissi devam etti.sanki yüz fırçası değil ayak törpüsü asla tavsiye etmem.
+  7015 | Qn             | Pn,Qn          | hiç beğenmedim çok fazla ses çıkarıyor. hepsinde mi böyle bilmiyorum. sabah çay için su ısıtıyordum o kadar ses çıkartıyor ki nerdeyse bütün apartmanı uyartacak hemen kapatmak zorunda kaldım hiç memnun değilim iade etmeye çalışıyorum.
+  7016 | Fp             | Fp,Kx          | hiç düşünmeden alın bu fiyata kaçmaz 2 gunde teslim
+  7017 | Qn             | Qn,Gn          | ürün çok kötü aldığıma pişman oldum ayakları basit duruyor lamba takılan siyah yeri ve aitındaki beyaz halkası görünüyor hiç beğenmedi tavsiye etmem.
+  7020 | Qp             | Pp,Gp          | bütün özellikleri çalışıyor benim için önemli olan buydu şık saat hem takım elbiseyle hem spor elbiseyle kullanılabilir. alana hayırlı olsun.
+  7021 | Fp             | Qn,Gp,Fx       | tablonun alt kısmındaki tahtanın çıkıntılı olması resimde potluk oluşturmuş.renklerin canlılığı iyi fiyatına göre normal.
+  7024 | Pp             | Pn*,Fp,Bp      | ses tatminkar fakat aracımda role olmasına rağmen sigorta attı. ikinci bir role iş görmez denildi ve bu yüzden uzun süre basamıyorum. bunun haricinde çok ekonomik 2004 corollaya taktırdım yer konusunda da problem çıkarmıyor.
+  7026 | Fp             | Fp,Qp          | bu fiyata bunu bulmanız çok zor eğer evinizde çalışmak istiyorsanız ihtiyacınız olan şey bu ama çalışmadan önce silerseniz iyi olur
+  7027 | Qp,Pp          | Pp*            | evde kullanımı rahat olmasıyla beraber her kapıya uymayabilir..mutfağın hemen karşındaki kapıya taktım ki mutfağa her gittiğimde beni uyarsın yediklerime dikkat etmem gerektiği mesajını versin diye sizde deneyebilirsiniz bu taktiği..girmeden 3-4 tane barfiks çekmeye çelışıp mutfakta fazla oyalanmanızı engelliyor...sağlık dolu günlere..
+  7030 | Pn             | Pn,Gp          | zil sesi çocuğumun ilgisini hiç çekmedi. sadce görüntüsüyle ilgilendi. almazsanızda olur.
+  7033 | Qn             | Pn             | yuksek hizda kullanirken titredim yaptigi icin eli rahatsiz ediyor
+  7034 | Qn             | Qn,Pn          | marka iyi ama urun.hic iyi degil hic tavsiye etmiyorum 2500 mah alin ayni hicbir fark yok
+  7035 | Qp             | Qp,Pp          | mukemmel bir urun.yazmiyor ama pilli kornasi bile var :)
+  7038 | Fp,Qp          | Gp,Fp          | ben odamdaki spotlara aldım ve gayet şık oldu...fiyatına göre alınabilecek en iyi led lamba diyebilirim...
+  7039 | Kp,Qp          | Kp,Pp,Gp,Qp    | ürün 1 günde elimdeydi. orijinallik testi olumlu. cebimde telefonumla üst üste şarj edebiliyorum. çok zarif ve kullanışlı. gören dostlarım bayılıyor. 2100 mahlik telefonum için fazlasıyla yeterli. şarjım artık bitmiyor. çok memnunum. tavsiye ederim.
+  7040 | Qp             | Qp,Pp          | arkadaşlar alalı 20-25 gün oldu herşeyi ile mükemmel bir alet.temizliğide kolay.torbalı süpürgeleri çalıştırınça kokan toz olayıda yok.i
+  7042 | Qp             | Qp,Pn          | arkadaşlar ürünün kalitesine diyecek yok. gerçekten kaliteli ve kullanışlı. ancak bu menteşe ayarını ben de bir türlü yapamadım. siz de benim gibi bir mobilyacı çağırıp kapakları bir ustaya monte ettirin.
+  7046 | Qp             | Qp,Pp          | sağlam ürün suda da iyi pilli olması avantaj şarjlı gibi çalışıyor
+  7047 | Kp,Sp          | Fp,Sp,Kp       | en uygun fi̇yat ve garanti̇si̇ teyi̇t edi̇ldi̇ hizli kargolandi ürün anlatildiği gi̇bi̇ orji̇nal ve hasarsiz geldi̇ . teşekkürler hepsi̇ burada eki̇bi̇ ve satici fi̇rma
+  7048 | Qn             | Qn,Fn          | kalitesiz alalı birkaç ay olmasına rağmen hemen parça pinçik oldu. fiyatını kesinlikle haketmiyor başka bir ürüne bakın.
+  7049 | Bp             | Gp,Pp          | ekran hafif kavisli, bu ekranına baktığınızda daha büyük gözükmesini sağlıyor. elinize ise iyi oturuyor.
+  7051 | Kp             | Kp,Qp          | aynı gün kargo ile sabah 11 de verdim siparişi akşamı 11 civarında elime ulaştı teşekkürler çok memnun kaldım
+  7052 | Bp             | Pp,Qp          | çok rahat eşim kullanıyor çok memnun tavsiye ederim
+  7053 | Fn,Qn          | Fn,Qn,Pn       | fiyata göre kalite yetersiz kurulum zaten çok uzun sürüyor
+  7055 | Fp             | Bx,Fp          | ayakkabı numaranızdan 1 küçük numarayı alabilirsiniz ve bu fiyata da kaçırmayın derim.
+  7056 | Qp,Sn          | Sn             | kitabı henüz aldım . eminim güzel bir hikayedir. ancak hepsiburadanın hizmetinden en ufak memnuniyet duymadım. sipariş ilişkim bittikten sonra asla alışveriş yapmayacağım ve yaşadığım ilgisizliği ulaşabildiğim herkese anlatacağım.
+  7057 | Qn,Pp          | Pn*,Qn         | üründen terletme işlevini gayet başarılı şekilde yerine getiriyor fakat üründen yanmış plastik kokusu gibi bir koku geliyor, defalarca yıkandı ve koku kaybolmadı.beğenmedim.
+  7058 | Fp,Qp,Pp       | Pp,Fp          | 1-bütün tozları suyun içinde görebilirsiniz.diğer makinalardaki gibi tozun yerini değiştirmek zorunda değilsiniz.bu fiyata bence çok makullll
+  7059 | Sp             | Kp,Qp,Sp*      | i phone 7 aldım, ertesi gün elime geçti. üründe sorun yoktu, güzel paketlenmişti. faturada ufak bir hata vardı ama firmayı aradığımda çok ilgilendiler ve hemen düzelttiler. gönül rahatlığıyla alış veriş yapılabilir.
+  7062 | Fp,Qn,Pn       | Pp,Fp,Bn,Qn    | ürün bu sabah elime geçti.kurulumu çok basit ve fiyatı da çok iyi.ancak oturulan sünger çok ince.plastik aksamı güven vermiyor.ve eğer biraz kiloysanız sığmakta güçlük çekebilirsiniz.
+  7065 | Qn             | Pn,Qp          | çok kokuyor ürün güzel fakat gunlerdir bankonda kokusu bi gitmiyo nolcak bilmiyorum
+  7071 | Qp             | Pn             | hiç düşünmeden almanızı tavsiye ederim keşke bataryası değiştirebilinseydi
+  7075 | Qp             | Qp,Bn          | alabileceğiniz en kaliteli ürün.kenarlarda boşluklar kalıyor ama hepsi bu şekilde.en azından güvenle kullanabileceğiniz kaliteli bir ürün.
+  7080 | Pp             | Qp,Pn          | dambil kendi  sahsim olarak   5 kg lik aldim  gayet iyi   kum sesi geliyorr o ayri
+  7088 | Kn,Fp,Qp       | Kx,Qp,Fp       | ürünü siteden istedim.yaklaşık 5 günde elime ulaştı.kokusunu biliyordum zaten.çok güzel bir parfüm.ama esmerlere daha çok yakışıyor.daha çok kışın kullanılacak bir parfüm bence.hem şimdi %12 indirimli.fiyatıda piyasaya göre gayet uygun.
+  7089 | Fp,Sp          | Fp,Qp          | hepsiburda aracılığı ile aldıgım ürün piyasa fiyatlarına göre gayet uygun fiyatlı ürün. yanında hediye ürün de olması dikkat cekici. fairy zaten tartışılmaz bir marka. teşekkürler hepsiburda.
+  7091 | 0              | Pn             | m9, z3+ ve s6larda cortex a53 ve a57lerden dörder tane var. ramler aynı ama g4te cortex a57 iki tane... onlarda snapdragon 810 ve exynos 7420 çip var. g4te sd808 var. g3e kadar lg çok güzel gelmişti. sanırım artık buraya kadar.
+  7092 | 0              | Qn             | devamli kullanicaginiz ev icin uygun degil yazliklarda veya köy evlerinde kullanilabilir.
+  7096 | Qp,Fp          | Pp,Qn,Fp       | makine elime ulaşır ulaşmaz hemen kullandım motoru gayet güçlü ama torna vida uçları yumuşak malzemeden yapılmış. fiyatına göre iyi sayılır..
+  7097 | Qn,Fn          | Gp,Qp*,Pp,Fp   | renkleri canlı ve parlak ahşap olmasıni isterdim ama plastiği de gayet kaliteli çıkardığı ses çok hoşuna gidiyor oğlumun.fiyatına gore çok iyi küçük parçalar içermiyor
+  7099 | Qp             | Bp,Pp,Qp       | bu üründen 2 yıldır kullanıyorum. gerek uzunluğu gerekse tutuş rahatlığıyla şerit siliciler içinde favorim. almayı düşünenlere tavsiye ederim.
+
+İKİ CLAUDE BİRBİRİNDEN AYRIŞIYOR: 19 yorum; üçü birebir aynı: 33
+
+TÜM ETİKETLER (id | görkan | fresh | macmini):
+  7000 | Qn             | Qn,Fn            | Qn
+  7001 | Fp,Qp          | Qp,Pp            | Qp,Pp
+  7002 | Fp,Kp,Qp,Sp    | Fp,Qp,Kp,Sp      | Kp,Fp,Qp,Sp
+  7003 | 0              | Pp               | Pp
+  7004 | Qp,Pp          | Qp,Pp            | Qp
+  7005 | 0              | Pn               | Pn
+  7006 | Qn,Pn          | Qn,Pn            | Qn,Pn
+  7007 | Qp             | Pn*,Sp,Gp,Qp     | Pn*,Sp,Gp,Qp
+  7008 | Sp             | 0                | Sp,Fp
+  7009 | Kp,Fp,Qp,Sp    | Kp,Fp,Gp,Sp      | Kp,Fp,Gp,Sp
+  7010 | Qn             | Qn,Sp            | Qn,Sp
+  7011 | Fp,Qn          | Qn,Fn            | Qn,Fn
+  7012 | Qn             | Qn               | Qn
+  7013 | Qn             | Pn,Qn            | Qn,Pn
+  7014 | Qp,Bn          | Qp,Bn            | Qp,Bn
+  7015 | Qn             | Pn,Qn            | Pn,Qn
+  7016 | Fp             | Fp,Kx            | Fp,Kx
+  7017 | Qn             | Qn,Gn            | Qn,Gn
+  7018 | Qn             | Qn               | Qn
+  7019 | Pn             | Pn               | Pn
+  7020 | Qp             | Pp,Gp            | Pp,Gp
+  7021 | Fp             | Qn,Gp,Fx         | Qn,Gp,Fx
+  7022 | Kp,Fp,Qp       | Kp,Qp,Fp         | Kp,Qp,Fp
+  7023 | Pp             | Pn*              | Qn*
+  7024 | Pp             | Pn*,Fp,Bp        | Pn*,Fp,Bp
+  7025 | Fp             | Fx,Qp,Gp,Kx      | Fp,Qp,Gp,Kx
+  7026 | Fp             | Fp,Qp            | Fp,Qp
+  7027 | Qp,Pp          | Pp*              | Pp*
+  7028 | Qp             | Qp               | Qp
+  7029 | Qp             | Qp*              | Qp*
+  7030 | Pn             | Pn,Gp            | Pn,Gp
+  7031 | Qn             | Qn               | Qn
+  7032 | 0              | 0                | Qn
+  7033 | Qn             | Pn               | Pn
+  7034 | Qn             | Qn,Pn            | Qn,Pn
+  7035 | Qp             | Qp,Pp            | Qp,Pp
+  7036 | Qp             | Qp               | Qp
+  7037 | Qn             | 0                | Sn
+  7038 | Fp,Qp          | Gp,Fp            | Gp,Fp
+  7039 | Kp,Qp          | Kp,Pp,Gp,Qp      | Kp,Qp,Pp,Gp
+  7040 | Qp             | Qp,Pp            | Qp,Pp
+  7041 | Kn,Qn          | Kn,Qn            | Kn,Qn
+  7042 | Qp             | Qp,Pn            | Qp,Pn
+  7043 | Qp             | Qp               | Qp
+  7044 | Qn,Pn          | Kn,Pn            | Kn,Qn
+  7045 | Fp,Qp          | Fp,Bp,Sn         | Fp,Bp,Gp,Sn
+  7046 | Qp             | Qp,Pp            | Qp,Pp
+  7047 | Kp,Sp          | Fp,Sp,Kp         | Fp,Sp,Kp
+  7048 | Qn             | Qn,Fn            | Qn,Fn
+  7049 | Bp             | Gp,Pp            | Gp,Pp
+  7050 | 0              | 0                | 0
+  7051 | Kp             | Kp,Qp            | Kp,Qp
+  7052 | Bp             | Pp,Qp            | Pp,Qp
+  7053 | Fn,Qn          | Fn,Qn,Pn         | Fn,Qn,Pn
+  7054 | Qp             | Qp               | Qp
+  7055 | Fp             | Bx,Fp            | Bx,Fp
+  7056 | Qp,Sn          | Sn               | Sn
+  7057 | Qn,Pp          | Pn*,Qn           | Pn*,Qn
+  7058 | Fp,Qp,Pp       | Pp,Fp            | Pp,Fp
+  7059 | Sp             | Kp,Qp,Sp*        | Kp,Sp,Qp
+  7060 | Kp             | Kp               | Kp
+  7061 | Qp             | Qp               | Qp,Pp
+  7062 | Fp,Qn,Pn       | Pp,Fp,Bn,Qn      | Pp,Fp,Bn,Qn
+  7063 | Qn             | Qn               | Qn
+  7064 | Qp             | Qp               | Qp
+  7065 | Qn             | Pn,Qp            | Pn,Qp
+  7066 | Fp,Qn          | Pn,Qn            | Qn
+  7067 | Qp,Sp          | Qp,Sp            | Qp,Sp
+  7068 | Qp,Bp          | Pp,Qp,Bx         | Pp,Qp
+  7069 | Fn,Qp          | Fn,Qp            | Fn,Qp
+  7070 | Fp             | Fx               | Qp,Fx
+  7071 | Qp             | Pn               | Pn
+  7072 | Qp,Sn          | Qp,Sn            | Qp,Sn
+  7073 | Qp             | Px               | Pn
+  7074 | Qn             | Qn               | Qn
+  7075 | Qp             | Qp,Bn            | Qp,Bn
+  7076 | Qn,Bn          | Bn,Qn            | Qn,Bn
+  7077 | Qn             | Qn               | Qn
+  7078 | 0              | Pn               | Pn,Sn
+  7079 | Qp             | Qp               | Qp
+  7080 | Pp             | Qp,Pn            | Qp,Pn
+  7081 | Fp,Qp,Pp       | Qp,Pp,Fp         | Qp,Pp,Fp
+  7082 | Qn             | Qn,Fn            | Qn
+  7083 | Pp             | Sp,Pp            | Pp
+  7084 | Fp             | Fp               | Fp
+  7085 | Qn             | Qn               | Qn
+  7086 | Fp,Pn          | Fp,Pn            | Fp,Pn
+  7087 | Qn             | Qn,Pp            | Qn*
+  7088 | Kn,Fp,Qp       | Kx,Qp,Fp         | Kx,Qp,Fp
+  7089 | Fp,Sp          | Fp,Qp            | Fp,Qp
+  7090 | 0              | 0                | Qp
+  7091 | 0              | Pn               | Pn
+  7092 | 0              | Qn               | Qn
+  7093 | Pp             | Pp               | Pp
+  7094 | Kp,Gp,Pp,Fp    | Kp,Gp,Pp,Fp      | Kp,Gp,Pp,Fp
+  7095 | Qp             | Qp               | Qp
+  7096 | Qp,Fp          | Pp,Qn,Fp         | Pp,Qn,Fp
+  7097 | Qn,Fn          | Gp,Qp*,Pp,Fp     | Gp,Qp,Pp,Fp
+  7098 | Qp             | Qp               | Qp
+  7099 | Qp             | Bp,Pp,Qp         | Bp,Pp,Qp
