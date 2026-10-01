@@ -677,11 +677,57 @@ kelime eşleşmesini modele özellik olarak vermek); (b) nadir konular için kon
 (c) Q/P tanımına "kitap/içerik" ve "işe yarama" için açık örnekler ekleyip iki etiketleyiciyle yeniden uyum ölçmek;
 (d) eşiği düşürmek (20 FN eşiğin hemen altında) — bu doğrudan teste bakarak ayar olur, yeni val + yeni test ister.
 
-## Yapılacaklar (2026-09-30'da güncellendi)
+## Adım 17: Konuya koşullu duygu modeli — TEST ÖLÇÜLDÜ (2026-10-01)
+Plan: `step17_aspect_sentiment/PLAN.md`. Dondurulan (`frozen_config.json`): v2b başlangıcı, epoch 8, tohum 0/1/2
+olasılık ortalaması; konu modeli Adım 16 (dondurulmuş). Test, Görkan'ın onayıyla (gorkanai-8f üzerinden) Mac mini'de
+**bir kez** koşturuldu: `python step17_aspect_sentiment/evaluate.py test` → `log_test.txt`, olasılıklar
+`test17_probs.npz`, `test15_sent_probs.npz`. Öncesinde iki altın dosyasının sha256'sı `frozen_config.json` ile
+eşleşti; hiçbir ayar, eşik ya da kod değişmedi, tekrar koşturma yok.
+
+**Ana sonuç — (i) altın konularla duygu doğruluğu, micro, yeni test, gorkanai-1e altını (363 çift):**
+eski hat **0.868** → YENİ **0.887**, fark **+0.019 [−0.016, +0.054]** (eşleştirilmiş bootstrap, 2000, tohum 17).
+**Aralık 0'ı içeriyor → başarı ölçütü karşılanmadı: fark yok (gürültüden ayrılamıyor).** Pratik tavan 0.967.
+
+**Test öncesi güncellenmiş beklentiyle (PLAN.md sonu) kıyas:**
+| Ölçü (yeni test, 1e altını) | Güncel beklenti | Sonuç | |
+|---|---|---|---|
+| (i) micro farkı | +1 ile +3 puan, aralık büyük olasılıkla 0'ı içerir | +1.9, aralık 0'ı içeriyor | tuttu |
+| (ii) uçtan uca micro farkı | 0 ile +2 puan | 0.706 → 0.720, +0.015 [−0.013, +0.043] | tuttu |
+| Zıt duygulu alt küme | kazanç beklenmiyor | 0.705 → 0.744 (78 çift) | beklenenden iyi, n küçük |
+| Örtük çiftler | küçük kötüleşme olası | 0.874 → 0.849 (119 çift) | tuttu |
+| Eski test uçtan uca | 0.697 → 0.69-0.72 | 0.697 → 0.723 | üst sınırın hemen üstü |
+| Konu F1 micro (Adım 16 BERT) | ~0.80-0.83 | 0.802 | alt sınırda |
+
+İlk beklenti (PLAN madde 6) "(i) aralığı büyük olasılıkla 0'ı dışlar" diyordu; bu tutmadı — val sonrası güncellemenin
+doğru yönde olduğu testte de görüldü. Nokta tahmini (0.887) ilk beklentinin 0.86-0.90 aralığında.
+
+**İkincil satırlar (ana iddia değil):**
+- Yeni test, bu oturumun (macmini) altını: 0.867 → 0.902, +0.035 [+0.000, +0.069] — sınırda, 0'ı içeriyor.
+- Yeni test, iki altının ortak çiftleri (320): 0.887 → 0.922, +0.034 [+0.003, +0.068] — 0'ı dışlıyor.
+- Eski test (Adım 15; hataları okunmuştu, iyimser olabilir): 0.858 → 0.891, +0.033 [+0.003, +0.063] — 0'ı dışlıyor;
+  uçtan uca +0.026 [+0.000, +0.052].
+- Birleşik 400 (yeni 1e + eski): +0.026 [+0.004, +0.049], uçtan uca +0.020 [+0.001, +0.039] — ikisi de 0'ı dışlıyor.
+  Bu satır önceden ikincil olarak tanımlanmıştı; ana sonucun yerine geçmez.
+- Görkan'ın kör 20'si (31 çift): 0.774 → 0.806, +0.032 [−0.062, +0.160] — sadece fikir verir.
+
+Okuma: farkın yönü bütün satırlarda aynı (+2 ile +3.5 puan) ve yeni model hiçbir altında kötüleşmiyor; ama önceden
+seçilen ana ölçü (1e altını, yeni test) gürültüden ayrılamıyor. Kayda geçen sonuç **"fark yok"**. Diğer altınlardaki
+0'ı dışlayan aralıklar sonradan ana iddiaya terfi ettirilmez (eski test görülmüş, ortak çiftler/birleşik ikincil).
+
+**Ek rapor (önceden planlanmamış) — konu tespiti bloğu:** `evaluate.py`'ye bu blok (anahtar kelime çizgisi, kelime
+tutmayan çiftlerde recall, bootstrap) dondurmadan SONRA, test ölçülmeden önce eklendi (commit 30e8f6b); duygu modelinden
+bağımsız, ayar içermiyor. Yeni test 1e altınında: anahtar kelime V2 F1 micro 0.712 → BERT (Adım 16) **0.802**,
+fark +0.090 [+0.051, +0.131] (0'ı dışlıyor); kelime tutmayan 119 çiftte BERT recall 0.504 (anahtar kelime 0).
+Macmini altınında +0.095 [+0.056, +0.134], eski testte +0.048 [+0.009, +0.089]. Bu, Adım 16 konu modelinin ilk temiz
+(görülmemiş testte) ölçümü; satıcıda BERT anahtar kelimeden kötü kalmaya devam ediyor (0.36 → 0.33).
+
+Hata kovaları başlamadı (ayrı onay gerekiyor).
+
+## Yapılacaklar (2026-10-01'de güncellendi)
 
 0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (16.1-16.5, yukarıda).
-   **Adım 17: konuya koşullu duygu modeli — PLAN AŞAMASINDA** (`step17_aspect_sentiment/PLAN.md`, Görkan'ın onayı
-   bekleniyor; kod/eğitim başlamadı). Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
+   **Adım 17: konuya koşullu duygu modeli — TEST ÖLÇÜLDÜ** (yukarıda; ana sonuç "fark yok"). Sırada (ayrı onayla):
+   Adım 17 hata kovaları. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
    `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
