@@ -1,0 +1,5 @@
+ADIM 18 — set seçimi. Aday havuzu: {'pozitif': 139841, 'negatif': 602}
+kalibrasyon: 100 (id 7000-7099) {'negatif': 50, 'pozitif': 50} -> calib_set.csv, calib_gorkan_01..04.csv
+ana test   : 500 (id 8000-8499) {'negatif': 250, 'pozitif': 250} -> test18_set.csv, test18_batch_01..10.csv
+kalan negatif havuz: 302
+sızıntı kontrolleri geçti (check_no_leak + Adım 16 + Adım 17 test + kalibrasyon/test çakışması)
