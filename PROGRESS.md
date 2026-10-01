@@ -846,13 +846,53 @@ test değil (ileride val/eğitim olabilir).
   İkisinin yüksek uyumu bu farkın küçük olduğunu düşündürüyor.
 - Tek insan, n=100.
 
+### Adım 18 (2b + 5): ana test 500 — etiketleme ve ölçüm 1-3 (2026-10-01)
+**Etiketler:** ana altın taze oturum (`test18_fresh.csv`), ikinci altın bu oturum (`test18_macmini.csv`); ikisi birbirini
+görmeden, donmuş `LABEL_RULES.md` ile. sha256'lar `step18_big_test/frozen_test.json`'da. İki altının uyumu (sadece toplu,
+`log_test_agreement.txt`): konu F1 0.966, çift F1 0.935, ortak konuda duygu uyumu 0.968 ((i)'nin pratik tavanı), konu
+başına kappa 0.87-0.99. Ana altında 43 nötr çift (%4.7) iki hat için de ulaşılamaz.
+
+**Ölçüm:** `step18_big_test/evaluate.py` (Adım 17 `report()` aynen; bootstrap 2000/tohum 17, konu tohum 16; başta bütün
+sha256'lar assert edildi). Önce kalibrasyon 100'de kuru çalıştırma (`log_calib_dryrun.txt`, kod kontrolü), sonra Görkan'ın
+onayıyla ana testte **bir kez** (`log_test.txt`, `test18_probs.npz`). Hiçbir ayar/kod değişmedi.
+
+**ANA İDDİA — (i) altın konularla duygu doğruluğu micro, fresh altını, 917 çift:** Adım 15 hattı **0.862** → Adım 17
+duygu modeli **0.896**, fark **+0.035 [+0.016, +0.054]** — **aralık 0'ı DIŞLIYOR: Adım 17 modeli kazandı.**
+(Adım 17'nin 200'lük testinde aynı fark +0.019 [−0.016, +0.054] idi, "ayırt edilemez"; 500'lük test aralığı ±0.019'a indirdi.)
+
+| Ölçüm (ana altın) | Beklenti (PLAN madde 4) | Sonuç | |
+|---|---|---|---|
+| 1. (i) micro farkı | +1 ile +3; 0'ı dışlama ~yarı yarıya | +0.035 [+0.016, +0.054] | dışladı; nokta beklentinin hemen üstünde |
+| 2. konu F1 micro, BERT − kelime | +0.06 ile +0.09, 0'ı dışlar | 0.753 → 0.815, +0.062 [+0.035, +0.087] | tuttu |
+| 3. (ii) uçtan uca micro farkı | +1 ile +2.5, dışlamayabilir | 0.701 → 0.730, +0.029 [+0.012, +0.046] | dışladı; nokta beklentinin biraz üstünde |
+
+**Alt kümeler (ana altın, (i)):** zıt duygulu çiftler (128) 0.695 → **0.812** (+11.7); tek duygulu 0.888 → 0.910; örtük
+(273) 0.894 → 0.919 (Adım 17 testinde ve val'de örtükte görülen kötüleşme burada TEKRARLAMADI); açık 0.848 → 0.887; nötr
+hariç 0.904 → 0.941. Konu başına (i): yedi konunun hepsinde YENİ ≥ eski. Ayrışan 93 çiftin 55'inde YENİ, 23'ünde eski doğru.
+**Konu tespiti (ölçüm 2) konu başına F1, kelime → BERT:** kargo 0.85→0.93, fiyat 0.96→0.95, kalite 0.75→0.82, performans
+0.70→0.77, boyut 0.66→0.77, görünüm 0.63→0.77, **satıcı 0.43→0.17** (BERT satıcıda belirgin kötü; Adım 16-17'deki işaret
+burada daha net). macro 0.710 → 0.741. Kelime tutmayan 273 çiftte BERT recall 0.535.
+
+**İkincil satırlar (ana iddiaya terfi yok):** macmini altını (i) +0.040 [+0.020, +0.059], (ii) +0.031 [+0.013, +0.048],
+konu +0.061 [+0.036, +0.086]; iki altının ortak çiftleri (865) (i) 0.881 → 0.919, +0.038 [+0.018, +0.058]. Hepsi aynı yönde
+ve 0'ı dışlıyor.
+
+**Okuma:** Adım 17'nin "fark yok"u bir güç sorunuymuş: aynı model, aynı kurallar, 2.5 kat büyük ve okunmamış testte
++3.5 puan ve aralık 0'ı dışlıyor. Kazancın en büyüğü modelin hedefi olan zıt duygulu yorumlarda. Ama: (a) altınlar yine
+Claude etiketi (insan çapası kalibrasyonda Görkan–Claude çift F1 0.64); "kazandı" = "Claude'un kurallarına göre okumada
+kazandı". (b) 17.5'teki "örtükte kötüleşme" bulgusu bu testte tekrarlamadı — o bulgu küçük n'nin gürültüsü olabilir.
+(c) Uçtan uca 0.73'te tavanı belirleyen artık konu tespiti (konu F1 0.815; satıcı çok zayıf).
+
+**Kasa:** hata kovası yapılmadı, yorum bazlı çıktı üretilmedi. **Bu test 3 karşılaştırma harcadı (ölçüm 1-3); en fazla 1
+hak kaldı** (PLAN madde 3.4: sonraki bir model, kendi planıyla, bir kez). Sonra test emekliye ayrılır.
+
 ## Yapılacaklar (2026-10-01'de güncellendi)
 
 0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (16.1-16.5, yukarıda).
    **Adım 17: konuya koşullu duygu modeli — TEST ÖLÇÜLDÜ** (yukarıda; ana sonuç "fark yok"); 17.5 hata kovaları
    yapıldı, yeni test artık okunmuş.
-   **Adım 18: büyük temiz test** — seçim + kalibrasyon yapıldı, kurallar donduruldu (yukarıda). Sırada: ana test 500'ü
-   önce taze oturum, sonra Mac mini etiketler → sha256 dondurma → DUR → (onay) ölçüm 1-3. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
+   **Adım 18: büyük temiz test** — TAMAMLANDI: ölçüm 1-3 yapıldı (ana iddia (i) +0.035 [+0.016, +0.054], 0'ı dışlıyor).
+   Ana test 500'de 1 karşılaştırma hakkı kaldı. Sonraki adım için ayrı plan + onay gerekiyor. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
    `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
