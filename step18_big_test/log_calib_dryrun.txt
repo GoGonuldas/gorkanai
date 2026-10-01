@@ -1,0 +1,54 @@
+ADIM 18 — KURU ÇALIŞTIRMA — kalibrasyon 100 (okunmuş küme; sadece kod kontrolü)
+donmuş: Adım 16 konu (epoch 12, eşik 0.60, tohum 0/1/2), Adım 17 duygu {"init": "v2b", "epoch": 8, "seeds": [0, 1, 2]}; Adım 15 hattı (bölme A + V2b, nötr kapalı). frozen_test.json sha256'ları doğrulandı.
+KASA: yorum bazlı çıktı yok; sadece toplu sayılar.
+
+BEKLENTİ (PLAN.md madde 4, ölçümden ÖNCE yazıldı):
+  ölçüm 1: fark +1 ile +3 puan; aralık ±0.022 → 0'ı dışlama olasılığı yaklaşık yarı yarıya
+  ölçüm 2: BERT − kelime +0.06 ile +0.09, aralık 0'ı dışlar
+  ölçüm 3: +1 ile +2.5 puan, 0'ı dışlamayabilir
+
+=== ANA — fresh altını (ölçüm 1 = (i) micro ANA İDDİA; ölçüm 2 = KONU TESPİTİ; ölçüm 3 = (ii)): 100 yorum, 185 altın çift (nötr 9, karışık 8; zıt duygulu yorum 17) ===
+(i) altın konularla duygu doğruluğu         micro   macro  karisik=0  nötr hariç  zıt duyg.  tek duyg.   örtük    açık
+  eski hat                               0.816   0.774      0.831       0.858      0.619      0.874   0.852   0.802
+  YENİ                                   0.865   0.823      0.870       0.909      0.762      0.895   0.852   0.870
+  (alt küme çift sayıları)                 185                177         176         42        143      54     131
+  konu başına (eski → YENİ, n): kargo 0.71→0.79 (14), fiyat 0.79→0.83 (29), kalite 0.95→0.95 (65), performans 0.69→0.82 (45), boyut 0.44→0.56 (9), gorunum 0.92→1.00 (12), satici 0.91→0.82 (11)
+  iki hattın anlaşmadığı çift: 21 (YENİ doğru 14, eski doğru 5)
+(ii) uçtan uca çift F1 (Adım 16 konuları, eşik 0.6): eski hat micro 0.650 macro 0.607 | YENİ micro 0.689 macro 0.663
+     KONU TESPİTİ (Adım 16 modeli dondurulmuş; duygudan bağımsız):
+       anahtar kelime V2    P 0.771 R 0.708 F1 micro 0.738 macro 0.708 | kelime tutmayan çiftlerde R 0.000 (n=54)
+       BERT (Adım 16)       P 0.819 R 0.735 F1 micro 0.775 macro 0.738 | kelime tutmayan çiftlerde R 0.574 (n=54)
+       konu başına F1 (kelime → BERT, n): kargo 0.84→0.90 (14), fiyat 0.90→0.87 (29), kalite 0.68→0.80 (65), performans 0.76→0.68 (45), boyut 0.48→0.67 (9), gorunum 0.77→0.88 (12), satici 0.53→0.38 (11)
+       bootstrap BERT − kelime, konu F1 micro: +0.037 [-0.016, +0.092] 0'ı içeriyor
+(iii) eşleştirilmiş bootstrap (2000, tohum 17), YENİ − eski hat, %95 aralık:
+  (i) micro doğruluk      +0.049  [+0.005, +0.098]  0'ı DIŞLIYOR
+  (ii) uçtan uca micro    +0.040  [+0.000, +0.080]  0'ı içeriyor -> gürültüden ayrılamıyor
+
+=== İKİNCİL — macmini altını: 100 yorum, 187 altın çift (nötr 6, karışık 7; zıt duygulu yorum 16) ===
+(i) altın konularla duygu doğruluğu         micro   macro  karisik=0  nötr hariç  zıt duyg.  tek duyg.   örtük    açık
+  eski hat                               0.840   0.785      0.856       0.867      0.634      0.897   0.877   0.823
+  YENİ                                   0.888   0.848      0.894       0.917      0.780      0.918   0.877   0.892
+  (alt küme çift sayıları)                 187                180         181         41        146      57     130
+  konu başına (eski → YENİ, n): kargo 0.71→0.79 (14), fiyat 0.82→0.86 (28), kalite 0.96→0.94 (70), performans 0.73→0.88 (41), boyut 0.50→0.62 (8), gorunum 0.92→1.00 (13), satici 0.85→0.85 (13)
+  iki hattın anlaşmadığı çift: 22 (YENİ doğru 15, eski doğru 6)
+(ii) uçtan uca çift F1 (Adım 16 konuları, eşik 0.6): eski hat micro 0.686 macro 0.632 | YENİ micro 0.725 macro 0.704
+     KONU TESPİTİ (Adım 16 modeli dondurulmuş; duygudan bağımsız):
+       anahtar kelime V2    P 0.765 R 0.695 F1 micro 0.728 macro 0.704 | kelime tutmayan çiftlerde R 0.000 (n=57)
+       BERT (Adım 16)       P 0.855 R 0.759 F1 micro 0.805 macro 0.774 | kelime tutmayan çiftlerde R 0.596 (n=57)
+       konu başına F1 (kelime → BERT, n): kargo 0.84→0.90 (14), fiyat 0.89→0.92 (28), kalite 0.67→0.83 (70), performans 0.74→0.70 (41), boyut 0.40→0.71 (8), gorunum 0.81→0.92 (13), satici 0.57→0.44 (13)
+       bootstrap BERT − kelime, konu F1 micro: +0.076 [+0.024, +0.135] 0'ı DIŞLIYOR
+(iii) eşleştirilmiş bootstrap (2000, tohum 17), YENİ − eski hat, %95 aralık:
+  (i) micro doğruluk      +0.048  [+0.000, +0.099]  0'ı içeriyor -> gürültüden ayrılamıyor
+  (ii) uçtan uca micro    +0.040  [+0.000, +0.082]  0'ı içeriyor -> gürültüden ayrılamıyor
+
+=== İKİNCİL — iki altının ORTAK çiftleri (aynı konu + aynı duygu): 100 yorum, 174 altın çift (nötr 6, karışık 7; zıt duygulu yorum 17) ===
+(i) altın konularla duygu doğruluğu         micro   macro  karisik=0  nötr hariç  zıt duyg.  tek duyg.   örtük    açık
+  eski hat                               0.833   0.787      0.850       0.863      0.634      0.895   0.857   0.824
+  YENİ                                   0.885   0.840      0.892       0.917      0.780      0.917   0.857   0.896
+  (alt küme çift sayıları)                 174                167         168         41        133      49     125
+  konu başına (eski → YENİ, n): kargo 0.71→0.79 (14), fiyat 0.81→0.85 (26), kalite 0.95→0.95 (65), performans 0.72→0.87 (39), boyut 0.50→0.62 (8), gorunum 0.92→1.00 (12), satici 0.90→0.80 (10)
+  iki hattın anlaşmadığı çift: 20 (YENİ doğru 14, eski doğru 5)
+(iii) eşleştirilmiş bootstrap (2000, tohum 17), YENİ − eski hat, %95 aralık:
+  (i) micro doğruluk      +0.052  [+0.005, +0.105]  0'ı DIŞLIYOR
+
+ÖZET (ana iddia): (i) micro YENİ − eski hat +0.049 [+0.005, +0.098] → 0'ı DIŞLIYOR: kazandı
