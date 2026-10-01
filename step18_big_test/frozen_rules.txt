@@ -1,0 +1,4 @@
+step17_aspect_sentiment/LABEL_RULES.md
+sha256 b069265a5ebdaf4ad5ea76a2acebdb0962aba4e010248d988c031c32d3cadeed
+son değiştiren commit: 694c610 (Adım 17 planı)
+donduruldu: 2026-10-01, Adım 18 kalibrasyon konuşmasından sonra DEĞİŞMEDEN (Görkan kararı). Ana test 500 bu kurallarla etiketlenir.

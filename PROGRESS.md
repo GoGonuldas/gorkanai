@@ -801,11 +801,58 @@ yapısı için hedefli eğitim örnekleri; (b) örtük konuda eski hattın tüm-
 iki hattı birleştirmek; (c) nötr/karışık sınıfını açmak (11 hata yapı gereği); (d) Q/P ve kitap tanımı için insanla
 (Görkan) yeniden uyum ölçmek — model–insan farkının yarısı tanım farkı.
 
+## Adım 18: Büyük temiz test + insan çapası — (1) seçim ve (2a) kalibrasyon TAMAMLANDI (2026-10-01)
+Plan: `step18_big_test/PLAN.md`. Model eğitilmez. Seçim (`prepare_sets.py`, 1432083): kalibrasyon 100 (id 7000-7099) +
+ana test 500 (id 8000-8499), 50/50 ve 250/250 havuz etiketli, hiç görülmemiş; sızıntı assert'leri geçti; kalan
+"negatif" havuz 302. Ana testin metinleri okunmadı (KASA kuralı: hataları tek tek okunmayacak, en fazla 4 karşılaştırma).
+
+### Adım 18 (2a): kalibrasyon — üç kör etiketleyici
+Etiketler: `data/aspect_labels_step18/calib_fresh.csv` (taze Claude oturumu, projede hiçbir etiketi görmemiş),
+`calib_macmini.csv` (bu oturum), `calib_gorkan.csv` (Görkan; kısa yönerge `GORKAN_YONERGE.md`). Rapor:
+`step18_big_test/agreement.py` → `log_agreement.txt`.
+
+| Çift | çift F1 | konu F1 | ortak konuda duygu uyumu | kappa Q / P | birebir aynı | Q/P takası |
+|---|---|---|---|---|---|---|
+| fresh – macmini | 0.935 | 0.946 | 0.989 | 0.89 / 0.88 | 81/100 | 2 |
+| Görkan – fresh | 0.642 | 0.735 | 0.873 | 0.53 / 0.40 | 37/100 | 4 |
+| Görkan – macmini | 0.644 | 0.718 | 0.897 | 0.44 / 0.32 | 37/100 | 5 |
+
+**Beklentiyle kıyas (PLAN madde 4):** Claude–Claude 0.88-0.92 bekleniyordu → 0.935, üstünde. Görkan–Claude 0.60-0.70
+→ 0.64, aralıkta. Duygu uyumu ~0.85 → 0.87-0.90, biraz üstünde. "Q/P kappası Görkan'la < 0.4" kısmen tuttu (P 0.40/0.32;
+Q 0.53/0.44 tutmadı).
+
+**Ana desen:** Görkan 136 çift verdi, Claude'lar 185/187. Ayrışma çoğunlukla **kapsam**: Görkan ikincil konuları yazmıyor
+(sadece Claude'ların verdiği: performans 28/27, görünüm 11/12, boyut 6, kargo 4, satıcı 4-5) ve adı konan özelliği Q'ya
+topluyor ya da hiç yazmıyor (ör. "çok ses çıkarıyor, hiç beğenmedim" → Görkan `Qn`, Claude'lar `Pn,Qn`). Gerçek Q/P
+takası az (4-5). Konu ortak olduğunda duygu uyumu yüksek (0.87-0.90). Görkan'ın iki Claude'dan da ayrıştığı ama iki
+Claude'un birebir anlaştığı 48 yorum konuşmanın gündemiydi (log'da listeli).
+
+**Görkan'ın kararları (kalibrasyon konuşması, laptop oturumu gorkanai-8f üzerinden):**
+1. Kapsam: görüş bildirilen HER konu yazılır (şimdiki kural).
+2. Adı konan özelliğin şikâyeti ("çok ses çıkarıyor", "titreme") → P (şimdiki kural 1).
+3. Tek başına "tavsiye ederim" → Q değil (şimdiki kural 2).
+4. 7097 (`Qn,Fn`) ve 7011 (`Fp`): Görkan "bilinçliydi" dedi → işaretleme hatası değil; etiketler aynen kaldı.
+
+**Sonuç: `LABEL_RULES.md` DEĞİŞMEDEN donduruldu** (sha256 `step18_big_test/frozen_rules.txt`'de). Kalibrasyon tartışması
+kural dosyasına yazılmadı; ana testi etiketleyecek taze oturum sadece o dosyayı okuyacak. Kalibrasyon 100 artık okundu,
+test değil (ileride val/eğitim olabilir).
+
+**Sınırlamalar:**
+- Görkan sadece kısa yönergeyi kullandı, Claude'lar ayrıntılı `LABEL_RULES.md`'yi. Görkan–Claude farkının bir kısmı
+  kural bilgisinden geliyor ("kim haklı" değil, "aynı kuralı biliyorlar mı").
+- Claude–Claude 0.935 **doğruluk değil**, aynı kuralı uygulamadaki **tutarlılık**. İki Claude ortak bir okuma tarzını
+  paylaşıyor olabilir; insan çapası (Görkan) bunun sadece 0.64'ünü paylaşıyor.
+- Mac mini oturumu önceki adımların etiket/hata tartışmalarını görmüştü (kör ama taze değil); taze oturum görmemişti.
+  İkisinin yüksek uyumu bu farkın küçük olduğunu düşündürüyor.
+- Tek insan, n=100.
+
 ## Yapılacaklar (2026-10-01'de güncellendi)
 
 0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (16.1-16.5, yukarıda).
    **Adım 17: konuya koşullu duygu modeli — TEST ÖLÇÜLDÜ** (yukarıda; ana sonuç "fark yok"); 17.5 hata kovaları
-   yapıldı, yeni test artık okunmuş. Sonraki adım (yeni model/etiket/test) için ayrı onay gerekiyor. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
+   yapıldı, yeni test artık okunmuş.
+   **Adım 18: büyük temiz test** — seçim + kalibrasyon yapıldı, kurallar donduruldu (yukarıda). Sırada: ana test 500'ü
+   önce taze oturum, sonra Mac mini etiketler → sha256 dondurma → DUR → (onay) ölçüm 1-3. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
    `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
