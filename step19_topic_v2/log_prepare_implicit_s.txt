@@ -1,0 +1,5 @@
+ADIM 19 — seçim parça 2 (örtük S). Alt küme: {'pozitif': 20000, 'negatif': 256} (satıcı kelimesi tutmayan)
+S olasılığı: medyan 0.015, >=0.15: 1308, bant [0.15, 0.6]: 1044 {'pozitif': 1032, 'negatif': 12}
+seçilen 30 (id 9270-9299) {'pozitif': 24, 'negatif': 6}
+select19.csv toplam 300, negatif 52
+sızıntı kontrolleri geçti
