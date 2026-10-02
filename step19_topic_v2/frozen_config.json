@@ -1,0 +1,20 @@
+{
+ "config": "B",
+ "epoch": 16,
+ "threshold": 0.7,
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "or_keyword_topics": [],
+ "model_dirs": [
+  "step19_topic_v2/model_B_s0_e16",
+  "step19_topic_v2/model_B_s1_e16",
+  "step19_topic_v2/model_B_s2_e16"
+ ],
+ "ablation_A": {
+  "epoch": 12,
+  "threshold": 0.55
+ }
+}
