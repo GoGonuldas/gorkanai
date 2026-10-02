@@ -5,7 +5,11 @@ başlayıp adım adım daha gelişmiş yöntemlere geçerek "kendi AI'ını" in�
 Alan: Türkçe duygu analizi (sentiment analysis). Odak: öğrenmek — her adımda
 gerçek bir sınırla karşılaşıp sebebini anlamak, sonra bir sonraki yöntemle çözmek.
 
-**Son durum (2026-09-29):** Adım 15 (konu bazlı duygu analizi, anahtar kelime + cümlecik + V2b temel çizgisi) tamamlandı:
+**Son durum (2026-10-02):** Adım 19 (konu tespiti v2, nadir konular) tamamlandı: kasa testi 500'de konu F1 macro
+0.741 → 0.809 (+0.068 [+0.035, +0.098]), satıcı F1 0.17 → 0.51, uçtan uca 0.730 → 0.763. Kasa testi emekli; sıradaki
+adım için yeni test gerekiyor.
+
+**Daha önceki durum (2026-09-29):** Adım 15 (konu bazlı duygu analizi, anahtar kelime + cümlecik + V2b temel çizgisi) tamamlandı:
 testte uçtan uca F1 0.653 (bağımsız insana karşı 0.638, insan-insan 0.667). Sıradaki: Adım 16 (onay bekliyor).
 
 **Önceki durum (2026-09-28):** Adım 1-14 tamamlandı, uygulama 3 sınıflı model V2b'yi kullanıyor, V2b hiç
@@ -892,13 +896,90 @@ kazandı". (b) 17.5'teki "örtükte kötüleşme" bulgusu bu testte tekrarlamad�
 **Kasa:** hata kovası yapılmadı, yorum bazlı çıktı üretilmedi. **Bu test 3 karşılaştırma harcadı (ölçüm 1-3); en fazla 1
 hak kaldı** (PLAN madde 3.4: sonraki bir model, kendi planıyla, bir kez). Sonra test emekliye ayrılır.
 
-## Yapılacaklar (2026-10-01'de güncellendi)
+## Adım 19: Konu tespiti v2 — nadir konular, özellikle satıcı — TAMAMLANDI (2026-10-02)
+**Görev:** Adım 18'de uçtan uca tavanı konu tespiti belirliyordu (konu F1 0.815) ve BERT satıcıda anahtar kelimeden
+kötüydü (F1 0.43 → 0.17). İki Claude altını satıcıda kappa 0.94 veriyordu: kural net, sorun veri (eğitimde S 44 örnek).
+Klasör: `step19_topic_v2/`, plan ve tüm önceden yazılı kurallar: `step19_topic_v2/PLAN.md`. Koordinasyon: gorkanai-87
+(laptop) planladı/değerlendirdi; taze oturum (gorkanai-fresh, Mac mini) kör etiketledi; Mac mini oturumu eğitti ve
+testi bir kez çalıştırdı; her commit/push ve ölçüm Görkan'ın onayıyla.
+
+**Veri (eğitim 600 → 1400; model tarifi Adım 16 AYNEN, tek değişken veri):**
+- (a) Okunmuş, artık test olmayan 500 yorum eğitime: Adım 15/16 testi 200, Adım 17 testi 200, Adım 18 kalibrasyon 100.
+- (b) Konu başına kotalı 300 yeni yorum (id 9000-9299), V2 anahtar kelimesiyle hedefli: S 120, G 60, B 60, rastgele 30
+  + örtük S 30 (S kelimesi tutmayan, Adım 16 modelinin S olasılığı 0.15-0.60). Satıcı kelimeli negatif havuzda sadece
+  16 yorum vardı (24 yerine 16). Kalan görülmemiş negatif havuz ~250.
+- Etiketleyici: **kasa testinin ana altınını veren taze oturum**, sadece LABEL_RULES.md, kaynak bilgisi görmeden.
+  Önce 30'luk kayma kontrolü (`log_drift_check.txt`): kendi Adım 18 etiketleriyle çift F1 0.918 (eşik 0.85), macmini
+  0.883, Görkan 0.710; S kappa üçünde de 1.00.
+- Hedefleme işe yaradı: hedefli S'nin %56'sında S (rastgelede %7), G %68, B %62. **Örtük S kararsızlık bandı
+  başarısız:** 30'un %7'sinde S — rastgeleyle aynı. Eğitimde S 44 → 171, G 68 → 181, B 72 → 175.
+
+**Val (300, Adım 16 val'i aynen; `log_val.txt`):** A = 1100 (yeni 300 yok), B = 1400. Epoch (3 tohum ort.): A 12,
+B 16 (yine ızgaranın üst sınırı). B eşik 0.70.
+
+| Val | micro | macro | S F1 (n=15) |
+|---|---|---|---|
+| Adım 16 BERT | 0.834 | 0.785 | 0.46 |
+| v2 A | 0.852 | 0.799 | 0.43 |
+| **v2 B (donduruldu)** | **0.852** | **0.806** | 0.47 |
+| B VEYA kelime (S/G/B) | 0.833 | 0.772 | 0.49 — reddedildi (S/G/B precision 0.41/0.56/0.58 < 0.70) |
+
+Kazancın tamamı val'in yeni 200'ünde; eski 100'de macro 0.773 → 0.764. Bu yüzden test beklentisi testten ÖNCE
+aşağı çekildi: macro +1 ile +3, S F1 0.20-0.40.
+
+**Test — kasa 500'ün SON hakkı, BİR KEZ** (`evaluate_test19.py`, `log_test.txt`; önce kalibrasyonda kuru çalıştırma;
+Adım 16/17 olasılıklarının Adım 18'dekiyle eşitliği assert edildi). Duygu iki hatta aynı (Adım 17 modeli).
+
+| Ana altın (fresh), 500 yorum | Adım 16 | v2 B | fark [%95] | |
+|---|---|---|---|---|
+| **konu F1 macro (ANA)** | 0.741 | **0.809** | **+0.068 [+0.035, +0.098]** | 0'ı dışlıyor |
+| konu F1 micro (koruma) | 0.815 | 0.852 | +0.037 [+0.022, +0.051] | tuttu |
+| satıcı F1 (n=38) | 0.174 | 0.509 | +0.335 [+0.147, +0.514] | P 0.50→0.82, R 0.11→0.37 |
+| boyut F1 (64) | 0.774 | 0.862 | +0.088 [+0.023, +0.164] | |
+| performans F1 (242) | 0.771 | 0.836 | +0.064 [+0.026, +0.105] | |
+| kalite F1 (312) | 0.816 | 0.845 | +0.029 [+0.005, +0.052] | |
+| görünüm F1 (46) | 0.773 | 0.742 | −0.031 [−0.122, +0.051] | kazanç yok |
+| kargo / fiyat | 0.929 / 0.951 | 0.909 / 0.962 | −0.019 / +0.012 | ikisi de 0'ı içeriyor |
+| uçtan uca micro | 0.730 | 0.763 | +0.033 [+0.018, +0.048] | 0'ı dışlıyor |
+
+İkincil (macmini altını): macro +0.070 [+0.038, +0.100], micro +0.037, S 0.167 → 0.491, uçtan uca +0.033 — aynı tablo.
+
+**Okuma:** Ana iddia tuttu ve sonuç güncellenmiş beklentinin çok, ilk plan beklentisinin bile üstünde (macro +6.8).
+Satıcı 3 katına çıktı ama hâlâ en zayıf konu: model artık satıcı dediğinde %82 haklı, fakat satıcıların sadece 1/3'ünü
+buluyor. Görünüm, 113 ek örneğe rağmen kazanmadı.
+
+**Dersler:**
+- **Bu sefer val KÖTÜMSERDİ — aynı dersin öbür yüzü.** Adım 16'da val modelle aynı etiketleyicidendi → iyimser. Burada
+  val (Adım 15/16 oturumları) ile kasa testinin altını (taze oturum) farklı etiketleyiciden; yeni eğitim etiketlerinin
+  400'ü testin etiketleyicisinden. Val +2.1, test +6.8. Ders: val ile test aynı etiketleyiciden değilse val'in tahmini
+  her iki yöne de sapar; beklentiyi val'e "çok" güvenip aşağı çekmek de hataydı.
+- **Ama bu bir uyarı da:** kazancın bir kısmı "testin etiketleyicisinin üslubunu öğrenmek" olabilir. İkinci altın
+  (macmini, başka oturum) aynı farkı veriyor (+0.070) — bu, kazancın sadece üsluptan olmadığını destekliyor; yine de
+  iki altın da Claude. İnsana karşı kanıt yok.
+- **Okunmuş testler çöp değil.** A (sadece yeniden kullanım, yeni etiket yok) val'de kazancın çoğunu verdi. Bir testi
+  okuyup emekliye ayırmak, onu eğitim verisine çevirir.
+- **Konu başına kararsızlık da nadir konuyu getirmedi** (örtük S %7). Anahtar kelimeyle hedefleme 8 kat daha verimli.
+  Adım 16'daki global kararsızlık dersi, konu başına kotayla da tekrarladı.
+- **Önceden yazılmış kural iki kez işe yaradı:** "teste B girer" (A'yı val'e bakıp seçmek yasak) ve VEYA'nın precision
+  koşulu (val'de macro'yu düşürdü, reddedildi).
+
+**Sınırlamalar:**
+1. Kasa testi bu ölçümle **emekli**. Sonraki her iddia yeni bir test ister; görülmemiş negatif havuz ~250.
+2. Epoch 16 yine ızgaranın üst sınırı; daha uzun eğitim denenmedi.
+3. Eğitim etiketleri üç ayrı Claude oturumundan (Adım 15, 16, taze) + gold_1e; birleştirilmedi/uzlaştırılmadı.
+4. Satıcı recall 0.37: örtük satıcı (eksik aksesuar, yanlış ürün) hâlâ kaçıyor; val'de S n=15 ile bunu ayarlamak mümkün değil.
+5. Ablasyon A testte ölçülmedi (kasa kuralı: listede yoktu); "kazancın ne kadarı yeni 300'den" sorusu sadece val'de.
+
+## Yapılacaklar (2026-10-02'de güncellendi)
 
 0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (16.1-16.5, yukarıda).
    **Adım 17: konuya koşullu duygu modeli — TEST ÖLÇÜLDÜ** (yukarıda; ana sonuç "fark yok"); 17.5 hata kovaları
    yapıldı, yeni test artık okunmuş.
    **Adım 18: büyük temiz test** — TAMAMLANDI: ölçüm 1-3 yapıldı (ana iddia (i) +0.035 [+0.016, +0.054], 0'ı dışlıyor).
-   Ana test 500'de 1 karşılaştırma hakkı kaldı. Sonraki adım için ayrı plan + onay gerekiyor. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
+   Ana test 500'de 1 karşılaştırma hakkı kaldı.
+   **Adım 19: konu tespiti v2** — TAMAMLANDI (macro +0.068, satıcı 0.17 → 0.51); kasa testi EMEKLİ.
+   Sonraki adım için ayrı plan + onay + YENİ TEST gerekiyor. Aday fikirler: satıcı recall'u (örtük satıcı), görünüm;
+   uygulamaya (step9_app) Adım 16-19 hattını koymak. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
    `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
