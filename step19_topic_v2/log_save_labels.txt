@@ -1,0 +1,18 @@
+ADIM 19 — eğitim seti (train19.csv). % yorumda konu var / ort. konu:
+origin            n   kargo   fiyat  kalite  perfor   boyut  gorunu  satici   ort  konusuz
+adim16_train    600      19      21      68      36      12      11       7  1.75       14
+adim15_test     200      17      24      65      44      12       8       9  1.79        5
+adim17_test     200      16      24      76      40      10       8       7  1.81        5
+adim18_calib    100      14      29      65      45       9      12      11  1.85        5
+adim19_new      300      34      27      68      43      17      23      28  2.39        4
+TOPLAM A       1100      18      23      69      39      11      10       8  1.78       29
+TOPLAM B       1400      21      24      69      40      12      13      12  1.91       33
+Eğitim A konu başına örnek: {'kargo': 195, 'fiyat': 253, 'kalite': 758, 'performans': 426, 'boyut': 125, 'gorunum': 113, 'satici': 87}
+Eğitim B konu başına örnek: {'kargo': 296, 'fiyat': 334, 'kalite': 961, 'performans': 556, 'boyut': 175, 'gorunum': 181, 'satici': 171}
+Yeni 300, kaynağa göre % yorumda S / G / B:
+  hedefli:boyut            n= 60  S   5  G  15  B  62
+  hedefli:gorunum          n= 60  S  17  G  68  B   8
+  hedefli:satici           n=120  S  56  G  10  B   4
+  kararsiz:satici_ortuk    n= 30  S   7  G  10  B   7
+  rastgele                 n= 30  S   7  G  10  B   3
+sızıntı kontrolleri geçti (val 300, Adım 18 kasa testi 500)
