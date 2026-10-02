@@ -83,3 +83,11 @@ için tek insan kontrolü.
   çıksa bile B girer (plan B için yazıldı; A'yı seçmek val'e bakarak model seçmek olurdu).
 - VEYA kuralının "precision < 0.70" koşulu: S, G, B precision'larının HER BİRİ val'de >= 0.70.
 - Örtük S 30 (kararsızlık bandı) yorumlarının sadece %7'sinde S var (rastgele ile aynı) → başarısız deneme olarak kayda.
+
+## Ekler (2026-10-02, val sonrası, TEST GÖRÜLMEDEN) — beklenti güncellemesi, Görkan "ölç" dedi
+- Val (300): macro 0.785 → 0.806 (+2.1), micro 0.834 → 0.852, S F1 0.46 → 0.47 (n=15). Kazancın tamamı val'in yeni
+  200'ünde; eski 100'de macro 0.773 → 0.764. A ile B farkı küçük (macro 0.799 / 0.806). VEYA reddedildi (S/G/B P < 0.70).
+- **Güncellenmiş test beklentisi:** macro +0.01 ile +0.03, 0'ı dışlama ~%30-40; S F1 0.20-0.40; micro +0.00 ile +0.02
+  (koruma: alt sınır > −0.01); uçtan uca +0.00 ile +0.015. İlk §4 beklentisi (macro +3/+6, S 0.40-0.60) iyimserdi.
+- Ölçüm: `evaluate_test19.py`, Mac mini'de; önce kalibrasyon 100'de kuru çalıştırma (kod kontrolü), sonra test BİR KEZ.
+  Uçtan uca: duygu Adım 17 modeli iki hatta aynı → fark sadece konu tespitinden.
