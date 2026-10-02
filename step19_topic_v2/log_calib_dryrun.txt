@@ -1,0 +1,43 @@
+ADIM 19 — KURU ÇALIŞTIRMA — kalibrasyon 100 (EĞİTİMDE olan küme; sayılar ANLAMSIZ, sadece kod kontrolü)
+v2 B: {"config": "B", "epoch": 16, "threshold": 0.7, "seeds": [0, 1, 2], "or_keyword_topics": [], "model_dirs": ["step19_topic_v2/model_B_s0_e16", "step19_topic_v2/model_B_s1_e16", "step19_topic_v2/model_B_s2_e16"], "ablation_A": {"epoch": 12, "threshold": 0.55}} | model sha256[:16] ['30d4fd0f2ffaa824', '1ab614c082b924f8', '021d06a2ed224b82']
+Adım 16: epoch 12, eşik 0.6; duygu: Adım 17 {"init": "v2b", "epoch": 8, "seeds": [0, 1, 2]}
+Adım 18 frozen_test.json sha256'ları doğrulandı. KASA: yorum bazlı çıktı yok.
+
+BEKLENTİ (ölçümden ÖNCE yazıldı; PLAN 19 §4, val sonrası güncellendi 2026-10-02):
+  ANA: konu F1 macro 0.741 → +0.01 ile +0.03; 0'ı dışlama olasılığı ~%30-40
+  satıcı F1 0.17 → 0.20-0.40 (n≈38, gürültülü); micro +0.00 ile +0.02 (koruma: alt sınır > −0.01)
+  uçtan uca micro +0.00 ile +0.015, 0'ı dışlamayabilir
+  (ilk plan beklentisi: macro +3 ile +6, S 0.40-0.60 — val bunu desteklemedi)
+
+=== ANA — fresh altını: 100 yorum, 185 altın konu; konu başına n {'kargo': 14, 'fiyat': 29, 'kalite': 65, 'performans': 45, 'boyut': 9, 'gorunum': 12, 'satici': 11} ===
+  Adım 16  P 0.819 R 0.735 | konu başına P/R: karg 0.87/0.93, fiya 0.84/0.90, kali 0.78/0.82, perf 0.89/0.56, boyu 0.83/0.56, goru 0.85/0.92, sati 0.60/0.27
+  v2 B     P 1.000 R 1.000 | konu başına P/R: karg 1.00/1.00, fiya 1.00/1.00, kali 1.00/1.00, perf 1.00/1.00, boyu 1.00/1.00, goru 1.00/1.00, sati 1.00/1.00
+  ölçü                    Adım 16     v2 B     fark   %95 aralık
+  konu F1 micro             0.775    1.000   +0.225   [+0.178, +0.276] 0'ı DIŞLIYOR
+  konu F1 macro (ANA)       0.738    1.000   +0.262   [+0.201, +0.336] 0'ı DIŞLIYOR
+  F1 kargo                  0.897    1.000   +0.103   [+0.000, +0.238] 0'ı içeriyor
+  F1 fiyat                  0.867    1.000   +0.133   [+0.054, +0.236] 0'ı DIŞLIYOR
+  F1 kalite                 0.797    1.000   +0.203   [+0.133, +0.282] 0'ı DIŞLIYOR
+  F1 performans             0.685    1.000   +0.315   [+0.200, +0.455] 0'ı DIŞLIYOR
+  F1 boyut                  0.667    1.000   +0.333   [+0.091, +0.714] 0'ı DIŞLIYOR
+  F1 gorunum                0.880    1.000   +0.120   [+0.000, +0.300] 0'ı içeriyor
+  F1 satici                 0.375    1.000   +0.625   [+0.333, +1.000] 0'ı DIŞLIYOR
+  uçtan uca micro           0.689    0.865   +0.175   [+0.132, +0.223] 0'ı DIŞLIYOR
+
+=== İKİNCİL — macmini altını: 100 yorum, 187 altın konu; konu başına n {'kargo': 14, 'fiyat': 28, 'kalite': 70, 'performans': 41, 'boyut': 8, 'gorunum': 13, 'satici': 13} ===
+  Adım 16  P 0.855 R 0.759 | konu başına P/R: karg 0.87/0.93, fiya 0.87/0.96, kali 0.84/0.81, perf 0.86/0.59, boyu 0.83/0.62, goru 0.92/0.92, sati 0.80/0.31
+  v2 B     P 0.951 R 0.941 | konu başına P/R: karg 1.00/1.00, fiya 0.93/0.96, kali 1.00/0.93, perf 0.89/0.98, boyu 0.89/1.00, goru 1.00/0.92, sati 0.91/0.77
+  ölçü                    Adım 16     v2 B     fark   %95 aralık
+  konu F1 micro             0.805    0.946   +0.142   [+0.094, +0.191] 0'ı DIŞLIYOR
+  konu F1 macro (ANA)       0.774    0.939   +0.166   [+0.099, +0.244] 0'ı DIŞLIYOR
+  F1 kargo                  0.897    1.000   +0.103   [+0.000, +0.238] 0'ı içeriyor
+  F1 fiyat                  0.915    0.947   +0.032   [-0.062, +0.129] 0'ı içeriyor
+  F1 kalite                 0.826    0.963   +0.137   [+0.064, +0.217] 0'ı DIŞLIYOR
+  F1 performans             0.696    0.930   +0.235   [+0.111, +0.375] 0'ı DIŞLIYOR
+  F1 boyut                  0.714    0.941   +0.227   [-0.038, +0.603] 0'ı içeriyor
+  F1 gorunum                0.923    0.960   +0.037   [-0.100, +0.200] 0'ı içeriyor
+  F1 satici                 0.444    0.833   +0.389   [+0.053, +0.742] 0'ı DIŞLIYOR
+  uçtan uca micro           0.725    0.839   +0.113   [+0.067, +0.161] 0'ı DIŞLIYOR
+
+ÖZET (ana iddia): konu F1 macro v2 − Adım 16 +0.262 [+0.201, +0.336] → 0'ı DIŞLIYOR: kazandı
+Koruma: micro +0.225, alt sınır +0.178 → tuttu
