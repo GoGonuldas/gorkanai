@@ -1,0 +1,114 @@
+Yapılandırma A | eğitim 1100 {'adim16_train': 600, 'adim15_test': 200, 'adim17_test': 200, 'adim18_calib': 100} | val 300 | cihaz mps
+Eğitimde konu başına örnek: {'kargo': 195, 'fiyat': 253, 'kalite': 758, 'performans': 426, 'boyut': 125, 'gorunum': 113, 'satici': 87}
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 10031.81it/s]
+[transformers] [1mBertForSequenceClassification LOAD REPORT[0m from: dbmdz/bert-base-turkish-cased
+Key                                        | Status     | 
+-------------------------------------------+------------+-
+cls.seq_relationship.weight                | UNEXPECTED | 
+cls.predictions.transform.dense.weight     | UNEXPECTED | 
+cls.predictions.bias                       | UNEXPECTED | 
+cls.seq_relationship.bias                  | UNEXPECTED | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED | 
+cls.predictions.transform.dense.bias       | UNEXPECTED | 
+classifier.weight                          | MISSING    | 
+classifier.bias                            | MISSING    | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+  tohum 0 epoch 1: eğitim kaybı 0.6731
+  tohum 0 epoch 2: eğitim kaybı 0.4518
+  tohum 0 epoch 3: eğitim kaybı 0.3018
+  tohum 0 epoch 4: eğitim kaybı 0.2002
+  tohum 0 epoch 5: eğitim kaybı 0.1439
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  5.61it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  5.60it/s]
+  tohum 0 epoch 6: eğitim kaybı 0.1023
+  tohum 0 epoch 7: eğitim kaybı 0.0782
+  tohum 0 epoch 8: eğitim kaybı 0.0522
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  4.28it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  4.28it/s]
+  tohum 0 epoch 9: eğitim kaybı 0.0366
+  tohum 0 epoch 10: eğitim kaybı 0.0290
+  tohum 0 epoch 11: eğitim kaybı 0.0240
+  tohum 0 epoch 12: eğitim kaybı 0.0190
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  5.82it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  5.82it/s]
+  tohum 0 epoch 13: eğitim kaybı 0.0163
+  tohum 0 epoch 14: eğitim kaybı 0.0136
+  tohum 0 epoch 15: eğitim kaybı 0.0119
+  tohum 0 epoch 16: eğitim kaybı 0.0100
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  5.88it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  5.88it/s]
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 8854.66it/s]
+[transformers] [1mBertForSequenceClassification LOAD REPORT[0m from: dbmdz/bert-base-turkish-cased
+Key                                        | Status     | 
+-------------------------------------------+------------+-
+cls.seq_relationship.weight                | UNEXPECTED | 
+cls.predictions.transform.dense.weight     | UNEXPECTED | 
+cls.predictions.bias                       | UNEXPECTED | 
+cls.seq_relationship.bias                  | UNEXPECTED | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED | 
+cls.predictions.transform.dense.bias       | UNEXPECTED | 
+classifier.weight                          | MISSING    | 
+classifier.bias                            | MISSING    | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+  tohum 1 epoch 1: eğitim kaybı 0.6917
+  tohum 1 epoch 2: eğitim kaybı 0.5030
+  tohum 1 epoch 3: eğitim kaybı 0.3417
+  tohum 1 epoch 4: eğitim kaybı 0.2380
+  tohum 1 epoch 5: eğitim kaybı 0.1640
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.13it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.13it/s]
+  tohum 1 epoch 6: eğitim kaybı 0.1140
+  tohum 1 epoch 7: eğitim kaybı 0.0829
+  tohum 1 epoch 8: eğitim kaybı 0.0603
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.44it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.44it/s]
+  tohum 1 epoch 9: eğitim kaybı 0.0419
+  tohum 1 epoch 10: eğitim kaybı 0.0307
+  tohum 1 epoch 11: eğitim kaybı 0.0255
+  tohum 1 epoch 12: eğitim kaybı 0.0203
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.40it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.39it/s]
+  tohum 1 epoch 13: eğitim kaybı 0.0165
+  tohum 1 epoch 14: eğitim kaybı 0.0142
+  tohum 1 epoch 15: eğitim kaybı 0.0122
+  tohum 1 epoch 16: eğitim kaybı 0.0110
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.22it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.21it/s]
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 10145.82it/s]
+[transformers] [1mBertForSequenceClassification LOAD REPORT[0m from: dbmdz/bert-base-turkish-cased
+Key                                        | Status     | 
+-------------------------------------------+------------+-
+cls.seq_relationship.weight                | UNEXPECTED | 
+cls.predictions.transform.dense.weight     | UNEXPECTED | 
+cls.predictions.bias                       | UNEXPECTED | 
+cls.seq_relationship.bias                  | UNEXPECTED | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED | 
+cls.predictions.transform.dense.bias       | UNEXPECTED | 
+classifier.weight                          | MISSING    | 
+classifier.bias                            | MISSING    | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+  tohum 2 epoch 1: eğitim kaybı 0.6781
+  tohum 2 epoch 2: eğitim kaybı 0.5491
+  tohum 2 epoch 3: eğitim kaybı 0.3810
+  tohum 2 epoch 4: eğitim kaybı 0.2552
+  tohum 2 epoch 5: eğitim kaybı 0.1765
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.23it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.22it/s]
+  tohum 2 epoch 6: eğitim kaybı 0.1236
+  tohum 2 epoch 7: eğitim kaybı 0.0876
+  tohum 2 epoch 8: eğitim kaybı 0.0651
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.25it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.25it/s]
+  tohum 2 epoch 9: eğitim kaybı 0.0503
+  tohum 2 epoch 10: eğitim kaybı 0.0353
+  tohum 2 epoch 11: eğitim kaybı 0.0272
+  tohum 2 epoch 12: eğitim kaybı 0.0217
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.51it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.51it/s]
+  tohum 2 epoch 13: eğitim kaybı 0.0180
+  tohum 2 epoch 14: eğitim kaybı 0.0148
+  tohum 2 epoch 15: eğitim kaybı 0.0123
+  tohum 2 epoch 16: eğitim kaybı 0.0109
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.68it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.67it/s]
+val olasılıkları -> val_probs_A.npz ; modeller -> model_A_s*_e*/
