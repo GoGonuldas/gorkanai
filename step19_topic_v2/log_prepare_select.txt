@@ -1,0 +1,13 @@
+ADIM 19 — seçim parça 1. Aday havuzu: {'pozitif': 139541, 'negatif': 302}
+source           pool_label
+hedefli:boyut    negatif        12
+                 pozitif        48
+hedefli:gorunum  negatif        12
+                 pozitif        48
+hedefli:satici   negatif        16
+                 pozitif       104
+rastgele         negatif         6
+                 pozitif        24
+toplam 270 (id 9000-9269), negatif 46
+kalan negatif havuz: 256
+sızıntı kontrolleri geçti (check_no_leak + Adım 16 + Adım 17 test + Adım 18 kalibrasyon + Adım 18 kasa testi)

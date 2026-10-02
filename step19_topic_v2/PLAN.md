@@ -71,3 +71,9 @@ Duygu modeli değişikliği, kural/konu tanımı değişikliği, nötr sınıfı
 ## Görkan'a düşen iş
 Onay (madde 1 ve 4'ten önce). İsteğe bağlı: `step16_topic_bert/review_sample16.csv` (30 yorum) — eğitim etiketleri
 için tek insan kontrolü.
+
+## Ekler (2026-10-02, seçim sırasında; hiçbir etiket/model sonucu görülmeden)
+- **Sapma:** satıcı kelimeli negatif havuzda sadece 16 yorum var → hedefli S grubunda 24 yerine 16 negatif,
+  eksik pozitifle tamamlandı. Parça 1 negatif 46; kalan negatif havuz 256 (parça 2 en fazla 6 daha alır).
+- Parça 1: `prepare_select.py` → `select19.csv` (id 9000-9269), `batch_01..05.csv` (54'er). Parça 2 (Mac mini):
+  `prepare_implicit_s.py` → select19.csv'ye eklenir, `batch_06.csv` (30).
