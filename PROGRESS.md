@@ -978,8 +978,9 @@ buluyor. Görünüm, 113 ek örneğe rağmen kazanmadı.
    **Adım 18: büyük temiz test** — TAMAMLANDI: ölçüm 1-3 yapıldı (ana iddia (i) +0.035 [+0.016, +0.054], 0'ı dışlıyor).
    Ana test 500'de 1 karşılaştırma hakkı kaldı.
    **Adım 19: konu tespiti v2** — TAMAMLANDI (macro +0.068, satıcı 0.17 → 0.51); kasa testi EMEKLİ.
-   Sonraki adım için ayrı plan + onay + YENİ TEST gerekiyor. Aday fikirler: satıcı recall'u (örtük satıcı), görünüm;
-   uygulamaya (step9_app) Adım 16-19 hattını koymak. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
+   **AÇIK KONU (bilerek ertelendi, 2026-10-02):** satıcı recall'u 0.37 (örtük satıcı), görünüm kazanmadı. Etkisi genel
+   skora küçük (S çiftlerin ~%4'ü), ölçmek için satıcıca zengin YENİ test gerekir; Görkan'la geçilmesine karar verildi.
+   **Adım 20: konu bazlı analizi uygulamaya koymak** — plan yazıldı (`step20_aspect_app/PLAN.md`), onay bekliyor. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
    `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
