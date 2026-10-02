@@ -1,0 +1,21 @@
+ADIM 19 — kayma kontrolü: taze oturumun 30 yeni kör etiketi (fresh19) vs aynı 30'un önceki etiketleri.
+
+--- fresh18 vs fresh19 (30 yorum) ---
+  çift sayısı: 60 / 62 (oran 1.03)
+  konu F1 0.951 | çift F1 0.918 | ortak konuda duygu uyumu 56/58
+  kappa: karg 0.92 fiya 0.93 kali 0.93 perf 0.86 boyu 0.78 goru 1.00 sati 1.00
+  sadece fresh18: {'performans': 2} | sadece fresh19: {'kargo': 1, 'fiyat': 1, 'boyut': 1, 'kalite': 1}
+
+--- macmini vs fresh19 (30 yorum) ---
+  çift sayısı: 58 / 62 (oran 1.07)
+  konu F1 0.917 | çift F1 0.883 | ortak konuda duygu uyumu 53/55
+  kappa: karg 0.92 fiya 0.86 kali 0.77 perf 0.78 boyu 0.78 goru 1.00 sati 1.00
+  sadece macmini: {'kalite': 2, 'performans': 1} | sadece fresh19: {'fiyat': 2, 'performans': 2, 'kalite': 1, 'boyut': 1, 'kargo': 1}
+
+--- görkan vs fresh19 (30 yorum) ---
+  çift sayısı: 45 / 62 (oran 1.38)
+  konu F1 0.785 | çift F1 0.710 | ortak konuda duygu uyumu 38/42
+  kappa: karg 0.74 fiya 0.86 kali 0.62 perf 0.42 boyu 0.00 goru 0.37 sati 1.00
+  sadece görkan: {'kalite': 3} | sadece fresh19: {'performans': 7, 'gorunum': 3, 'boyut': 3, 'kargo': 3, 'fiyat': 2, 'kalite': 2}
+
+KARAR (önceden yazılı eşik 0.85): fresh18–fresh19 çift F1 0.918 → GEÇTİ, ana etiketlemeye geçilebilir
