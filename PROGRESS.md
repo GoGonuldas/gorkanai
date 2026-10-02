@@ -6,8 +6,9 @@ Alan: Türkçe duygu analizi (sentiment analysis). Odak: öğrenmek — her adı
 gerçek bir sınırla karşılaşıp sebebini anlamak, sonra bir sonraki yöntemle çözmek.
 
 **Son durum (2026-10-02):** Adım 19 (konu tespiti v2, nadir konular) tamamlandı: kasa testi 500'de konu F1 macro
-0.741 → 0.809 (+0.068 [+0.035, +0.098]), satıcı F1 0.17 → 0.51, uçtan uca 0.730 → 0.763. Kasa testi emekli; sıradaki
-adım için yeni test gerekiyor.
+0.741 → 0.809 (+0.068 [+0.035, +0.098]), satıcı F1 0.17 → 0.51, uçtan uca 0.730 → 0.763. Kasa testi emekli. Satıcı recall'u
+bilerek ertelendi. **Sıradaki: Adım 20 — konu bazlı analizi uygulamaya koymak** (`step20_aspect_app/PLAN.md`); plan
+onayı ve "uygulama nerede çalışsın" kararı (Mac mini önerildi / modelleri laptopa kopyalamak) bir sonraki oturumda.
 
 **Daha önceki durum (2026-09-29):** Adım 15 (konu bazlı duygu analizi, anahtar kelime + cümlecik + V2b temel çizgisi) tamamlandı:
 testte uçtan uca F1 0.653 (bağımsız insana karşı 0.638, insan-insan 0.667). Sıradaki: Adım 16 (onay bekliyor).
