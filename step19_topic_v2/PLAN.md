@@ -77,3 +77,9 @@ için tek insan kontrolü.
   eksik pozitifle tamamlandı. Parça 1 negatif 46; kalan negatif havuz 256 (parça 2 en fazla 6 daha alır).
 - Parça 1: `prepare_select.py` → `select19.csv` (id 9000-9269), `batch_01..05.csv` (54'er). Parça 2 (Mac mini):
   `prepare_implicit_s.py` → select19.csv'ye eklenir, `batch_06.csv` (30).
+
+## Ekler (2026-10-02, eğitim sürerken; val olasılıkları görülmeden)
+- **Teste giren yapılandırma B** (tam veri, 1400); A (1100, yeni 300 yok) sadece ablasyon satırı — val'de A daha iyi
+  çıksa bile B girer (plan B için yazıldı; A'yı seçmek val'e bakarak model seçmek olurdu).
+- VEYA kuralının "precision < 0.70" koşulu: S, G, B precision'larının HER BİRİ val'de >= 0.70.
+- Örtük S 30 (kararsızlık bandı) yorumlarının sadece %7'sinde S var (rastgele ile aynı) → başarısız deneme olarak kayda.
