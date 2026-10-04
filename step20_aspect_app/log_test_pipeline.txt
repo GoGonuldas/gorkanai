@@ -1,0 +1,17 @@
+ADIM 20 — uygulama hattı doğrulaması (val 300; testlere dokunulmadı)
+cihaz: mps
+
+1) EŞDEĞERLİK (atol 1e-3):
+  konu : (300, 7) olasılık, maks |fark| 0.00e+00, eşikte (0.70) değişen karar 0
+  duygu: 513 altın çift, maks |fark| 0.00e+00, 0.5'te değişen karar 0
+  → GEÇTİ: uygulama ölçtüğümüz modelleri çalıştırıyor
+
+2) DUMAN TESTİ: /health 200, /predict 200, /aspects 200 (biçim doğru), boş 422, 2001 karakter 422 → GEÇTİ
+  örnek (elle yazılmış cümle): [{"konu": "satıcı", "olasilik": 0.9963, "duygu": "negatif", "guven": 0.9979}, {"konu": "kargo", "olasilik": 0.9951, "duygu": "negatif", "guven": 0.8556}]
+
+3) GECİKME (/aspects, 20 val yorumu, 3 tohum): medyan 101 ms, maks 270 ms
+
+4) HAFİF MOD (val 300; tek tohum vs 3 tohum):
+  konu F1 micro 0.852 → 0.844, macro 0.806 → 0.800; (i) duygu doğruluğu 0.889 → 0.891
+  kural (fark < 0.01, micro ve (i)) → KULLANILABİLİR (ASPECT_LIGHT=1); varsayılan yine 3 tohum
+  hafif mod hattı ortalama 24 ms/yorum (HTTP olmadan)
