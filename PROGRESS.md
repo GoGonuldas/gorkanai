@@ -7,8 +7,8 @@ gerçek bir sınırla karşılaşıp sebebini anlamak, sonra bir sonraki yöntem
 
 **Son durum (2026-10-02):** Adım 19 (konu tespiti v2, nadir konular) tamamlandı: kasa testi 500'de konu F1 macro
 0.741 → 0.809 (+0.068 [+0.035, +0.098]), satıcı F1 0.17 → 0.51, uçtan uca 0.730 → 0.763. Kasa testi emekli. Satıcı recall'u
-bilerek ertelendi. **Sıradaki: Adım 20 — konu bazlı analizi uygulamaya koymak** (`step20_aspect_app/PLAN.md`); plan
-onayı ve "uygulama nerede çalışsın" kararı (Mac mini önerildi / modelleri laptopa kopyalamak) bir sonraki oturumda.
+bilerek ertelendi. **Adım 20 (2026-10-04):** konu bazlı analiz uygulamada
+(`/aspects`, konu çipleri), Mac mini'de ev ağından açılıyor; val'de eşdeğerlik tam (fark 0), ~0.1 sn/yorum. Sıradaki seçilmedi.
 
 **Daha önceki durum (2026-09-29):** Adım 15 (konu bazlı duygu analizi, anahtar kelime + cümlecik + V2b temel çizgisi) tamamlandı:
 testte uçtan uca F1 0.653 (bağımsız insana karşı 0.638, insan-insan 0.667). Sıradaki: Adım 16 (onay bekliyor).
@@ -971,7 +971,46 @@ buluyor. Görünüm, 113 ek örneğe rağmen kazanmadı.
 4. Satıcı recall 0.37: örtük satıcı (eksik aksesuar, yanlış ürün) hâlâ kaçıyor; val'de S n=15 ile bunu ayarlamak mümkün değil.
 5. Ablasyon A testte ölçülmedi (kasa kuralı: listede yoktu); "kazancın ne kadarı yeni 300'den" sorusu sadece val'de.
 
-## Yapılacaklar (2026-10-02'de güncellendi)
+## Adım 20: Konu bazlı analizi uygulamaya koymak — TAMAMLANDI (2026-10-04)
+**Görev:** Adım 15-19'un konu bazlı hattını `step9_app`'e koymak. Yeni model, ayar, test YOK; plan:
+`step20_aspect_app/PLAN.md`. Laptop (gorkanai-87) kodu yazdı, Mac mini oturumu ("İşlemlere başla") doğruladı ve
+sunucuyu açtı; her adım Görkan'ın Mac mini oturumundaki onayıyla.
+
+**Ne değişti:**
+- `step9_app/aspect_pipeline.py`: konu = Adım 19 v2 B (3 tohum ort., eşik 0.70), duygu = Adım 17 (3 tohum ort.,
+  P(pozitif) ≥ 0.5). Ön işleme eğitim script'lerinden IMPORT edilir, ayarlar `frozen_config.json`'lardan OKUNUR.
+- `app.py`: yeni `POST /aspects` → `{konular: [{konu, olasilik, duygu, guven}], genel: <V2b>, hafif_mod}`;
+  `/predict` aynen. `ASPECT_LIGHT=1` = tek tohum.
+- `index.html`: genel duygu çubuklarının altında konu çipleri (👍/👎 + güven) ve sınırlama notu.
+- Çalıştırma (Mac mini, ev ağı): `cd step9_app && ../.venv/bin/uvicorn app:app --host 0.0.0.0 --port 8000`,
+  laptoptan `http://gorkans-mac-mini.local:8000` (ya da `http://192.168.5.11:8000`). Görkan tarayıcıdan açtı.
+
+**Doğrulama** (`step20_aspect_app/test_pipeline.py`, `log_test_pipeline.txt`, val 300, Mac mini MPS):
+| Kontrol | Sonuç |
+|---|---|
+| Eşdeğerlik: uygulamanın konu olasılıkları vs `val_probs_B.npz` | maks fark **0**, değişen karar 0 |
+| Eşdeğerlik: duygu (513 altın çift) vs Adım 17 `val_probs.npz` | maks fark **0**, değişen karar 0 |
+| Duman testi (/health, /predict, /aspects, boş ve 2001 karakter → 422) | geçti |
+| Gecikme /aspects (3 tohum, HTTP dahil) | medyan **101 ms**, maks 270 ms |
+| Hafif mod (tek tohum), val | konu micro 0.852 → 0.844, macro 0.806 → 0.800, (i) 0.889 → 0.891; ~24 ms/yorum → kullanılabilir, varsayılan yine 3 tohum |
+
+**Gözlem (ölçüm değil):** "Kargo çok hızlıydı ama ürün kırık geldi, satıcı da cevap vermedi." → satıcı negatif,
+**kargo negatif**. Sezgiye ters ama kurala uygun: LABEL_RULES'ta "ürünün hasarlı GELMESİ → K"; kargo hem övülmüş hem
+eleştirilmiş, baskın duygu negatif. Kuralın kendisi kullanıcı için şaşırtıcı (kalite yerine kargo).
+
+**Dersler:**
+- **"Ölçtüğün modeli mi çalıştırıyorsun?" sorusu test edilebilir.** Eşdeğerlik testi tam sıfır fark verdi, çünkü
+  uygulama ön işlemeyi kopyalamıyor, eğitim kodunu import ediyor. Adım 9'daki turkish_lower hatası (kopyalanan ön
+  işleme) bu tasarımla tekrar edemez.
+- **3 tohum "pahalı" değilmiş:** 7 BERT ile bile yorum başına ~0.1 sn. Hafif mod 4 kat hızlı ama gerek yok.
+- **Ev ağına açmak ayrı bir izin kararı:** Mac mini oturumu `0.0.0.0`'a bağlanmadan önce Görkan'ın kendi onayını istedi
+  (diğer oturumun aktardığı onayı yeterli saymadı) — doğru davranış. Laptopun terminali (Yerel Ağ izni) bağlanamadı,
+  tarayıcı bağlandı.
+
+**Sınırlamalar:** konu başına nötr yok; satıcı recall ~0.37; kısa yorumlar/olumsuzlama eğitimde az; yayınlama yok
+(HF Spaces PRO istiyor); sunucu Mac mini açıkken ve aynı ağdayken erişilebilir.
+
+## Yapılacaklar (2026-10-04'te güncellendi)
 
 0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (16.1-16.5, yukarıda).
    **Adım 17: konuya koşullu duygu modeli — TEST ÖLÇÜLDÜ** (yukarıda; ana sonuç "fark yok"); 17.5 hata kovaları
@@ -981,7 +1020,7 @@ buluyor. Görünüm, 113 ek örneğe rağmen kazanmadı.
    **Adım 19: konu tespiti v2** — TAMAMLANDI (macro +0.068, satıcı 0.17 → 0.51); kasa testi EMEKLİ.
    **AÇIK KONU (bilerek ertelendi, 2026-10-02):** satıcı recall'u 0.37 (örtük satıcı), görünüm kazanmadı. Etkisi genel
    skora küçük (S çiftlerin ~%4'ü), ölçmek için satıcıca zengin YENİ test gerekir; Görkan'la geçilmesine karar verildi.
-   **Adım 20: konu bazlı analizi uygulamaya koymak** — plan yazıldı (`step20_aspect_app/PLAN.md`), onay bekliyor. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
+   **Adım 20: konu bazlı analizi uygulamaya koymak** — TAMAMLANDI (yukarıda). Sonraki adım seçilmedi. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
    `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
