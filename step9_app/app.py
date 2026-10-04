@@ -1,6 +1,8 @@
 """
 ADIM 9: Modeli bir uygulamaya dönüştürmek (FastAPI).
 ADIM 14 devamı (2026-09-28): 3 sınıflı modele (V2b) geçiş.
+ADIM 20 (2026-10-04): /aspects — konu bazlı analiz (Adım 19 konu modeli + Adım 17 konuya koşullu duygu modeli),
+  hattın kendisi aspect_pipeline.py'de. /predict (genel duygu) aynen duruyor.
 
 Gerçek yorumlarla eğittiğimiz BERT modelini bir web servisine koyuyoruz.
 Artık model bir script'in içinde değil — herhangi bir program (web sayfası,
@@ -31,6 +33,8 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+from aspect_pipeline import AspectPipeline
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 # Adım 14 Deney 3b: nötr sınıfını da öğrenen, val'de seçilen model
@@ -70,6 +74,9 @@ def predict(text: str) -> dict:
     }
 
 
+# Konu hattı 6 BERT daha yükler (~2.6 GB); ASPECT_LIGHT=1 ile tohum başına 1 model (bkz. aspect_pipeline.py)
+aspects = AspectPipeline(light=os.environ.get("ASPECT_LIGHT") == "1")
+
 app = FastAPI(title="gorkanai — Türkçe Duygu Analizi")
 
 
@@ -80,6 +87,12 @@ class PredictRequest(BaseModel):
 @app.post("/predict")
 def predict_endpoint(req: PredictRequest):
     return {"text": req.text, **predict(req.text)}
+
+
+@app.post("/aspects")
+def aspects_endpoint(req: PredictRequest):
+    return {"text": req.text, "konular": aspects.analyze(req.text), "genel": predict(req.text),
+            "hafif_mod": aspects.light}
 
 
 @app.get("/health")

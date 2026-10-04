@@ -1,4 +1,4 @@
-# Adım 20 — Konu bazlı analizi uygulamaya koymak: PLAN (2026-10-02, ONAY BEKLİYOR; kod başlamadı)
+# Adım 20 — Konu bazlı analizi uygulamaya koymak: PLAN (2026-10-02; Görkan ONAYLADI 2026-10-04 — çalışma yeri: Mac mini, öneri varsayılan alındı)
 
 ## 0. Neden
 - Adım 15-19 boyunca konu bazlı hat sadece script'lerde ve log'larda yaşadı. Uygulama (`step9_app`) hâlâ Adım 14'ün
