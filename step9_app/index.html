@@ -22,6 +22,13 @@
   .bar-row .pct { width: 42px; text-align: right; color: #666; }
   .bar { flex: 1; height: 10px; border-radius: 5px; background: #eee; overflow: hidden; }
   .bar div { height: 100%; }
+  .aspects { margin-top: 16px; padding-top: 12px; border-top: 1px solid #eee; }
+  .aspects h2 { font-size: .95rem; margin: 0 0 8px; color: #444; }
+  .chip { display: inline-block; margin: 4px 6px 0 0; padding: 5px 10px; border-radius: 999px; font-size: .85rem; border: 1px solid; }
+  .chip.pozitif { background: #e9f6ec; border-color: #1a7f37; }
+  .chip.negatif { background: #fdecec; border-color: #c62828; }
+  .chip small { color: #666; }
+  .note { margin-top: 10px; font-size: .75rem; color: #888; }
   .examples button { background: #e8e8e8; color: #333; padding: 6px 10px; font-size: .85rem; margin: 4px 4px 0 0; }
 </style>
 </head>
@@ -35,6 +42,7 @@
   <button type="button">İade etmek zorunda kaldım, hiç memnun değilim.</button>
   <button type="button">Fiyatına göre idare eder.</button>
   <button type="button">Ürün bugün elime ulaştı.</button>
+  <button type="button">Kargo çok hızlıydı ama ürün kırık geldi, satıcı da cevap vermedi.</button>
 </div>
 <button id="go">Analiz et</button>
 
@@ -54,12 +62,13 @@
     if (!text) return;
     goEl.disabled = true;
     try {
-      const res = await fetch("/predict", {
+      const res = await fetch("/aspects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
       });
-      const data = await res.json();
+      const all = await res.json();
+      const data = all.genel;
       const colors = { pozitif: "#1a7f37", nötr: "#8a6d00", negatif: "#c62828" };
       const order = ["pozitif", "nötr", "negatif"];
       const bars = order.map(name => {
@@ -73,7 +82,16 @@
       resultEl.innerHTML = `
         <div class="label ${data.label}">${data.label.toUpperCase()}</div>
         <div>Güven: %${(data.confidence * 100).toFixed(1)}</div>
-        <div class="bars">${bars}</div>`;
+        <div class="bars">${bars}</div>
+        <div class="aspects">
+          <h2>Konular</h2>
+          ${all.konular.length
+            ? all.konular.map(k => `<span class="chip ${k.duygu}">${k.konu} ${k.duygu === "pozitif" ? "👍" : "👎"}
+                 <small>%${(k.guven * 100).toFixed(0)}</small></span>`).join("")
+            : "<span class=\"note\">Belirli bir konu bulunamadı.</span>"}
+          <div class="note">Konu başına sadece pozitif/negatif (nötr yok). Satıcı konusu sık kaçırılır;
+            8 kelimeden kısa yorumlar ve olumsuzlama kalıpları eğitimde azdı.${all.hafif_mod ? " (hafif mod)" : ""}</div>
+        </div>`;
       resultEl.hidden = false;
     } catch (e) {
       resultEl.textContent = "Hata: sunucuya ulaşılamadı.";
