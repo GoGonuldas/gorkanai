@@ -1,0 +1,1 @@
+Görkan: 100 yorum, 125 (konu, duygu) çifti, konusuz 8; boşluk->virgül düzeltilen satır 27 -> data/aspect_labels_step21/human_gorkan.csv
