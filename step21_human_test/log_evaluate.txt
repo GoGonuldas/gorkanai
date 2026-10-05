@@ -1,0 +1,41 @@
+ADIM 21 — İNSAN TESTİ: 100 yorum (id 9500-9599; 70 pozitif + 30 negatif havuz), Görkan / taze Claude / model.
+Model = uygulama hattı (Adım 19 konu v2 + Adım 17 duygu, 3 tohum); konu başına nötr üretmez.
+Görkan'ın nötr çifti: 0 | fresh'in nötr çifti: 10
+
+BEKLENTİ (PLAN §4, etiketlerden ÖNCE yazıldı):
+  fresh–Görkan çift F1 0.60-0.68 (kalibrasyonda 0.64); model–Görkan 0.55-0.65
+  fark (model − fresh) −0.08 ile 0; 0'ı dışlama ~yarı yarıya
+  ortak konuda duygu uyumu: fresh ~0.87, model ~0.85; model–fresh çift F1 ~0.72-0.80
+  konu kapsamı: model ve fresh Görkan'dan ~%25-40 fazla konu
+
+--- model vs görkan (100 yorum) ---
+  çift: model 158, görkan 125 (oran 1.26)
+  çift F1 0.636 | nötr hariç çift F1 0.636 | konu F1 0.678
+  görkan'nin konularını bulma (recall) 0.768 | model'nin konuları görkan'de var (precision) 0.608
+  ortak konuda duygu uyumu 90/96 = 0.938
+  konu başına (sayı model/görkan, kappa): karg 13/10 0.56, fiya 21/17 0.81, kali 70/70 0.24, perf 36/14 0.25, boyu 11/4 0.50, goru 2/5 0.26, sati 5/5 0.79
+  sadece model: {'performans': 26, 'kalite': 16, 'boyut': 7, 'kargo': 6, 'fiyat': 5, 'gorunum': 1, 'satici': 1} | sadece görkan: {'kalite': 16, 'gorunum': 4, 'performans': 4, 'kargo': 3, 'satici': 1, 'fiyat': 1}
+
+--- fresh vs görkan (100 yorum) ---
+  çift: fresh 176, görkan 125 (oran 1.41)
+  çift F1 0.664 | nötr hariç çift F1 0.687 | konu F1 0.704
+  görkan'nin konularını bulma (recall) 0.848 | fresh'nin konuları görkan'de var (precision) 0.602
+  ortak konuda duygu uyumu 100/106 = 0.943
+  konu başına (sayı fresh/görkan, kappa): karg 16/10 0.65, fiya 22/17 0.84, kali 71/70 0.35, perf 49/14 0.25, boyu 11/4 0.50, goru 4/5 0.65, sati 3/5 0.74
+  sadece fresh: {'performans': 36, 'kalite': 14, 'boyut': 7, 'kargo': 7, 'fiyat': 5, 'gorunum': 1} | sadece görkan: {'kalite': 13, 'gorunum': 2, 'satici': 2, 'kargo': 1, 'performans': 1}
+
+--- model vs fresh (100 yorum) ---
+  çift: model 158, fresh 176 (oran 0.90)
+  çift F1 0.760 | nötr hariç çift F1 0.784 | konu F1 0.838
+  fresh'nin konularını bulma (recall) 0.795 | model'nin konuları fresh'de var (precision) 0.886
+  ortak konuda duygu uyumu 127/140 = 0.907
+  konu başına (sayı model/fresh, kappa): karg 13/16 0.80, fiya 21/22 0.97, kali 70/71 0.50, perf 36/49 0.58, boyu 11/11 0.90, goru 2/4 0.66, sati 5/3 0.74
+  sadece model: {'kalite': 10, 'performans': 4, 'satici': 2, 'kargo': 1, 'boyut': 1} | sadece fresh: {'performans': 17, 'kalite': 11, 'kargo': 4, 'gorunum': 2, 'boyut': 1, 'fiyat': 1}
+
+ANA — çift F1 farkı (model–Görkan) − (fresh–Görkan), bootstrap 2000 / tohum 21:
+  tüm çiftler             -0.028  [-0.069, +0.015]  0'ı içeriyor: model, Görkan'a bir Claude etiketleyici kadar yakın (fark ayırt edilemiyor)
+  nötr hariç (adil kıyas) -0.051  [-0.095, -0.007]  0'ı DIŞLIYOR: model Claude etiketleyiciden GERİDE
+
+Havuza göre çift F1 (model–Görkan / fresh–Görkan):
+  pozitif (70): 0.673 / 0.706
+  negatif (30): 0.533 / 0.554
