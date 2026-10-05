@@ -8,7 +8,8 @@ gerçek bir sınırla karşılaşıp sebebini anlamak, sonra bir sonraki yöntem
 **Son durum (2026-10-02):** Adım 19 (konu tespiti v2, nadir konular) tamamlandı: kasa testi 500'de konu F1 macro
 0.741 → 0.809 (+0.068 [+0.035, +0.098]), satıcı F1 0.17 → 0.51, uçtan uca 0.730 → 0.763. Kasa testi emekli. Satıcı recall'u
 bilerek ertelendi. **Adım 20 (2026-10-04):** konu bazlı analiz uygulamada
-(`/aspects`, konu çipleri), Mac mini'de ev ağından açılıyor; val'de eşdeğerlik tam (fark 0), ~0.1 sn/yorum. Sıradaki seçilmedi.
+(`/aspects`, konu çipleri), Mac mini'de ev ağından açılıyor; val'de eşdeğerlik tam (fark 0), ~0.1 sn/yorum. **Adım 21 (2026-10-05):** ilk insan
+testi — model Görkan'a çift F1 0.636 (Claude etiketleyici 0.664), ortak konuda duygu uyumu %94. Sıradaki seçilmedi.
 
 **Daha önceki durum (2026-09-29):** Adım 15 (konu bazlı duygu analizi, anahtar kelime + cümlecik + V2b temel çizgisi) tamamlandı:
 testte uçtan uca F1 0.653 (bağımsız insana karşı 0.638, insan-insan 0.667). Sıradaki: Adım 16 (onay bekliyor).
@@ -1010,7 +1011,54 @@ eleştirilmiş, baskın duygu negatif. Kuralın kendisi kullanıcı için şaş�
 **Sınırlamalar:** konu başına nötr yok; satıcı recall ~0.37; kısa yorumlar/olumsuzlama eğitimde az; yayınlama yok
 (HF Spaces PRO istiyor); sunucu Mac mini açıkken ve aynı ağdayken erişilebilir.
 
-## Yapılacaklar (2026-10-04'te güncellendi)
+## Adım 21: İnsan testi — model, Görkan'ın okumasına ne kadar yakın? — TAMAMLANDI (2026-10-05)
+**Görev:** Adım 15-20'nin bütün altınları Claude etiketiydi. İlk kez dondurulmuş UYGULAMA hattını (Adım 19 konu + Adım 17
+duygu) bir insana karşı ölçmek. Plan: `step21_human_test/PLAN.md`. Model eğitilmedi.
+**Veri:** 100 hiç görülmemiş yorum (id 9500-9599; 70 pozitif + 30 negatif havuz — negatif havuz azaldığı için; kalan 220).
+Üç kör, bağımsız etiket: **Görkan** (önce commit'lendi), **taze Claude oturumu** (sadece LABEL_RULES; "Claude
+etiketleyici" referansı), **model** (`predict_model.py`, bir kez). Ölçüm script'i etiketler gelmeden commit'lendi.
+
+| Görkan'a karşı (100 yorum) | model | taze Claude |
+|---|---|---|
+| çift sayısı (Görkan 125) | 158 | 176 |
+| **çift F1** | **0.636** | **0.664** |
+| nötr hariç çift F1 | 0.636 | 0.687 |
+| konu F1 | 0.678 | 0.704 |
+| Görkan'ın konularını bulma (recall) | 0.768 | 0.848 |
+| **ortak konuda duygu uyumu** | **0.938** (90/96) | 0.943 (100/106) |
+| performans sayısı (Görkan 14) | 36 | 49 |
+
+**ANA** (önceden: çift F1 farkı model − Claude, bootstrap 2000/tohum 21): tüm çiftler **−0.028 [−0.069, +0.015]** —
+ayırt edilemiyor; nötr hariç (daha adil: Görkan hiç nötr kullanmadı, Claude'un 10 nötrü onu cezalandırıyordu, model nötr
+üretmez) **−0.051 [−0.095, −0.007]** — model Claude etiketleyiciden ~5 puan geride. İkisi de beklentinin içinde
+(−0.08 ile 0). Model–Claude çift F1 0.760 (kasa testindeki 0.763 ile tutarlı). Havuz: pozitif 0.673/0.706, negatif 0.533/0.554.
+
+**Ayrışma okuması (ölçümden SONRA, Görkan'la; `review_disagreements.md`; hiçbir etiket değiştirilmedi):** Claude'un da
+modelle aynı dediği 7 ayrışmanın **3'ü Görkan'ın hatası** çıktı (doğrusu modelin dediği: 9500 Pn, 9576 Pn, 9517 Fp,Pn);
+kalan 4'ünde Görkan bilinçli olarak sadece ana fikri yazmış ama modelin/Claude'un eklediği konuları "eklenebilir" buldu
+(koku/ses → Görkan Q, kural P; "küçük", "hızlı" gibi yan övgüleri yazmıyor). Sadece modelin hatası olan 5 örnekte kalıp:
+"iade" → olumsuz satıcı (iade hızlıyken), "performans" kelimesine takılma ("ekonomi performans" = fiyat/kalite),
+"küçük" uyarısını şikâyet sanma, bilgi cümlesinde nötr diyememe.
+
+**Okuma:** Duyguda model insan kadar iyi (%94). Ayrışmanın neredeyse tamamı **hangi konuların yazılacağı**: Görkan ana
+fikri yazıyor, kural (ve onu öğrenen model) bahsedilen her konuyu. Bu yüzden ölçülen ~0.64, "modelin yanlışı" değil büyük
+ölçüde "iki geçerli okuma biçiminin farkı" + insan etiket hatası. İncelenen 7 kural ayrışmasının hiçbirinde Görkan modelin
+konusunu yanlış bulmadı (sadece eksik ya da fazla).
+
+**Dersler:**
+- **İnsan altını da gürültülü.** Seçilmiş 7 ayrışmanın 3'ünde hata insandaydı. "İnsan = doğru cevap" varsayımı, ayrışma
+  okunmadan yapılsaydı modeli olduğundan kötü gösterirdi. (Seçilmiş örnek: bu bir hata ORANI değil.)
+- **"Hangi konular sayılır" sorusu görevin tanımı; model değil.** Q/P sınırı Adım 15'ten beri her insan kıyasında en büyük
+  ayrışma. Tek-doğru-cevaplı çift F1, "kabul edilebilir" etiketleri yanlış sayıyor.
+- **Adil kıyası önceden tanımlamak yetmedi, hangisinin ANA olduğunu doğru seçmek gerekiyordu:** "tüm çiftler"i ana yazdım;
+  Görkan'ın hiç nötr kullanmaması bunu Claude aleyhine eğdi. Rapor ikisini de verdi; dürüst özet "~5 puan geride".
+- **Modelin gerçek hataları kelimeye takılma:** "iade", "performans", "küçük". Bunlar az sayıda hedefli örnekle
+  düzeltilebilir — ama yeni test ister.
+
+**Sınırlamalar:** tek insan, n=100 (aralık ±0.04-0.05); havuz 70/30 (önceki setler 50/50); ayrışma okuması seçilmiş 12
+yorum; Görkan'ın düzeltmeleri altına işlenmedi (ölçüm aynen).
+
+## Yapılacaklar (2026-10-05'te güncellendi)
 
 0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (16.1-16.5, yukarıda).
    **Adım 17: konuya koşullu duygu modeli — TEST ÖLÇÜLDÜ** (yukarıda; ana sonuç "fark yok"); 17.5 hata kovaları
@@ -1020,7 +1068,10 @@ eleştirilmiş, baskın duygu negatif. Kuralın kendisi kullanıcı için şaş�
    **Adım 19: konu tespiti v2** — TAMAMLANDI (macro +0.068, satıcı 0.17 → 0.51); kasa testi EMEKLİ.
    **AÇIK KONU (bilerek ertelendi, 2026-10-02):** satıcı recall'u 0.37 (örtük satıcı), görünüm kazanmadı. Etkisi genel
    skora küçük (S çiftlerin ~%4'ü), ölçmek için satıcıca zengin YENİ test gerekir; Görkan'la geçilmesine karar verildi.
-   **Adım 20: konu bazlı analizi uygulamaya koymak** — TAMAMLANDI (yukarıda). Sonraki adım seçilmedi. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
+   **Adım 20: konu bazlı analizi uygulamaya koymak** — TAMAMLANDI (yukarıda).
+   **Adım 21: insan testi** — TAMAMLANDI: model Görkan'a çift F1 0.636 (Claude 0.664); duygu uyumu %94; ayrışma çoğunlukla
+   "hangi konular yazılır". Sonraki adım seçilmedi. Fikirler: "kabul edilebilir etiket" ölçüsü (çoklu doğru cevap);
+   kelimeye takılma hataları ("iade", "performans", "küçük") için hedefli örnek; konu başına nötr. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
    `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
