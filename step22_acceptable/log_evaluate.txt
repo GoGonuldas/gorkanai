@@ -1,0 +1,24 @@
+ADIM 22 — KABUL EDİLEBİLİR ETİKET ÖLÇÜSÜ: 100 yorum (9500-9599), Görkan'ın 142 k/y kararı (kaynak gizli) + 85 otomatik kabul.
+A = 187 kabul çifti; y = 40; R (Görkan'ın onayladığı kendi çiftleri) = 115 / 125
+
+BEKLENTİ (PLAN §3, kararlardan önce): model kabul F1 0.80-0.88; Claude 0.82-0.90; fark −0.05 ile +0.02;
+  modelin y'leri en çok performans/kalite; Görkan kendi çiftlerinin 3-6'sını eler.
+
+etiketleyici  çift  kabul P  zorunlu R  kabul F1  y çift   (Adım 21 katı çift F1)
+model          158    0.867      0.783     0.823      21   (0.636)
+claude         176    0.881      0.835     0.857      21   (0.664)
+görkan         125    0.920      1.000     0.958      10   (1.000)
+
+Y (yanlış) çiftlerin konuya göre dağılımı — kimde:
+  model   kalite 8, performans 4, kargo 4, satici 2, boyut 2, fiyat 1
+  claude  kalite 12, performans 4, kargo 3, boyut 1, fiyat 1
+  görkan  kalite 5, performans 3, kargo 1, satici 1
+Y çiftlerde tür (konu yanlış = o konu kabul kümesinde hiç yok; duygu yanlış = konu kabul, duygu değil):
+  model   {'konu yanlış': 12, 'duygu yanlış': 9}
+  claude  {'konu yanlış': 15, 'duygu yanlış': 6}
+  görkan  {'duygu yanlış': 5, 'konu yanlış': 5}
+Zorunlu (R) çiftlerden kaçırılanlar, konuya göre:
+  model   kalite 13, gorunum 4, performans 4, kargo 2, fiyat 1, satici 1
+  claude  kalite 13, gorunum 3, satici 1, performans 1, kargo 1
+
+ANA — kabul F1 model − Claude: -0.034 [-0.087, +0.018] → 0'ı içeriyor: ayırt edilemiyor

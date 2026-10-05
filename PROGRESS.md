@@ -9,7 +9,8 @@ gerçek bir sınırla karşılaşıp sebebini anlamak, sonra bir sonraki yöntem
 0.741 → 0.809 (+0.068 [+0.035, +0.098]), satıcı F1 0.17 → 0.51, uçtan uca 0.730 → 0.763. Kasa testi emekli. Satıcı recall'u
 bilerek ertelendi. **Adım 20 (2026-10-04):** konu bazlı analiz uygulamada
 (`/aspects`, konu çipleri), Mac mini'de ev ağından açılıyor; val'de eşdeğerlik tam (fark 0), ~0.1 sn/yorum. **Adım 21 (2026-10-05):** ilk insan
-testi — model Görkan'a çift F1 0.636 (Claude etiketleyici 0.664), ortak konuda duygu uyumu %94. Sıradaki seçilmedi.
+testi — model Görkan'a çift F1 0.636 (Claude etiketleyici 0.664), ortak konuda duygu uyumu %94. **Adım 22:** "kabul edilebilir" ölçüyle model 0.636 → 0.823 (Claude 0.857, ayırt
+edilemiyor). Sıradaki seçilmedi.
 
 **Daha önceki durum (2026-09-29):** Adım 15 (konu bazlı duygu analizi, anahtar kelime + cümlecik + V2b temel çizgisi) tamamlandı:
 testte uçtan uca F1 0.653 (bağımsız insana karşı 0.638, insan-insan 0.667). Sıradaki: Adım 16 (onay bekliyor).
@@ -1058,6 +1059,41 @@ konusunu yanlış bulmadı (sadece eksik ya da fazla).
 **Sınırlamalar:** tek insan, n=100 (aralık ±0.04-0.05); havuz 70/30 (önceki setler 50/50); ayrışma okuması seçilmiş 12
 yorum; Görkan'ın düzeltmeleri altına işlenmedi (ölçüm aynen).
 
+## Adım 22: "Kabul edilebilir etiket" ölçüsü — TAMAMLANDI (2026-10-05)
+**Görev:** Adım 21'in tek-doğru-cevaplı çift F1'i, kabul edilebilir etiketleri yanlış sayıyordu. Eğitim yok; aynı 100 yorum
+Görkan'ın yargısıyla yeniden puanlandı. Plan: `step22_acceptable/PLAN.md` (ölçü ve beklenti kararlardan önce commit'lendi).
+**Yöntem:** üç etiketleyicinin (Görkan, taze Claude, model) bütün çiftlerinin birleşimi; üçünün ortak çiftleri (85)
+otomatik kabul, kalan **142 aday** için Görkan **k/y** dedi — **kaynak gizli**, kendi çiftleri de karışık. 102 k, 40 y.
+Kabul kümesi A = 187 çift; zorunlu küme R = Görkan'ın onayladığı kendi çiftleri (115/125).
+
+| | çift | kabul P (A'da) | zorunlu R | **kabul F1** | y çift | Adım 21 katı çift F1 |
+|---|---|---|---|---|---|---|
+| model | 158 | 0.867 | 0.783 | **0.823** | 21 | 0.636 |
+| taze Claude | 176 | 0.881 | 0.835 | **0.857** | 21 | 0.664 |
+| Görkan (kendi etiketi) | 125 | 0.920 | 1.000 | 0.958 | **10** | — |
+
+**ANA:** kabul F1 model − Claude **−0.034 [−0.087, +0.018]** — 0'ı içeriyor, ayırt edilemiyor. Beklentinin içinde
+(model 0.80-0.88, Claude 0.82-0.90, fark −0.05/+0.02).
+- **Görkan kendi 125 çiftinin 10'unu kaynak gizliyken "yanlış" dedi** (beklenti 3-6) — model ve Claude'un her birinin
+  21 yanlışına karşı.
+- Modelin 21 yanlışı: 12 konu yanlış, 9 duygu yanlış; konuya göre kalite 8, performans 4, kargo 4. Claude'un da 21
+  (kalite 12). Modelin kaçırdığı zorunlu çiftler: kalite 13, görünüm 4, performans 4 — Claude da kaliteyi 13 kaçırıyor.
+
+**Okuma:** "Kabul edilebilir" ölçüde model 0.636 → **0.823**. Modelin verdiği her 100 çiftin ~87'si bir insanın
+"yazılabilir" dediği çift; insanın kendi ilk etiketi bile ~92. Kalan fark Claude etiketleyiciyle ayırt edilemiyor.
+Asıl zayıflık artık **kalite (Q) konusu**: hem yanlışlarda hem kaçırılanlarda ilk sırada, ve Claude'da da aynı — yani
+yine model değil, Q tanımının kendisi (genel yargı ne zaman ayrı bir Q'dur?).
+
+**Dersler:**
+- **Ölçü, sorulan soruyu belirler.** Aynı tahminler aynı insana göre 0.636 de 0.823 de olabiliyor; fark "tek doğru
+  cevap" ile "kabul edilebilir cevaplar" arasında. Çok etiketli, yoruma açık görevlerde katı F1 modeli olduğundan kötü gösterir.
+- **Kaynak gizli yargı, insanın kendi hatasını da yakalıyor:** Görkan kendi etiketlerinin %8'ini yanlış buldu.
+  "İnsan altını = doğru" varsayımı burada da tutmadı (Adım 21'deki okumanın daha sistematik hali).
+- **Kalite (Q) bu projenin kalıcı belirsizliği:** Adım 15'ten 22'ye her insan/oturum kıyasında en çok ayrışan konu.
+
+**Sınırlamalar:** tek insan; "k" demek "y" demekten kolay (cömertlik yanlılığı); set okunmuş (Adım 21'de 12 yorumun
+kaynağı görülmüştü); n=100, aralık ±0.05; R, Görkan'ın kendi okumasına dayanıyor.
+
 ## Yapılacaklar (2026-10-05'te güncellendi)
 
 0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (16.1-16.5, yukarıda).
@@ -1070,8 +1106,10 @@ yorum; Görkan'ın düzeltmeleri altına işlenmedi (ölçüm aynen).
    skora küçük (S çiftlerin ~%4'ü), ölçmek için satıcıca zengin YENİ test gerekir; Görkan'la geçilmesine karar verildi.
    **Adım 20: konu bazlı analizi uygulamaya koymak** — TAMAMLANDI (yukarıda).
    **Adım 21: insan testi** — TAMAMLANDI: model Görkan'a çift F1 0.636 (Claude 0.664); duygu uyumu %94; ayrışma çoğunlukla
-   "hangi konular yazılır". Sonraki adım seçilmedi. Fikirler: "kabul edilebilir etiket" ölçüsü (çoklu doğru cevap);
-   kelimeye takılma hataları ("iade", "performans", "küçük") için hedefli örnek; konu başına nötr. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
+   "hangi konular yazılır".
+   **Adım 22: kabul edilebilir etiket ölçüsü** — TAMAMLANDI: model kabul F1 0.823 (Claude 0.857, fark ayırt edilemiyor);
+   Görkan kendi çiftlerinin 10/125'ini yanlış buldu; en zayıf konu kalite (Q). Sonraki adım seçilmedi. Fikirler:
+   Q tanımını netleştirmek; kelimeye takılma hataları ("iade", "performans", "küçük") için hedefli örnek; konu başına nötr. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
    `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
