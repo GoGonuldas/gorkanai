@@ -1,0 +1,3 @@
+ADIM 21 — insan testi seçimi. Aday havuzu: {'pozitif': 139293, 'negatif': 250}
+seçilen 100 (id 9500-9599) {'pozitif': 70, 'negatif': 30}; kalan negatif havuz 220
+sızıntı kontrolleri geçti (check_no_leak + Adım 16/17/18/19 setleri)

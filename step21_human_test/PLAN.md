@@ -1,4 +1,4 @@
-# Adım 21 — İnsan testi: model, bir insana (Görkan) göre ne kadar iyi? PLAN (2026-10-05, ONAY BEKLİYOR; kod/etiket başlamadı)
+# Adım 21 — İnsan testi: model, bir insana (Görkan) göre ne kadar iyi? PLAN (2026-10-05, Görkan ONAYLADI)
 
 ## 0. Neden
 - Adım 15-20'nin bütün altınları Claude etiketi. "Kazandı" hep "Claude'un kurallarına göre okumada kazandı" demekti.
