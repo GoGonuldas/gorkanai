@@ -10,7 +10,7 @@ gerçek bir sınırla karşılaşıp sebebini anlamak, sonra bir sonraki yöntem
 bilerek ertelendi. **Adım 20 (2026-10-04):** konu bazlı analiz uygulamada
 (`/aspects`, konu çipleri), Mac mini'de ev ağından açılıyor; val'de eşdeğerlik tam (fark 0), ~0.1 sn/yorum. **Adım 21 (2026-10-05):** ilk insan
 testi — model Görkan'a çift F1 0.636 (Claude etiketleyici 0.664), ortak konuda duygu uyumu %94. **Adım 22:** "kabul edilebilir" ölçüyle model 0.636 → 0.823 (Claude 0.857, ayırt
-edilemiyor). Sıradaki seçilmedi.
+edilemiyor). Sıradaki seçilmedi; öneri: Q (kalite) tanımını netleştirmek.
 
 **Daha önceki durum (2026-09-29):** Adım 15 (konu bazlı duygu analizi, anahtar kelime + cümlecik + V2b temel çizgisi) tamamlandı:
 testte uçtan uca F1 0.653 (bağımsız insana karşı 0.638, insan-insan 0.667). Sıradaki: Adım 16 (onay bekliyor).
@@ -1109,7 +1109,10 @@ kaynağı görülmüştü); n=100, aralık ±0.05; R, Görkan'ın kendi okuması
    "hangi konular yazılır".
    **Adım 22: kabul edilebilir etiket ölçüsü** — TAMAMLANDI: model kabul F1 0.823 (Claude 0.857, fark ayırt edilemiyor);
    Görkan kendi çiftlerinin 10/125'ini yanlış buldu; en zayıf konu kalite (Q). Sonraki adım seçilmedi. Fikirler:
-   Q tanımını netleştirmek; kelimeye takılma hataları ("iade", "performans", "küçük") için hedefli örnek; konu başına nötr. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
+   Q tanımını netleştirmek; kelimeye takılma hataları ("iade", "performans", "küçük") için hedefli örnek; konu başına nötr.
+   **Gün sonu notu (2026-10-05):** bir sonraki oturum için öneri — Q (kalite) tanımını Görkan'la netleştirmek (kısa,
+   konuşarak; sonraki her model adımının ölçümünü anlamlı kılar). Kısıt: görülmemiş negatif havuz ~220 yorum.
+   Küçük temizlikler (sadece Görkan isterse): Mac mini'de ~10 GB kullanılmayan Adım 19 modeli, laptopta 1.5 GB .git. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
    `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).
 2. ~~Uygulamaya 3 sınıf ekle.~~ — **yapıldı** (yukarıda).
