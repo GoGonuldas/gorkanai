@@ -10,7 +10,8 @@ gerçek bir sınırla karşılaşıp sebebini anlamak, sonra bir sonraki yöntem
 bilerek ertelendi. **Adım 20 (2026-10-04):** konu bazlı analiz uygulamada
 (`/aspects`, konu çipleri), Mac mini'de ev ağından açılıyor; val'de eşdeğerlik tam (fark 0), ~0.1 sn/yorum. **Adım 21 (2026-10-05):** ilk insan
 testi — model Görkan'a çift F1 0.636 (Claude etiketleyici 0.664), ortak konuda duygu uyumu %94. **Adım 22:** "kabul edilebilir" ölçüyle model 0.636 → 0.823 (Claude 0.857, ayırt
-edilemiyor). Sıradaki seçilmedi; öneri: Q (kalite) tanımını netleştirmek.
+edilemiyor). **Adım 23 (2026-10-06): proje kapandı** — kalite kuralı Görkan'la yeniden yazıldı (`LABEL_RULES_v2.md`),
+tek sayfa özet: `step23_wrapup/OZET.md`.
 
 **Daha önceki durum (2026-09-29):** Adım 15 (konu bazlı duygu analizi, anahtar kelime + cümlecik + V2b temel çizgisi) tamamlandı:
 testte uçtan uca F1 0.653 (bağımsız insana karşı 0.638, insan-insan 0.667). Sıradaki: Adım 16 (onay bekliyor).
@@ -1094,7 +1095,25 @@ yine model değil, Q tanımının kendisi (genel yargı ne zaman ayrı bir Q'dur
 **Sınırlamalar:** tek insan; "k" demek "y" demekten kolay (cömertlik yanlılığı); set okunmuş (Adım 21'de 12 yorumun
 kaynağı görülmüştü); n=100, aralık ±0.05; R, Görkan'ın kendi okumasına dayanıyor.
 
-## Yapılacaklar (2026-10-05'te güncellendi)
+## Adım 23: Kapanış — kalite (Q) tanımı + özet — TAMAMLANDI (2026-10-06)
+**1. Kalite tanımı (Görkan'la, Adım 22'nin Q ayrışmalarına bakarak):** `step23_wrapup/LABEL_RULES_v2.md`.
+v1 (`step17_aspect_sentiment/LABEL_RULES.md`) DEĞİŞTİRİLMEDİ — kasa testinin sha256'sı ve bütün etiketler ona bağlı.
+Görkan'ın üç kararı:
+- **Bağlı yargı:** "beğendim / memnunum" yakınındaki başka bir konuya bağlanıyorsa sadece o konu, Q değil
+  ("kolda güzel duruyor, beğendim" → `Gp`). Q sadece ürünün bütünü hakkında açık yargıda.
+- **Ana işlev = sadece Q:** ürünün asıl işinin değerlendirmesi (parfümde koku, kulaklıkta ses, makinede yıkama) Q; P artık
+  yalnız yan özellikler. (v1'de bunlar P idi — en büyük değişiklik.)
+- **Kitap içeriği ürün yorumu değil:** konu/içerik hakkındaki kişisel görüş yazılmaz; v1 sınır kuralı 3 kaldırıldı.
+**Etki:** v2 ile model eğitmek, mevcut 1400 eğitim + val + insan testinin (en azından Q/P/kitap içerenlerin) yeniden
+etiketlenmesini ister; "ana işlev" kuralı yeni bir yargı noktası getirdiği için yeni etiketleyicide önce 30'luk uyum ölçülmeli.
+
+**2. Kapanış:** `step23_wrapup/OZET.md` — Adım 1-23 tek sayfa (sonuçlar, dört dönem, 8 ders, bilerek bırakılanlar).
+README güncellendi (Adım 15-23, uygulamanın 7 modeli ve üreten script'leri, `/aspects`, ev ağından çalıştırma).
+
+**Ders:** Bir kuralı "düzeltmek" geçmiş veriyi geçersiz kılabilir. Kurallar sürümlenmeli; eski sürüme bağlı ölçümler
+eski sürümle kalmalı.
+
+## Yapılacaklar (2026-10-06'da güncellendi)
 
 0. ~~Adım 16: BERT ile çok etiketli konu tespiti~~ — **yapıldı** (16.1-16.5, yukarıda).
    **Adım 17: konuya koşullu duygu modeli — TEST ÖLÇÜLDÜ** (yukarıda; ana sonuç "fark yok"); 17.5 hata kovaları
@@ -1110,8 +1129,9 @@ kaynağı görülmüştü); n=100, aralık ±0.05; R, Görkan'ın kendi okuması
    **Adım 22: kabul edilebilir etiket ölçüsü** — TAMAMLANDI: model kabul F1 0.823 (Claude 0.857, fark ayırt edilemiyor);
    Görkan kendi çiftlerinin 10/125'ini yanlış buldu; en zayıf konu kalite (Q). Sonraki adım seçilmedi. Fikirler:
    Q tanımını netleştirmek; kelimeye takılma hataları ("iade", "performans", "küçük") için hedefli örnek; konu başına nötr.
-   **Gün sonu notu (2026-10-05):** bir sonraki oturum için öneri — Q (kalite) tanımını Görkan'la netleştirmek (kısa,
-   konuşarak; sonraki her model adımının ölçümünü anlamlı kılar). Kısıt: görülmemiş negatif havuz ~220 yorum.
+   **Adım 23: kapanış** — TAMAMLANDI: `LABEL_RULES_v2.md` (Q tanımı), `step23_wrapup/OZET.md`, README.
+   **Duygu analizi projesi bu haliyle KAPANDI.** Geri dönülürse ilk iş: v2 kurallarıyla yeniden etiketleme planı.
+   Kısıt: görülmemiş negatif havuz ~220 yorum. Sonraki yolculuk için fikir: kendi kod ajanı (Ollama/Claude API).
    Küçük temizlikler (sadece Görkan isterse): Mac mini'de ~10 GB kullanılmayan Adım 19 modeli, laptopta 1.5 GB .git. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın
    `step16_topic_bert/review_sample16.csv` gözden geçirmesi.
 1. ~~Yeni, hiç görülmemiş bir test seti (~200 kısa yorum) etiketle ve V2b'yi ölç.~~ — **yapıldı** (yukarıda).

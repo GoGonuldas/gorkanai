@@ -5,6 +5,7 @@ En basit yöntemden (Bag-of-Words) başlayıp BERT fine-tuning'e, gerçek veriye
 bir web uygulamasına kadar ilerliyor. Her adımda bir sınırla karşılaşıp sebebini anlamak ve
 bir sonraki adımda çözmek amaçlandı.
 
+**Tek sayfalık özet (Adım 1-23): [step23_wrapup/OZET.md](step23_wrapup/OZET.md)** ·
 Ayrıntılı sonuçlar, her adımın dersleri ve kararlar: **[PROGRESS.md](PROGRESS.md)**
 
 ## Adımlar
@@ -18,7 +19,16 @@ Ayrıntılı sonuçlar, her adımın dersleri ve kararlar: **[PROGRESS.md](PROGR
 | 11 | `step11_confidence` | Kalibrasyon analizi, "emin değilim" eşiğinin val setinde seçilmesi |
 | 12 | `step12_confident_learning` | Eğitim verisindeki hatalı etiketleri bulup temizlemek |
 | 13 | `step13_temperature` | Temperature scaling (denendi, uygulamaya alınmadı — nedeni PROGRESS.md'de) |
-| 14 | `step14_three_class` | Nötr sınıfı: Vikipedi nötrleriyle kısayol öğrenme, elle etiketlenmiş nötrlerle 3 sınıflı model (devam ediyor) |
+| 14 | `step14_three_class` | Nötr sınıfı: Vikipedi nötrleriyle kısayol öğrenme, elle etiketlenmiş nötrlerle 3 sınıflı model V2b (uygulamada) |
+| 15 | `step15_aspect` | Konu (aspect) bazlı duygu: 7 konu, anahtar kelime + cümlecik bölme temel çizgisi |
+| 16 | `step16_topic_bert` | BERT ile çok etiketli konu tespiti, active learning ile 800 yeni etiket |
+| 17 | `step17_aspect_sentiment` | Konuya koşullu duygu modeli ([CLS] konu [SEP] yorum); `LABEL_RULES.md` (v1) |
+| 18 | `step18_big_test` | 500 yorumluk "kasa testi" + insan kalibrasyonu (Görkan–Claude uyumu) |
+| 19 | `step19_topic_v2` | Konu tespiti v2: nadir konular için hedefli veri (satıcı F1 0.17 → 0.51) |
+| 20 | `step20_aspect_app` | Konu bazlı analiz uygulamada (`/aspects`), eşdeğerlik testi |
+| 21 | `step21_human_test` | İlk insan testi: model vs Görkan vs Claude etiketleyici |
+| 22 | `step22_acceptable` | "Kabul edilebilir etiket" ölçüsü (model 0.823, Claude 0.857) |
+| 23 | `step23_wrapup` | Kapanış: tek sayfa özet, `LABEL_RULES_v2.md` (kalite tanımı Görkan'la netleştirildi) |
 
 ## Kurulum
 
@@ -38,22 +48,27 @@ cd data && python prepare_real_dataset.py
 
 ## Modeller
 
-Eğitilmiş modeller (~420 MB) depoda **yok**; ilgili adımın script'i ile yeniden üretilir.
-Uygulamanın kullandığı model Adım 12'ninki:
+Eğitilmiş modeller (~420 MB'lık klasörler) depoda **yok**; ilgili adımın script'i ile yeniden üretilir.
+Uygulama 7 BERT kullanır (şu an hepsi Mac mini'de):
 
-```bash
-# Adım 12 modeli için önce Adım 10'un eğitim seti kurulumu kullanılır (script kendi içinde yapar)
-cd step12_confident_learning && python train.py      # ~30-40 dk (Apple M2 Pro, MPS)
-```
+| Uygulamadaki rol | Klasör | Üreten script |
+|---|---|---|
+| Genel duygu (3 sınıf) | `step14_three_class/model_v2b` | `step14_three_class/train_v2.py` |
+| Konu tespiti (3 tohum) | `step19_topic_v2/model_B_s{0,1,2}_e16` | `step19_topic_v2/train19.py B` |
+| Konuya koşullu duygu (3 tohum) | `step17_aspect_sentiment/model_v2b_s{0,1,2}_e8` | `step17_aspect_sentiment/train.py` |
+
+Genel duygu modeli Hugging Face Hub'da da var: [Urartu65/gorkanai-tr-sentiment](https://huggingface.co/Urartu65/gorkanai-tr-sentiment).
 
 ## Uygulamayı çalıştırmak
 
 ```bash
-cd step9_app && uvicorn app:app --reload
+cd step9_app && ../.venv/bin/uvicorn app:app --host 0.0.0.0 --port 8000   # ~30 sn'de açılır (7 BERT)
 ```
 
-- http://127.0.0.1:8000 — web arayüzü
-- http://127.0.0.1:8000/docs — API dokümantasyonu (`POST /predict {"text": "..."}`)
+- http://127.0.0.1:8000 — web arayüzü (ev ağından: `http://<makine-adı>.local:8000`)
+- http://127.0.0.1:8000/docs — API dokümantasyonu
+- `POST /predict {"text": "..."}` — genel duygu; `POST /aspects {"text": "..."}` — konular + konu başına duygu
+- `ASPECT_LIGHT=1` — konu hattında tek tohum (~4 kat hızlı, val'de < 1 puan kayıp)
 
 ## Elle etiketlenmiş veriler
 
