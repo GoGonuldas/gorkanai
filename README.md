@@ -5,7 +5,7 @@ En basit yöntemden (Bag-of-Words) başlayıp BERT fine-tuning'e, gerçek veriye
 bir web uygulamasına kadar ilerliyor. Her adımda bir sınırla karşılaşıp sebebini anlamak ve
 bir sonraki adımda çözmek amaçlandı.
 
-**Tek sayfalık özet (Adım 1-23): [step23_wrapup/OZET.md](step23_wrapup/OZET.md)** ·
+**Nasıl çalıştırılır: [CALISTIRMA.md](CALISTIRMA.md)** · **Tek sayfalık özet (Adım 1-23): [step23_wrapup/OZET.md](step23_wrapup/OZET.md)** ·
 Ayrıntılı sonuçlar, her adımın dersleri ve kararlar: **[PROGRESS.md](PROGRESS.md)**
 
 ## Adımlar
@@ -60,6 +60,7 @@ Uygulama 7 BERT kullanır (şu an hepsi Mac mini'de):
 Genel duygu modeli Hugging Face Hub'da da var: [Urartu65/gorkanai-tr-sentiment](https://huggingface.co/Urartu65/gorkanai-tr-sentiment).
 
 ## Uygulamayı çalıştırmak
+Kurulum, modelleri edinme, doğrulama ve sorun giderme dahil adım adım: **[CALISTIRMA.md](CALISTIRMA.md)**. Kısaca:
 
 ```bash
 cd step9_app && ../.venv/bin/uvicorn app:app --host 0.0.0.0 --port 8000   # ~30 sn'de açılır (7 BERT)
