@@ -1130,6 +1130,10 @@ eski sürümle kalmalı.
    Görkan kendi çiftlerinin 10/125'ini yanlış buldu; en zayıf konu kalite (Q). Sonraki adım seçilmedi. Fikirler:
    Q tanımını netleştirmek; kelimeye takılma hataları ("iade", "performans", "küçük") için hedefli örnek; konu başına nötr.
    **Adım 23: kapanış** — TAMAMLANDI: `LABEL_RULES_v2.md` (Q tanımı), `step23_wrapup/OZET.md`, README.
+   **Hugging Face (2026-10-07):** tek tohumlu konu ve konu-duygu modelleri GİZLİ depolarda: `Urartu65/gorkanai-tr-aspect-topic`,
+   `Urartu65/gorkanai-tr-aspect-sentiment` (kartlar `step23_wrapup/hf_cards/`, script `upload_hf.py`; Mac mini'den, ilk deneme
+   Xet ağ hatası, ikincisi başarılı). Herkese açmadan önce veri seti (`fthbrmnby/turkish_product_reviews`) koşullarına bakılmalı.
+   Çalıştırma dokümanı: `CALISTIRMA.md`.
    **Duygu analizi projesi bu haliyle KAPANDI.** Geri dönülürse ilk iş: v2 kurallarıyla yeniden etiketleme planı.
    Kısıt: görülmemiş negatif havuz ~220 yorum. Sonraki yolculuk için fikir: kendi kod ajanı (Ollama/Claude API).
    Küçük temizlikler (sadece Görkan isterse): Mac mini'de ~10 GB kullanılmayan Adım 19 modeli, laptopta 1.5 GB .git. Açık kalanlar (ayrı onayla): Adım 16 ablasyonları; Görkan'ın

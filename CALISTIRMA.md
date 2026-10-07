@@ -124,7 +124,17 @@ Genel duygu modeli Hub'da herkese açık: [Urartu65/gorkanai-tr-sentiment](https
 .venv/bin/python -c "from huggingface_hub import snapshot_download; \
 snapshot_download('Urartu65/gorkanai-tr-sentiment', local_dir='step14_three_class/model_v2b')"
 ```
-Konu ve konu-duygu modelleri (6 tanesi) Hub'da **yok** — onlar için Yol A ya da Yol C.
+Konu ve konu-duygu modellerinin **tek tohumlu** sürümleri de Hub'da, ama **gizli** (sadece Urartu65 hesabıyla,
+`hf auth login` sonrası indirilebilir): `Urartu65/gorkanai-tr-aspect-topic` (= `model_B_s0_e16`),
+`Urartu65/gorkanai-tr-aspect-sentiment` (= `model_v2b_s0_e8`). Bunlarla uygulama **hafif modda** çalışır:
+```bash
+.venv/bin/python -c "from huggingface_hub import snapshot_download as d; \
+d('Urartu65/gorkanai-tr-aspect-topic', local_dir='step19_topic_v2/model_B_s0_e16'); \
+d('Urartu65/gorkanai-tr-aspect-sentiment', local_dir='step17_aspect_sentiment/model_v2b_s0_e8')"
+cd step9_app && ASPECT_LIGHT=1 ../.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8000
+```
+(İndirilen klasörlerde Hub'ın eklediği `README.md` olur, zararsız.) 3 tohumlu tam sürüm için diğer 4 model Hub'da yok —
+Yol A ya da Yol C. Not: 5. bölümdeki eşdeğerlik testi 3 tohum ister, hafif kurulumda çalışmaz.
 
 ### Yol C — Yeniden eğit (Mac mini'de saatler sürer)
 Eğitim verileri depoda. Sıra önemli (Adım 17, genel duygu modelinden başlar):
